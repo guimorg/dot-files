@@ -34,6 +34,9 @@ filetype plugin indent on    " required
 set backspace=indent,eol,start
 set clipboard=unnamed
 
+" Allows me to execute Python with selected text
+xnoremap <leader>p :w !python<cr>
+
 syntax enable          " enable syntax processing
 let python_highlight_all=1
 set smartindent   " Do smart autoindenting when starting a new line
