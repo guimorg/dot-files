@@ -5,22 +5,19 @@ fpath=(~/.zsh $fpath)
 # VPN ticket
 source $HOME/.secrets/secret.sh
 
+# some functions
 mcd () {
     # Creates dir and cd into dir
     mkdir -p $1
     cd $1
 }
 
-# This is to quickly transform a .mov file into .gif
-# it is helpful to generate visualizations of a CLI
-# on the README.md file
 mov_to_gif(){
     echo "📽️  Going to transform ${1} to ${2} 📽️"
     ffmpeg -i ${1}.mov -s 800x600 -pix_fmt rgb24 -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > ${2}.gif
     echo "🍿 Finished! 🍿"
 }
 
-# This is helpful for my work
 pintoken(){
     # Gets TOTP ticket
     totp --list meli >> /dev/null
@@ -33,7 +30,6 @@ pintoken(){
     echo "${VPN_PIN}${melitotp}"
 }
 
-# Also helpful for my work
 meli_aws_login() {
     # Getting token and pin
     which aws-bastion-cli >> /dev/null
@@ -52,7 +48,6 @@ meli_aws_login() {
     fi
     expire=$(jq -r '.Expiration' <<< "${aws_json_fields}")
     echo "Credentials will expire at ${expire} ⏲️"
-    # It looks ugly, but it works
     export AWS_ACCESS_KEY_ID=$(jq -r '.AccessKeyId' <<< "${aws_json_fields}")
     export AWS_SECRET_ACCESS_KEY=$(jq -r '.SecretAccessKey' <<< "${aws_json_fields}")
     export AWS_SECURITY_TOKEN=$(jq -r '.SessionToken' <<< "${aws_json_fields}")
@@ -72,6 +67,9 @@ alias es_to_en='trans es:en "$@"'
 alias pt_to_en='trans pt:en "$@"'
 alias pt_to_es='trans pt:es "$@"'
 
+# python3
+alias python=python3
+
 # to quickly edit zshrc
 alias zshrc='vim ~/.zshrc'
 
@@ -89,12 +87,11 @@ GOPATH=$HOME/go
 
 # gitconfig if needed
 alias gitconfig='vim ~/.gitconfig'
-
 # Added by furycli:
 export PATH="$HOME/Library/Python/3.7/bin:$GOPATH/bin:$PATH"
-
 source "$HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
 source $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
 # Load completion config
 source $HOME/.zsh/completion.zsh
 
@@ -112,11 +109,9 @@ fi
 # Enhanced form of menu completion called `menu selection'
 zmodload -i zsh/complist
 
-# I like to use Starship to keep thing preety
 eval "$(starship init zsh)"
 source /Users/guamorim/.zsh/history.zsh
 
-# Using PyEnv to keep different versions of Python on my local machine
 export PATH="/Users/guamorim/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
