@@ -1,134 +1,361 @@
-colorscheme badwolf    " nice colorscheme
+" vim: fdm=marker foldenable sw=4 ts=4 sts=4
+" This is my .vimrc File, most of it came from Max Canto's .vimrc File
+" https://github.com/changemewtf/dotfiles/blob/master/vim/.vimrc
 
-set nocompatible              " required
-filetype off                  " required
+" {{{ Clear all autocommands
 
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
+" TODO: It might be more honest to put this in my ,v auto-source-vimrc binding
+au!
+
+" }}}
+
+" {{{ Plugins and Settings
+
+" Vundle is used to handle plugins.
+" https://github.com/gmarik/Vundle.vim
+
+" {{{ VUNDLE SETUP
+
+set nocompatible
+filetype off
+set rtp+=$HOME/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
 Plugin 'gmarik/Vundle.vim'
-Plugin 'chrisbra/csv.vim'
-Plugin 'tmhedberg/SimpylFold'
-Plugin 'vim-scripts/indentpython.vim'
-Bundle 'Valloric/YouCompleteMe'
-Plugin 'vim-syntastic/syntastic'
-Plugin 'nvie/vim-flake8'
-Plugin 'scrooloose/nerdtree'
-Plugin 'kien/ctrlp.vim'
+
+" }}}
+
+" {{{ vim-tmux
+"     ========
+
+Plugin 'tmux-plugins/vim-tmux'
+
+" }}}
+
+" {{{ vim-instant-markdown
+"     ====================
+
+" Plugin 'suan/vim-instant-markdown'
+
+" }}}
+
+" {{{ vim-csv
+" 
+"     ====================
+
+" Plugin 'chrisbra/csv.vim'
+
+" }}}
+"
+
+" {{{ His Home-Row-ness the Pope of Tim
+"     =================================
+
+" vim-surround: s is a text-object for delimiters; ss linewise
+" ys to add surround
+Plugin 'tpope/vim-surround'
+
+" vim-commentary: gc is an operator to toggle comments; gcc linewise
+Plugin 'tpope/vim-commentary'
+
+" vim-repeat: make vim-commentary and vim-surround work with .
+Plugin 'tpope/vim-repeat'
+
+" vim-liquid: syntax stuff
+Plugin 'tpope/vim-liquid'
+
+" vim-markdown: some stuff for fenced language highlighting
+Plugin 'tpope/vim-markdown'
+let g:markdown_fenced_languages = ['html', 'python', 'ruby', 'yaml', 'haml', 'bash=sh']
+
 Plugin 'tpope/vim-fugitive'
-Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+Plugin 'tpope/vim-git'
+Plugin 'tpope/vim-rails'
+Plugin 'tpope/vim-vinegar'
+Plugin 'tpope/vim-haml'
+Plugin 'tpope/vim-eunuch'
 
-" add all your plugins here (note older versions of Vundle
-" used Bundle instead of Plugin)
+" }}}
 
-" ...
+" {{{ NERDTree
+"     ========
 
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-filetype plugin on
+" Plugin 'scrooloose/nerdtree'
 
-set backspace=indent,eol,start
+" OPTIONS:
+
+" Get rid of objects in C projects
+" let NERDTreeIgnore=['\~$', '.o$', 'bower_components', 'node_modules', '__pycache__']
+" let NERDTreeWinSize=20
+" 
+" nmap <C-f> :NERDTreeToggle<CR>
+
+" }}}
+
+" {{{ netrw: Configuration
+"     ====================
+
+let g:netrw_banner=0        " disable banner
+let g:netrw_browse_split=4  " open in prior window
+let g:netrw_altv=1          " open splits to the right
+let g:netrw_liststyle=3     " tree view
+let g:netrw_winsize=25      " width of tree explorer
+" hide gitignore'd files
+let g:netrw_list_hide=netrw_gitignore#Hide()
+" hide dotfiles by default (this is the string toggled by netrw-gh)
+let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+
+" Opens netrw with vim
+" augroup ProjectDrawer
+"   autocmd!
+"   autocmd VimEnter * :Vexplore
+" augroup END
+
+" }}}
+
+" {{{ undotree
+"     ======
+
+Plugin 'mbbill/undotree'
+
+" OPTIONS:
+
+set undodir=~/.vim/undodir
+set undofile
+
+" }}}
+
+" {{{ vim-syntastic
+"     ==========
+
+Plugin 'vim-syntastic/syntastic'
+
+" OPTIONS:
+
+let g:syntastic_python_python_exec = 'python3'
+
+" }}}
+
+" {{{ vim-wakatime
+"     ============
+
+Plugin 'wakatime/vim-wakatime'
+
+" }}}
+
+" {{{ vim-startify
+"     ============
+
+" Plugin 'mhinz/vim-startify'
+
+" }}}
+
+" </PLUGINS>
+
+" {{{ VUNDLE TEARDOWN
+
+call vundle#end()
+filetype plugin indent on
+
+" }}}
+
+" }}}
+
+" {{{ Basic Settings
+
+" Modelines
+set modelines=2
+set modeline
+
+" Colorscheme
+colorscheme badwolf
+set background=dark
+
+" For clever completion with the :find command
+set path+=**
+
+" Always use bash syntax for sh filetype
+let g:is_bash=1
+
+" Search
+set ignorecase smartcase
+set grepprg=grep\ -IrsnH
+set incsearch
+
+" Window display
+set showcmd ruler laststatus=2
+
+" Mac OS X clipboard
 set clipboard=unnamed
 
-" Allows me to execute Python with selected text
-xnoremap <leader>p :w !python<cr>
+" Numbers
+set number
+set relativenumber
 
-syntax enable          " enable syntax processing
-let python_highlight_all=1
+" Splits
+set splitright
+set splitbelow      " default split is below
+
+" Ident
 set smartindent   " Do smart autoindenting when starting a new line
 set shiftwidth=4  " Set number of spaces per auto indentation
 set tabstop=4       " number of visual spaces per TAB
-set softtabstop=4   " number of spaces in tab when editing
-set expandtab       " tabs are spaces
-set splitbelow      " default split is below
-set splitright      " default split is right
+
+" Buffers
+set history=500
+set hidden
+if exists("&undofile")
+    set undofile
+endif
+
+" Text display
+set listchars=trail:.,tab:>-,extends:>,precedes:<,nbsp:¬
+set list
+
+" Typing behavior
+set backspace=indent,eol,start
+set showmatch
+set wildmode=full
+set wildmenu
+set complete-=i
+
+" Formatting
+set nowrap
+set tabstop=2 shiftwidth=2 softtabstop=2
+set foldlevelstart=2
+
+" Status line
+set statusline=%!MyStatusLine()
+
+" Session saving
+set sessionoptions=blank,buffers,curdir,folds,help,tabpages,winsize,localoptions
+
+" Word splitting
+set iskeyword+=-
+
+" git grep
+set grepprg=git\ grep\ -n\ $*         " Use git grep for searching
+
+" }}}
+
+" {{{ Autocommands
+
+" Make the modification indicator [+] white on red background
+au ColorScheme * hi User1 gui=bold term=bold cterm=bold guifg=white guibg=red ctermfg=white ctermbg=red
+
+" Tweak the color of the fold display column
+au ColorScheme * hi FoldColumn cterm=bold ctermbg=233 ctermfg=146
+
+" Spaces Only
+au FileType swift,mustache,markdown,cpp,hpp,vim,sh,html,htmldjango,css,sass,scss,javascript,coffee,python,ruby,eruby setl expandtab list
+
+" Tabs Only
+au FileType c,h,make setl foldmethod=syntax noexpandtab nolist
+au FileType gitconfig,apache,sql setl noexpandtab nolist
+
+" Folding
+au FileType html,htmldjango,css,sass,javascript,coffee,python,ruby,eruby setl foldmethod=indent foldenable
+au FileType json setl foldmethod=indent foldenable shiftwidth=4 softtabstop=4 tabstop=4 expandtab
+
+" Tabstop/Shiftwidth
+au FileType mustache,ruby,eruby,javascript,coffee,sass,scss setl softtabstop=2 shiftwidth=2 tabstop=2
+au FileType rst setl softtabstop=3 shiftwidth=3 tabstop=3
+
+" Other
+au FileType python let b:python_highlight_all=1
+au FileType markdown setl linebreak
+
+" }}}
+
+" {{{ Syntax Hilighting
+
+" This has to happen AFTER autocommands are defined, because I run au! when,
+" defining them, and syntax hilighting is done with autocommands.
+
+" Syntax hilighting
+syntax enable
+
+" }}}
+
+" Key Mappings {{{
 
 "split navigations
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
+" nnoremap <C-J> <C-W><C-J>
+" nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
-set number              " show line numbers
-set showcmd             " show command in bottom bar
-set cursorline          " highlight current line
-filetype indent on      " load filetype-specific indent files
-set wildmenu            " visual autocomplete for command menu
-set lazyredraw          " redraw only when we need to.
-set showmatch           " highlight matching [{()}]
+" Newlines
+nnoremap <C-j> o<ESC>k
+nnoremap <C-k> O<ESC>j
 
-set incsearch           " search as characters are entered
-set hlsearch            " highlight matches
-" turn off search highlight
-nnoremap <leader><space> :nohlsearch<CR>
+" Select the stuff I just pasted
+nnoremap gV `[V`]
 
-set foldenable          " enable folding
-set foldlevelstart=10   " open most folds by default
-set foldnestmax=10      " 10 nested fold max
-nnoremap <space> za
-set foldmethod=indent   " fold based on indent level
+" De-fuckify whitespace
+nnoremap <F4> :retab<CR>:%s/\s\+$//e<CR><C-o>
 
-" move vertically by visual line
-nnoremap j gj
-nnoremap k gk
+" Change indent continuously
+vmap < <gv
+vmap > >gv
 
-" move to beginning/end of line
-nnoremap B ^
-nnoremap E $
+" camelCase => camel_case
+vnoremap ,case :s/\v\C(([a-z]+)([A-Z]))/\2_\l\3/g<CR>
 
-" $/^ doesn't do anything
-nnoremap $ <nop>
-nnoremap ^ <nop>
+" Session mappings
+nnoremap ,s :mksession! Session.vim<CR>
 
-" enconding for Python3
-set encoding=utf-8
+" Instant Python constructors
+nnoremap ,c 0f(3wyt)o<ESC>pV:s/\([a-z_]\+\),\?/self.\1 = \1<C-v><CR>/g<CR>ddV?def<CR>j
 
-" highlight last inserted text
-noremap gV `[v`]
+" Directory of current file (not pwd)
+cnoremap %% <C-R>=expand('%:h').'/'<CR>
 
-" proper PEP8 indentation
-au BufNewFile,BufRead *.py
-    \ set tabstop=4 |
-    \ set softtabstop=4 |
-    \ set shiftwidth=4 |
-    \ set textwidth=79 |
-    \ set expandtab |
-    \ set autoindent |
-    \ set fileformat=unix |
+" Swap order of Python function arguments
+nnoremap <silent> ,- :%s/\(self\.\)\?<C-R><C-W>(\(self, \)\?\([a-zA-Z]\+\), \?\([a-zA-Z]\+\))/\1<C-R><C-W>(\2\4, \3)/g<CR>
 
-highlight BadWhitespace ctermbg=red guibg=darkred
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+" Insert timestamp
+nnoremap <C-d> "=strftime("%-l:%M%p")<CR>P
+inoremap <C-d> <C-r>=strftime("%-l:%M%p")<CR>
 
-" edit vimrc/zshrc and load vimrc bindings
-nnoremap <leader>ev :vsp $MYVIMRC<CR>
-nnoremap <leader>ez :vsp ~/.zshrc<CR>
-nnoremap <leader>sv :source $MYVIMRC<CR>
+" UndoTree
+nnoremap <leader>u :UndotreeShow<CR>
 
-" save session
-nnoremap <leader>s :mksession<CR>
+" Diff Mode
+nnoremap <silent> ,j :if &diff \| exec 'normal ]czz' \| endif<CR>
+nnoremap <silent> ,k :if &diff \| exec 'normal [czz' \| endif<CR>
+nnoremap <silent> ,p :if &diff \| exec 'normal dp' \| endif<CR>
+nnoremap <silent> ,o :if &diff \| exec 'normal do' \| endif<CR>
+nnoremap <silent> ZD :if &diff \| exec ':qall' \| endif<CR>
 
-" toggle between number and relativenumber
-function! ToggleNumber()
-    if(&relativenumber == 1)
-        set norelativenumber
-        set number
-    else
-        set relativenumber
-    endif
-endfunc
+" netrw
+nnoremap <silent> <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
 
-" Plugin Configuration
-let g:SimpylFold_docstring_preview=1
-let g:ycm_autoclose_preview_window_after_completion=1
-map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
-let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
-let g:airline_powerline_fonts = 1
-let g:go_fmt_command = "goimports"
-" Status line types/signatures.
-let g:go_auto_type_info = 1
+" }}}
+
+" Custom Functions {{{
+
+" MyStatusLine() {{{
+
+function! MyStatusLine()
+    let statusline = ""
+    " Filename (F -> full, f -> relative)
+    let statusline .= "%f"
+    " Buffer flags
+    let statusline .= "%( %h%1*%m%*%r%w%) "
+    " File format and type
+    let statusline .= "(%{&ff}%(\/%Y%))"
+    " Left/right separator
+    let statusline .= "%="
+    " Line & column
+    let statusline .= "(%l,%c%V) "
+    " Character under cursor (decimal)
+    let statusline .= "%03.3b "
+    " Character under cursor (hexadecimal)
+    let statusline .= "0x%02.2B "
+    " File progress
+    let statusline .= "| %P/%L"
+    return statusline
+endfunction
+
+" }}}
