@@ -2,6 +2,9 @@
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath=(~/.zsh $fpath)
 
+# vi-mode ftw
+set -o vi
+
 # VPN ticket
 source $HOME/.secrets/secret.sh
 
@@ -12,9 +15,24 @@ mcd () {
     cd $1
 }
 
+get_bin_bank() {
+	curl -X GET -sS https://internal-api.mercadopago.com/binapi/v1/search/$1/$2 | jq '.settings[] | {issuer: .issuer_name, issuer_code: .issuer_code, country: .country_code, brand: .brand_code}'
+}
+
+get_ip_cidr() {
+    URL=`curl --silent http://checkip.amazonaws.com/`
+    echo "${URL}/32"
+}
+
+function sk() {
+    # sk for screen kill
+    # function instead of alias because the order of the parameters matters
+    screen -S "$1" -X quit
+}
+
 mov_to_gif(){
     echo "📽️  Going to transform ${1} to ${2} 📽️"
-    ffmpeg -i ${1}.mov -s 800x600 -pix_fmt rgb24 -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > ${2}.gif
+    ffmpeg -i ${1}.mov -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > ${2}.gif
     echo "🍿 Finished! 🍿"
 }
 
@@ -76,14 +94,23 @@ alias zshrc='vim ~/.zshrc'
 # to quickly edit vimrc
 alias vimrc='vim ~/.vimrc'
 
+alias tmuxconf='vim ~/.tmux.conf'
+
 # quickly update zhsrc
 alias update="source ~/.zshrc"
+
+# screen
+alias sn='screen -S'  # sn for screen new
+alias sl='screen -ls' # sl for screen list
+alias sr='screen -x'  # sr for screen resume
 
 # default editor
 EDITOR=vim
 
 # Not sure why GOPATH is unset
 GOPATH=$HOME/go
+GOPRIVATE="github.com/mercadolibre"
+GOSUMDB=off
 
 # gitconfig if needed
 alias gitconfig='vim ~/.gitconfig'
@@ -116,6 +143,20 @@ export PATH="/Users/guamorim/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
 
+export GREP_OPTIONS='--color=always'
+export GREP_COLOR='1;35;40'
+
+
+
+export STARSHIP_CONFIG=~/.starship
+
+if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
+        tmux attach -t default || tmux new -s default
+fi
+
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/Users/guamorim/.sdkman"
 [[ -s "/Users/guamorim/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/guamorim/.sdkman/bin/sdkman-init.sh"
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /usr/local/bin/terraform terraform

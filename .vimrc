@@ -25,10 +25,24 @@ Plugin 'gmarik/Vundle.vim'
 
 " }}}
 
+" {{{ vim-fetch
+"     =========
+
+Plugin 'wsdjeg/vim-fetch'
+
+" }}}
+
 " {{{ vim-tmux
 "     ========
 
 Plugin 'tmux-plugins/vim-tmux'
+
+" }}}
+
+" {{{ vim-obsession
+"     ========
+
+Plugin 'tpope/vim-obsession'
 
 " }}}
 
@@ -112,6 +126,13 @@ let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 " augroup END
 
 " }}}
+
+" {{{ skeleton-config
+"     ===============
+autocmd BufNewFile README.md 0r ~/skeletons/README.md
+autocmd BufNewFile readme.md 0r ~/skeletons/readme.md
+
+autocmd BufNewFile *.sh 0r ~/skeletons/bash.sh
 
 " {{{ undotree
 "     ======
@@ -303,7 +324,10 @@ vmap > >gv
 vnoremap ,case :s/\v\C(([a-z]+)([A-Z]))/\2_\l\3/g<CR>
 
 " Session mappings
-nnoremap ,s :mksession! Session.vim<CR>
+let g:sessions_dir = '~/vim-sessions'
+nnoremap <Leader>ss :Obsession ' . g:session_dir . '/*.vim<C-D><BS><BS><BS><BS><BS>'
+nnoremap <Leader>sr :so ' . g:session_dir. '/*.vim<C-D><BS><BS><BS><BS><BS>'
+nnoremap <Leader>sp :Obsession<CR>
 
 " Instant Python constructors
 nnoremap ,c 0f(3wyt)o<ESC>pV:s/\([a-z_]\+\),\?/self.\1 = \1<C-v><CR>/g<CR>ddV?def<CR>j
@@ -355,7 +379,54 @@ function! MyStatusLine()
     let statusline .= "0x%02.2B "
     " File progress
     let statusline .= "| %P/%L"
+    " Obsession vim-session
+    for i in range(tabpagenr('$'))
+        " select the highlighting
+        if i + 1 == tabpagenr()
+            let statusline .= '%#TabLineSel#'
+        else
+            let statusline .= '%#TabLine#'
+    endif
+
+    " set the tab page number (for mouse clicks)
+    let statusline .= '%' . (i + 1) . 'T'
+
+    " the label is made by MyTabLabel()
+    let statusline .= ' %{MyTabLabel(' . (i + 1) . ')} '
+    endfor
+
+    " after the last tab fill with TabLineFill and reset tab page nr
+    let statusline .= '%#TabLineFill#%T'
+
+    let statusline .= '%=' " Right-align after this
+
+    if exists('g:this_obsession')
+        let statusline .= '%#diffadd#' " Use the "DiffAdd" color if in a session
+    endif
+
+    " add vim-obsession status if available
+    if exists(':Obsession')
+        let statusline .= "%{ObsessionStatus()}"
+        if exists('v:this_session') && v:this_session != ''
+            let s:obsession_string = v:this_session
+            let s:obsession_parts = split(s:obsession_string, '/')
+            let s:obsession_filename = s:obsession_parts[-1]
+            let statusline .= ' ' . s:obsession_filename . ' '
+            let statusline .= '%*' " Restore default color
+        endif
+    endif
+
     return statusline
+endfunction
+
+" }}}
+
+" {{{ MyTabLine()
+
+function MyTabLabel(n)
+  let buflist = tabpagebuflist(a:n)
+  let winnr = tabpagewinnr(a:n)
+  return bufname(buflist[winnr - 1])
 endfunction
 
 " }}}
