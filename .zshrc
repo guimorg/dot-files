@@ -15,10 +15,6 @@ mcd () {
     cd $1
 }
 
-get_bin_bank() {
-	curl -X GET -sS https://internal-api.mercadopago.com/binapi/v1/search/$1/$2 | jq '.settings[] | {issuer: .issuer_name, issuer_code: .issuer_code, country: .country_code, brand: .brand_code}'
-}
-
 get_ip_cidr() {
     URL=`curl --silent http://checkip.amazonaws.com/`
     echo "${URL}/32"

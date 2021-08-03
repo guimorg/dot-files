@@ -32,6 +32,14 @@ Plugin 'wsdjeg/vim-fetch'
 
 " }}}
 
+
+" {{{ vim-livedown
+"     =========
+
+Plugin 'shime/vim-livedown'
+
+" }}}
+
 " {{{ vim-tmux
 "     ========
 
