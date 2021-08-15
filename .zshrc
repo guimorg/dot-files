@@ -5,9 +5,6 @@ fpath=(~/.zsh $fpath)
 # vi-mode ftw
 set -o vi
 
-# VPN ticket
-source $HOME/.secrets/secret.sh
-
 # some functions
 mcd () {
     # Creates dir and cd into dir
@@ -116,7 +113,12 @@ source "$HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting/fast-syntax-hig
 source $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Load completion config
-source $HOME/.zsh/completion.zsh
+if type brew &>/dev/null; then
+	FPATH=$(brew --prefix)/share/zsh-completions:$FPATH
+
+	autoload -Uz compinit
+	compinit
+fi
 
 # Initialize the completion system
 autoload -Uz compinit
@@ -133,16 +135,11 @@ fi
 zmodload -i zsh/complist
 
 eval "$(starship init zsh)"
-source /Users/guamorim/.zsh/history.zsh
-
-export PATH="/Users/guamorim/.pyenv/bin:$PATH"
 eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
 
 export GREP_OPTIONS='--color=always'
 export GREP_COLOR='1;35;40'
-
-
 
 export STARSHIP_CONFIG=~/.starship
 
@@ -150,9 +147,6 @@ if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
         tmux attach -t default || tmux new -s default
 fi
 
-#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-export SDKMAN_DIR="/Users/guamorim/.sdkman"
-[[ -s "/Users/guamorim/.sdkman/bin/sdkman-init.sh" ]] && source "/Users/guamorim/.sdkman/bin/sdkman-init.sh"
-
 autoload -U +X bashcompinit && bashcompinit
 complete -o nospace -C /usr/local/bin/terraform terraform
+function gi() { curl -sLw n https://www.toptal.com/developers/gitignore/api/$@ ;}

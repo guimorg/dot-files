@@ -23,6 +23,8 @@ call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
 
+Plugin 'joshdick/onedark.vim'
+
 " }}}
 
 " {{{ vim-fetch
@@ -161,7 +163,8 @@ Plugin 'vim-syntastic/syntastic'
 
 " OPTIONS:
 
-let g:syntastic_python_python_exec = 'python3'
+let g:syntastic_python_checkers = ['python', 'flake8']
+let g:syntastic_python_pylint_exec = '~/.pyenv/versions/3.7.3/bin/flake8'
 
 " }}}
 
@@ -197,8 +200,8 @@ set modelines=2
 set modeline
 
 " Colorscheme
-colorscheme badwolf
-set background=dark
+syntax on
+colorscheme onedark
 
 " For clever completion with the :find command
 set path+=**
