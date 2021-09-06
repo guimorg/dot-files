@@ -17,10 +17,34 @@ get_ip_cidr() {
     echo "${URL}/32"
 }
 
-function sk() {
-    # sk for screen kill
-    # function instead of alias because the order of the parameters matters
-    screen -S "$1" -X quit
+vpn_start() {
+	pushd ~/.secrets &> /dev/null
+	openvpn3 session-start --config client.ovpn
+	popd &> /dev/null
+}
+
+vpn_stop() {
+	pushd ~/.secrets &> /dev/null
+	openvpn3 session-manage --config client.ovpn --disconnect
+	popd &> /dev/null
+}
+
+vpn_pause() {
+	pushd ~/.secrets &> /dev/null
+	openvpn3 session-manage --config client.ovpn --pause
+	popd &> /dev/null
+}
+
+vpn_resume() {
+	pushd ~/.secrets &> /dev/null
+	openvpn3 session-manage --config client.ovpn --resume
+	popd &> /dev/null
+}
+
+vpn_status() {
+	pushd ~/.secrets &> /dev/null
+	openvpn3 session-stats --config client.ovpn
+	popd &> /dev/null
 }
 
 mov_to_gif(){
@@ -29,49 +53,10 @@ mov_to_gif(){
     echo "🍿 Finished! 🍿"
 }
 
-pintoken(){
-    # Gets TOTP ticket
-    totp --list meli >> /dev/null
-    if [[ $? -ne 0 ]]; then
-        echo "TOTP for MeLi is not available!"
-        return 2
-    fi
-    
-    melitotp="$(totp --totp meli)"
-    echo "${VPN_PIN}${melitotp}"
-}
-
-meli_aws_login() {
-    # Getting token and pin
-    which aws-bastion-cli >> /dev/null
-    if [[ $? -ne 0 ]]; then
-        echo "Could not find aws-bastion-cli 😓"
-        return 2
-    fi
-    
-    echo "Getting your pintoken 😏 🍆"
-    token=`pintoken`
-    echo "Logging in using aws-bastion-cli ☁️"
-    aws_json_fields="$(aws-bastion-cli -t ${token} --print 2>/dev/null)"
-    if [[ $? -ne 0 ]]; then
-        echo "Try again!"
-        return 1
-    fi
-    expire=$(jq -r '.Expiration' <<< "${aws_json_fields}")
-    echo "Credentials will expire at ${expire} ⏲️"
-    export AWS_ACCESS_KEY_ID=$(jq -r '.AccessKeyId' <<< "${aws_json_fields}")
-    export AWS_SECRET_ACCESS_KEY=$(jq -r '.SecretAccessKey' <<< "${aws_json_fields}")
-    export AWS_SECURITY_TOKEN=$(jq -r '.SessionToken' <<< "${aws_json_fields}")
-    export AWS_SESSION_TOKEN=$(jq -r '.SessionToken' <<< "${aws_json_fields}")
-    echo "All done! Goodbye! 😍"
-}
-
 # some aliases
+alias ll='ls -l --color=auto'
 alias ..='cd ..'
 alias ...='cd ../..'
-alias ls='ls -GwF'
-alias ll='ls -alh'
-alias l='ls -CF'
 alias en_to_pt='trans en:pt "$@"'
 alias es_to_pt='trans es:pt "$@"'
 alias es_to_en='trans es:en "$@"'
@@ -87,30 +72,22 @@ alias zshrc='vim ~/.zshrc'
 # to quickly edit vimrc
 alias vimrc='vim ~/.vimrc'
 
-alias tmuxconf='vim ~/.tmux.conf'
-
 # quickly update zhsrc
 alias update="source ~/.zshrc"
-
-# screen
-alias sn='screen -S'  # sn for screen new
-alias sl='screen -ls' # sl for screen list
-alias sr='screen -x'  # sr for screen resume
 
 # default editor
 EDITOR=vim
 
-# Not sure why GOPATH is unset
-GOPATH=$HOME/go
-GOPRIVATE="github.com/mercadolibre"
-GOSUMDB=off
-
 # gitconfig if needed
 alias gitconfig='vim ~/.gitconfig'
-# Added by furycli:
-export PATH="$HOME/Library/Python/3.7/bin:$GOPATH/bin:$PATH"
-source "$HOME/.oh-my-zsh/custom/plugins/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh"
-source $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+plugins=(
+	zsh-autosuggestions
+	fast-syntax-highlighting
+	docker
+	tmux
+	zsh-pyenv
+)
 
 # Load completion config
 if type brew &>/dev/null; then
@@ -134,19 +111,19 @@ fi
 # Enhanced form of menu completion called `menu selection'
 zmodload -i zsh/complist
 
-eval "$(starship init zsh)"
-eval "$(pyenv init -)"
-if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+eval "$(pyenv virtualenv-init -)"
 
-export GREP_OPTIONS='--color=always'
+alias grep='grep --color=always'
 export GREP_COLOR='1;35;40'
 
 export STARSHIP_CONFIG=~/.starship
+eval "$(starship init zsh)"
 
-if command -v tmux &> /dev/null && [ -z "$TMUX" ]; then
-        tmux attach -t default || tmux new -s default
-fi
+export ZSH=/home/guimorg/.oh-my-zsh
+export ZSH_THEME="spaceship"
+source $ZSH/oh-my-zsh.sh
 
 autoload -U +X bashcompinit && bashcompinit
-complete -o nospace -C /usr/local/bin/terraform terraform
 function gi() { curl -sLw n https://www.toptal.com/developers/gitignore/api/$@ ;}
+bindkey -v
+export PATH=/home/guimorg/.local/bin:/home/guimorg/.pyenv/plugins/pyenv-virtualenv/shims:/home/guimorg/.pyenv/shims:/home/guimorg/.pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin

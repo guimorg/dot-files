@@ -42,13 +42,6 @@ Plugin 'shime/vim-livedown'
 
 " }}}
 
-" {{{ vim-tmux
-"     ========
-
-Plugin 'tmux-plugins/vim-tmux'
-
-" }}}
-
 " {{{ vim-obsession
 "     ========
 
@@ -77,26 +70,26 @@ Plugin 'tpope/vim-obsession'
 
 " vim-surround: s is a text-object for delimiters; ss linewise
 " ys to add surround
-Plugin 'tpope/vim-surround'
+" 1Plugin 'tpope/vim-surround'
 
 " vim-commentary: gc is an operator to toggle comments; gcc linewise
 Plugin 'tpope/vim-commentary'
 
 " vim-repeat: make vim-commentary and vim-surround work with .
-Plugin 'tpope/vim-repeat'
-
-" vim-liquid: syntax stuff
-Plugin 'tpope/vim-liquid'
+" Plugin 'tpope/vim-repeat'
 
 " vim-markdown: some stuff for fenced language highlighting
 Plugin 'tpope/vim-markdown'
+
 let g:markdown_fenced_languages = ['html', 'python', 'ruby', 'yaml', 'haml', 'bash=sh']
 
+" vim-fugitive: git is heaven
 Plugin 'tpope/vim-fugitive'
-Plugin 'tpope/vim-git'
-Plugin 'tpope/vim-rails'
+
+" vim-vinegar
 Plugin 'tpope/vim-vinegar'
-Plugin 'tpope/vim-haml'
+
+" vim-eunuch
 Plugin 'tpope/vim-eunuch'
 
 " }}}
@@ -163,8 +156,8 @@ Plugin 'vim-syntastic/syntastic'
 
 " OPTIONS:
 
-let g:syntastic_python_checkers = ['python', 'flake8']
-let g:syntastic_python_pylint_exec = '~/.pyenv/versions/3.7.3/bin/flake8'
+let g:syntastic_python_checkers = ['python3', 'flake8']
+let g:syntastic_python_pylint_exec = 'flake8'
 
 " }}}
 
@@ -265,12 +258,14 @@ set sessionoptions=blank,buffers,curdir,folds,help,tabpages,winsize,localoptions
 " Word splitting
 set iskeyword+=-
 
-" git grep
-set grepprg=git\ grep\ -n\ $*         " Use git grep for searching
-
 " }}}
 
 " {{{ Autocommands
+
+augroup Markdown
+  autocmd!
+  autocmd FileType markdown set wrap
+augroup END
 
 " Make the modification indicator [+] white on red background
 au ColorScheme * hi User1 gui=bold term=bold cterm=bold guifg=white guibg=red ctermfg=white ctermbg=red
@@ -364,7 +359,7 @@ nnoremap <silent> ,o :if &diff \| exec 'normal do' \| endif<CR>
 nnoremap <silent> ZD :if &diff \| exec ':qall' \| endif<CR>
 
 " netrw
-nnoremap <silent> <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
+" nnoremap <silent> <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
 
 " }}}
 
@@ -439,5 +434,7 @@ function MyTabLabel(n)
   let winnr = tabpagewinnr(a:n)
   return bufname(buflist[winnr - 1])
 endfunction
+
+" }}}
 
 " }}}
