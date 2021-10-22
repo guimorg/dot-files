@@ -27,18 +27,19 @@ Plugin 'joshdick/onedark.vim'
 
 " }}}
 
+" }}}
+
+" {{{ vim-maximizer
+"     =========
+
+Plugin 'szw/vim-maximizer'
+
+" }}}
+
 " {{{ vim-fetch
 "     =========
 
 Plugin 'wsdjeg/vim-fetch'
-
-" }}}
-
-
-" {{{ vim-livedown
-"     =========
-
-Plugin 'shime/vim-livedown'
 
 " }}}
 
@@ -188,6 +189,9 @@ filetype plugin indent on
 
 " {{{ Basic Settings
 
+" clipboard
+set clipboard=unnamedplus
+
 " Modelines
 set modelines=2
 set modeline
@@ -311,6 +315,9 @@ syntax enable
 " nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+
+" vim-maximizer
+noremap <C-w>m :MaximizerToggle<CR>
 
 " Newlines
 nnoremap <C-j> o<ESC>k

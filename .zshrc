@@ -47,10 +47,47 @@ vpn_status() {
 	popd &> /dev/null
 }
 
-mov_to_gif(){
+to_gif(){
     echo "📽️  Going to transform ${1} to ${2} 📽️"
-    ffmpeg -i ${1}.mov -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > ${2}.gif
+    ffmpeg -i ${1}.mp4 -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > ${2}.gif
     echo "🍿 Finished! 🍿"
+}
+
+pintoken(){
+    # Gets TOTP ticket
+    totp --list meli >> /dev/null
+    if [[ $? -ne 0 ]]; then
+        echo "TOTP for MeLi is not available!"
+        return 2
+    fi
+    
+    melitotp="$(totp --totp meli)"
+    echo "${VPN_PIN}${melitotp}"
+}
+
+meli_aws_login() {
+    # Getting token and pin
+    which aws-bastion-cli >> /dev/null
+    if [[ $? -ne 0 ]]; then
+        echo "Could not find aws-bastion-cli 😓"
+        return 2
+    fi
+    
+    echo "Getting your pintoken 😏 🍆"
+    token=`pintoken`
+    echo "Logging in using aws-bastion-cli ☁️"
+    aws_json_fields="$(aws-bastion-cli -t ${token} --print 2>/dev/null)"
+    if [[ $? -ne 0 ]]; then
+        echo "Try again!"
+        return 1
+    fi
+    expire=$(jq -r '.Expiration' <<< "${aws_json_fields}")
+    echo "Credentials will expire at ${expire} ⏲️"
+    export AWS_ACCESS_KEY_ID=$(jq -r '.AccessKeyId' <<< "${aws_json_fields}")
+    export AWS_SECRET_ACCESS_KEY=$(jq -r '.SecretAccessKey' <<< "${aws_json_fields}")
+    export AWS_SECURITY_TOKEN=$(jq -r '.SessionToken' <<< "${aws_json_fields}")
+    export AWS_SESSION_TOKEN=$(jq -r '.SessionToken' <<< "${aws_json_fields}")
+    echo "All done! Goodbye! 😍"
 }
 
 # some aliases
