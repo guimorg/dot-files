@@ -10,3 +10,5 @@ export EDITOR=vim
 export TERMINAL=alacritty
 export OPENER=xdg-open
 export PAGER=less
+
+export SCRIPT_DIR=~/scripts

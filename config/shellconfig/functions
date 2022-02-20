@@ -29,77 +29,39 @@ get_ip_cidr() {
     echo "${URL}/32"
 }
 
-vpn_start() {
-	pushd ~/.secrets &> /dev/null
-	openvpn3 session-start --config client.ovpn
-	popd &> /dev/null
+start_vpn() {
+	echo 'Connecting to VPN...'
+	pushd $HOME/.secrets
+	sudo openvpn client.ovpn --daemon
+	echo 'Connected!'
+	export DISPLAY=:0.0
+	nofify-send 'Connected to VPN!'
+	popd
 }
 
-vpn_stop() {
-	pushd ~/.secrets &> /dev/null
-	openvpn3 session-manage --config client.ovpn --disconnect
-	popd &> /dev/null
+stop_vpn() {
+	echo 'Stopping VPN Connection...'
+	sudo killall openvpn
+	echo 'Removing VPN tunnel if exists...'
+	sudo ip link delete tun0
+	echo 'Disconnected'
+	DISPLAY=:0.0 notify-send "Disconnected from VPN!"
 }
 
-vpn_pause() {
-	pushd ~/.secrets &> /dev/null
-	openvpn3 session-manage --config client.ovpn --pause
-	popd &> /dev/null
+restart_vpn() {
+	stop_vpn
+	start_vpn
 }
 
-vpn_resume() {
-	pushd ~/.secrets &> /dev/null
-	openvpn3 session-manage --config client.ovpn --resume
-	popd &> /dev/null
-}
-
-vpn_status() {
-	pushd ~/.secrets &> /dev/null
-	openvpn3 session-stats --config client.ovpn
-	popd &> /dev/null
+status_vpn() {
+	ps -a | grep openvpn
+	echo 'VPN running in this process.'
 }
 
 to_gif(){
     echo "📽️  Going to transform ${1} to ${2} 📽️"
     ffmpeg -i ${1}.mp4 -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > ${2}.gif
     echo "🍿 Finished! 🍿"
-}
-
-pintoken(){
-    # Gets TOTP ticket
-    totp --list meli >> /dev/null
-    if [[ $? -ne 0 ]]; then
-        echo "TOTP for MeLi is not available!"
-        return 2
-    fi
-    
-    melitotp="$(totp --totp meli)"
-    echo "${VPN_PIN}${melitotp}"
-}
-
-meli_aws_login() {
-    # Getting token and pin
-    which aws-bastion-cli >> /dev/null
-    if [[ $? -ne 0 ]]; then
-        echo "Could not find aws-bastion-cli 😓"
-        return 2
-    fi
-    
-    echo "Getting your pintoken 😏 🍆"
-    token=`pintoken`
-    echo "Logging in using aws-bastion-cli ☁️"
-    aws_json_fields="$(aws-bastion-cli -t ${token} --print 2>/dev/null)"
-    if [[ $? -ne 0 ]]; then
-        echo "Try again!"
-        return 1
-    fi
-    expire=$(jq -r '.Expiration' <<< "${aws_json_fields}")
-    echo "Credentials will expire at ${expire} ⏲️"
-    export AWS_ACCESS_KEY_ID=$(jq -r '.AccessKeyId' <<< "${aws_json_fields}")
-    export AWS_SECRET_ACCESS_KEY=$(jq -r '.SecretAccessKey' <<< "${aws_json_fields}")
-    export AWS_SECURITY_TOKEN=$(jq -r '.SessionToken' <<< "${aws_json_fields}")
-    export AWS_SESSION_TOKEN=$(jq -r '.SessionToken' <<< "${aws_json_fields}")
-    echo "All done! Goodbye! 😍"
 }
 
 function gi() { curl -sLw n https://www.toptal.com/developers/gitignore/api/$@ ;}
