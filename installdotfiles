@@ -30,7 +30,7 @@ ln -sf $path/config/shellconfig $HOME/.config/shellconfig
 ln -sf $path/config/starship.toml $HOME/.config/starship.toml
 # ln -sf $path/config/wall.png $HOME/.config/wall.png
 
-[ ! -d $HOME/.config/skeletons ] && mkdir -o $HOME/.config/skeletons
+[ ! -d $HOME/.config/skeletons ] && mkdir -p $HOME/.config/skeletons
 ln -sf $path/config/skeletons $HOME/.config/skeletons
 
 # Local directory

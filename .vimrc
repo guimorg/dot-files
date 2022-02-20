@@ -136,7 +136,7 @@ let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 " autocmd BufNewFile README.md 0r ~/skeletons/README.md
 " autocmd BufNewFile readme.md 0r ~/skeletons/readme.md
 
-autocmd BufNewFile *.sh 0r ~/skeletons/bash.sh
+autocmd BufNewFile *.sh 0r ~/.config/skeletons/bash.sh
 
 " {{{ undotree
 "     ======
