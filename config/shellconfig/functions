@@ -29,35 +29,6 @@ get_ip_cidr() {
     echo "${URL}/32"
 }
 
-start_vpn() {
-	echo 'Connecting to VPN...'
-	pushd $HOME/.secrets
-	sudo openvpn client.ovpn --daemon
-	echo 'Connected!'
-	export DISPLAY=:0.0
-	nofify-send 'Connected to VPN!'
-	popd
-}
-
-stop_vpn() {
-	echo 'Stopping VPN Connection...'
-	sudo killall openvpn
-	echo 'Removing VPN tunnel if exists...'
-	sudo ip link delete tun0
-	echo 'Disconnected'
-	DISPLAY=:0.0 notify-send "Disconnected from VPN!"
-}
-
-restart_vpn() {
-	stop_vpn
-	start_vpn
-}
-
-status_vpn() {
-	ps -a | grep openvpn
-	echo 'VPN running in this process.'
-}
-
 to_gif(){
     echo "📽️  Going to transform ${1} to ${2} 📽️"
     ffmpeg -i ${1}.mp4 -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > ${2}.gif
