@@ -1,0 +1,113 @@
+mcd () {
+    # Creates dir and cd into dir
+    mkdir -p ${1}
+    cd ${1}
+}
+
+inject_init_py() {
+	if [[ -d ${1} ]]; then
+		touch ${1}/__init__.py
+	else
+		echo "${1} is not a directory, please try again"
+		exit 1
+	fi
+}
+
+md_to_html() {
+	# Really ugly way to render markdown files
+	# I need to make this prettier, but for now
+	# it works
+	new_html_file="${1}.html"
+	pandoc -f markdown -t html ${1} > ${new_html_file}
+	google-chrome ${new_html_file}
+	sleep 2
+	rm ${new_html_file}
+}
+
+get_ip_cidr() {
+    URL=`curl --silent http://checkip.amazonaws.com/`
+    echo "${URL}/32"
+}
+
+vpn_start() {
+	pushd ~/.secrets &> /dev/null
+	openvpn3 session-start --config client.ovpn
+	popd &> /dev/null
+}
+
+vpn_stop() {
+	pushd ~/.secrets &> /dev/null
+	openvpn3 session-manage --config client.ovpn --disconnect
+	popd &> /dev/null
+}
+
+vpn_pause() {
+	pushd ~/.secrets &> /dev/null
+	openvpn3 session-manage --config client.ovpn --pause
+	popd &> /dev/null
+}
+
+vpn_resume() {
+	pushd ~/.secrets &> /dev/null
+	openvpn3 session-manage --config client.ovpn --resume
+	popd &> /dev/null
+}
+
+vpn_status() {
+	pushd ~/.secrets &> /dev/null
+	openvpn3 session-stats --config client.ovpn
+	popd &> /dev/null
+}
+
+to_gif(){
+    echo "📽️  Going to transform ${1} to ${2} 📽️"
+    ffmpeg -i ${1}.mp4 -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > ${2}.gif
+    echo "🍿 Finished! 🍿"
+}
+
+pintoken(){
+    # Gets TOTP ticket
+    totp --list meli >> /dev/null
+    if [[ $? -ne 0 ]]; then
+        echo "TOTP for MeLi is not available!"
+        return 2
+    fi
+    
+    melitotp="$(totp --totp meli)"
+    echo "${VPN_PIN}${melitotp}"
+}
+
+meli_aws_login() {
+    # Getting token and pin
+    which aws-bastion-cli >> /dev/null
+    if [[ $? -ne 0 ]]; then
+        echo "Could not find aws-bastion-cli 😓"
+        return 2
+    fi
+    
+    echo "Getting your pintoken 😏 🍆"
+    token=`pintoken`
+    echo "Logging in using aws-bastion-cli ☁️"
+    aws_json_fields="$(aws-bastion-cli -t ${token} --print 2>/dev/null)"
+    if [[ $? -ne 0 ]]; then
+        echo "Try again!"
+        return 1
+    fi
+    expire=$(jq -r '.Expiration' <<< "${aws_json_fields}")
+    echo "Credentials will expire at ${expire} ⏲️"
+    export AWS_ACCESS_KEY_ID=$(jq -r '.AccessKeyId' <<< "${aws_json_fields}")
+    export AWS_SECRET_ACCESS_KEY=$(jq -r '.SecretAccessKey' <<< "${aws_json_fields}")
+    export AWS_SECURITY_TOKEN=$(jq -r '.SessionToken' <<< "${aws_json_fields}")
+    export AWS_SESSION_TOKEN=$(jq -r '.SessionToken' <<< "${aws_json_fields}")
+    echo "All done! Goodbye! 😍"
+}
+
+function gi() { curl -sLw n https://www.toptal.com/developers/gitignore/api/$@ ;}
+
+# Colourized cat output
+ccat() {
+  case "$1" in
+      *.md) glow -s dark "$1";;
+      *) highlight -O ansi "$1" --force;;
+  esac
+}

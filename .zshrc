@@ -1,129 +1,85 @@
+neofetch
+
 # autocompletion for git
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
 fpath=(~/.zsh $fpath)
 
+[[ $- != *i* ]] && return
+
+HISTSIZE=1000
+SAVEHIST=1000
+HISTFILE=~/.cache/zsh/history
+
+# Initialize the completion system
+autoload -Uz compinit
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
+zmodload zsh/complist
+compinit
+_comp_options+=(globdots)		# Include hidden files.
+
 # vi-mode ftw
+bindkey -v
+export KEYTIMEOUT=1
+
+bindkey '^R' history-incremental-pattern-search-backward
+autoload edit-command-line; zle -N edit-command-line
+bindkey '^v' edit-command-line
+autoload -U edit-command-line && zle -N edit-command-line && bindkey -M vicmd "^v" edit-command-line
+
+# Change cursor shape for different vi modes.
+function zle-keymap-select {
+  if [[ ${KEYMAP} == vicmd ]] ||
+     [[ $1 = 'block' ]]; then
+    echo -ne '\e[1 q'
+  elif [[ ${KEYMAP} == main ]] ||
+       [[ ${KEYMAP} == viins ]] ||
+       [[ ${KEYMAP} = '' ]] ||
+       [[ $1 = 'beam' ]]; then
+    echo -ne '\e[5 q'
+  fi
+}
+zle -N zle-keymap-select
+
+# ci", ci', ci`, di", etc
+autoload -U select-quoted
+zle -N select-quoted
+for m in visual viopp; do
+  for c in {a,i}{\',\",\`}; do
+    bindkey -M $m $c select-quoted
+  done
+done
+
+# ci{, ci(, ci<, di{, etc
+autoload -U select-bracketed
+zle -N select-bracketed
+for m in visual viopp; do
+  for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
+    bindkey -M $m $c select-bracketed
+  done
+done
+
+zle-line-init() {
+    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+    echo -ne "\e[5 q"
+}
+zle -N zle-line-init
+
+echo -ne '\e[5 q' # Use beam shape cursor on startup.
+precmd() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+
 set -o vi
-
-# some functions
-mcd () {
-    # Creates dir and cd into dir
-    mkdir -p $1
-    cd $1
-}
-
-get_ip_cidr() {
-    URL=`curl --silent http://checkip.amazonaws.com/`
-    echo "${URL}/32"
-}
-
-vpn_start() {
-	pushd ~/.secrets &> /dev/null
-	openvpn3 session-start --config client.ovpn
-	popd &> /dev/null
-}
-
-vpn_stop() {
-	pushd ~/.secrets &> /dev/null
-	openvpn3 session-manage --config client.ovpn --disconnect
-	popd &> /dev/null
-}
-
-vpn_pause() {
-	pushd ~/.secrets &> /dev/null
-	openvpn3 session-manage --config client.ovpn --pause
-	popd &> /dev/null
-}
-
-vpn_resume() {
-	pushd ~/.secrets &> /dev/null
-	openvpn3 session-manage --config client.ovpn --resume
-	popd &> /dev/null
-}
-
-vpn_status() {
-	pushd ~/.secrets &> /dev/null
-	openvpn3 session-stats --config client.ovpn
-	popd &> /dev/null
-}
-
-to_gif(){
-    echo "📽️  Going to transform ${1} to ${2} 📽️"
-    ffmpeg -i ${1}.mp4 -r 10 -f gif - | gifsicle --optimize=3 --delay=3 > ${2}.gif
-    echo "🍿 Finished! 🍿"
-}
-
-pintoken(){
-    # Gets TOTP ticket
-    totp --list meli >> /dev/null
-    if [[ $? -ne 0 ]]; then
-        echo "TOTP for MeLi is not available!"
-        return 2
-    fi
-    
-    melitotp="$(totp --totp meli)"
-    echo "${VPN_PIN}${melitotp}"
-}
-
-meli_aws_login() {
-    # Getting token and pin
-    which aws-bastion-cli >> /dev/null
-    if [[ $? -ne 0 ]]; then
-        echo "Could not find aws-bastion-cli 😓"
-        return 2
-    fi
-    
-    echo "Getting your pintoken 😏 🍆"
-    token=`pintoken`
-    echo "Logging in using aws-bastion-cli ☁️"
-    aws_json_fields="$(aws-bastion-cli -t ${token} --print 2>/dev/null)"
-    if [[ $? -ne 0 ]]; then
-        echo "Try again!"
-        return 1
-    fi
-    expire=$(jq -r '.Expiration' <<< "${aws_json_fields}")
-    echo "Credentials will expire at ${expire} ⏲️"
-    export AWS_ACCESS_KEY_ID=$(jq -r '.AccessKeyId' <<< "${aws_json_fields}")
-    export AWS_SECRET_ACCESS_KEY=$(jq -r '.SecretAccessKey' <<< "${aws_json_fields}")
-    export AWS_SECURITY_TOKEN=$(jq -r '.SessionToken' <<< "${aws_json_fields}")
-    export AWS_SESSION_TOKEN=$(jq -r '.SessionToken' <<< "${aws_json_fields}")
-    echo "All done! Goodbye! 😍"
-}
-
-# some aliases
-alias ll='ls -l --color=auto'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias en_to_pt='trans en:pt "$@"'
-alias es_to_pt='trans es:pt "$@"'
-alias es_to_en='trans es:en "$@"'
-alias pt_to_en='trans pt:en "$@"'
-alias pt_to_es='trans pt:es "$@"'
-
-# python3
-alias python=python3
-
-# to quickly edit zshrc
-alias zshrc='vim ~/.zshrc'
-
-# to quickly edit vimrc
-alias vimrc='vim ~/.vimrc'
-
-# quickly update zhsrc
-alias update="source ~/.zshrc"
-
-# default editor
-EDITOR=vim
-
-# gitconfig if needed
-alias gitconfig='vim ~/.gitconfig'
 
 plugins=(
 	zsh-autosuggestions
 	fast-syntax-highlighting
 	docker
-	tmux
 	zsh-pyenv
+	you-should-use
+	asdf
+	command-not-found
+	git
 )
 
 # Load completion config
@@ -134,9 +90,7 @@ if type brew &>/dev/null; then
 	compinit
 fi
 
-# Initialize the completion system
-autoload -Uz compinit
-
+for f in ~/.config/shellconfig/*; do source "$f"; done
 # Cache completion if nothing changed - faster startup time
 typeset -i updated_at=$(date +'%j' -r ~/.zcompdump 2>/dev/null || stat -f '%Sm' -t '%j' ~/.zcompdump 2>/dev/null)
 if [ $(date +'%j') != $updated_at ]; then
@@ -145,22 +99,53 @@ else
   compinit -C -i
 fi
 
-# Enhanced form of menu completion called `menu selection'
-zmodload -i zsh/complist
+# # Enhanced form of menu completion called `menu selection'
+# zmodload -i zsh/complist
 
 eval "$(pyenv virtualenv-init -)"
 
-alias grep='grep --color=always'
-export GREP_COLOR='1;35;40'
-
-export STARSHIP_CONFIG=~/.starship
-eval "$(starship init zsh)"
-
-export ZSH=/home/guimorg/.oh-my-zsh
-export ZSH_THEME="spaceship"
 source $ZSH/oh-my-zsh.sh
 
-autoload -U +X bashcompinit && bashcompinit
-function gi() { curl -sLw n https://www.toptal.com/developers/gitignore/api/$@ ;}
-bindkey -v
-export PATH=/home/guimorg/.local/bin:/home/guimorg/.pyenv/plugins/pyenv-virtualenv/shims:/home/guimorg/.pyenv/shims:/home/guimorg/.pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+# autoload -U +X bashcompinit && bashcompinit
+# autoload -U colors && colors
+
+# # append completions to fpath
+# fpath=(${ASDF_DIR}/completions $fpath)
+# # initialise completions with ZSH's compinit
+# autoload -Uz compinit && compinit
+
+SPACESHIP_PROMPT_ADD_NEWLINE=false
+SPACESHIP_PROMPT_SEPARATE_LINE=false
+SPACESHIP_CHAR_SYMBOL=❯
+SPACESHIP_CHAR_SUFFIX=" "
+SPACESHIP_HG_SHOW=false
+SPACESHIP_PACKAGE_SHOW=false
+SPACESHIP_NODE_SHOW=false
+SPACESHIP_RUBY_SHOW=false
+SPACESHIP_ELM_SHOW=false
+SPACESHIP_ELIXIR_SHOW=false
+SPACESHIP_XCODE_SHOW_LOCAL=false
+SPACESHIP_SWIFT_SHOW_LOCAL=false
+SPACESHIP_GOLANG_SHOW=false
+SPACESHIP_PHP_SHOW=false
+SPACESHIP_RUST_SHOW=false
+SPACESHIP_JULIA_SHOW=false
+SPACESHIP_DOCKER_SHOW=true
+SPACESHIP_DOCKER_CONTEXT_SHOW=true
+SPACESHIP_AWS_SHOW=false
+SPACESHIP_CONDA_SHOW=false
+SPACESHIP_VENV_SHOW=false
+SPACESHIP_PYENV_SHOW=true
+SPACESHIP_DOTNET_SHOW=false
+SPACESHIP_EMBER_SHOW=false
+SPACESHIP_KUBECONTEXT_SHOW=false
+SPACESHIP_TERRAFORM_SHOW=false
+SPACESHIP_TERRAFORM_SHOW=false
+SPACESHIP_VI_MODE_SHOW=false
+SPACESHIP_JOBS_SHOW=false
+
+. $HOME/.cargo/env
+. $HOME/.asdf/asdf.sh
+
+eval "$(starship init zsh)"
+fpath+=${ZDOTDIR:-~}/.zsh_functions

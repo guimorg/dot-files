@@ -1,0 +1,22 @@
+alias ll='ls -l --color=auto'
+# alias ls='exa --icons -a --group-directories-first'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias en_to_pt='trans en:pt "$@"'
+alias es_to_pt='trans es:pt "$@"'
+alias es_to_en='trans es:en "$@"'
+alias pt_to_en='trans pt:en "$@"'
+alias pt_to_es='trans pt:es "$@"'
+alias zshrc='vim ~/.zshrc'
+
+alias vimrc='vim ~/.vimrc'
+alias update="source ~/.zshrc"
+
+alias gitconfig='vim ~/.gitconfig'
+
+alias r=ranger
+alias v=vim
+
+
+alias c='"$(history | tail -2 | sed "s/  [0-9]*  //;2d")" > /tmp/cmdoutput && cat /tmp/cmdoutput | xsel -b && notify-send "Terminal" "Ouput Copied"'
+alias grep='grep --color=always'

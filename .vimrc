@@ -133,8 +133,8 @@ let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
 
 " {{{ skeleton-config
 "     ===============
-autocmd BufNewFile README.md 0r ~/skeletons/README.md
-autocmd BufNewFile readme.md 0r ~/skeletons/readme.md
+" autocmd BufNewFile README.md 0r ~/skeletons/README.md
+" autocmd BufNewFile readme.md 0r ~/skeletons/readme.md
 
 autocmd BufNewFile *.sh 0r ~/skeletons/bash.sh
 
@@ -195,6 +195,9 @@ set clipboard=unnamedplus
 " Modelines
 set modelines=2
 set modeline
+
+" Leading zeros
+set nrformats-=octal
 
 " Colorscheme
 syntax on
@@ -260,7 +263,7 @@ set statusline=%!MyStatusLine()
 set sessionoptions=blank,buffers,curdir,folds,help,tabpages,winsize,localoptions
 
 " Word splitting
-set iskeyword+=-
+"set iskeyword+=-
 
 " }}}
 
@@ -432,6 +435,10 @@ function! MyStatusLine()
     return statusline
 endfunction
 
+" }}}
+
+" {{{ Abbreviations
+cabbrev vsf vert sfind
 " }}}
 
 " {{{ MyTabLine()

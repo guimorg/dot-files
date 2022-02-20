@@ -1,0 +1,37 @@
+#!/bin/bash
+
+set -euo pipefail
+
+function coffeelog(){
+cat << "EOF"
+~-_
+_-~
+c|_|
+EOF
+    printf "\n\n\e[32m ${1} \e[0m\n\n"
+}
+
+cat << "EOF"
+Preparing some coffee...
+ ((     ___
+  ))  \___/_
+ |~~| /~~~\ \
+C|__| \___/
+      `'`'`
+EOF
+
+coffeelog "I'll be right right back!"
+
+sleep ${1}
+
+cat << "EOF"
+Yummy!
+         ,-"-.
+       _r-----i          _
+       \      |-.      ,###.
+        |     | |    ,-------.
+        |     | |   c|       |                       ,--.
+        |     |'     |       |      _______________ C|  |
+        (=====)      =========      \_____________/  `=='
+(HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH)
+EOF
