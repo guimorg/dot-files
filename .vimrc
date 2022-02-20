@@ -23,14 +23,24 @@ call vundle#begin()
 
 Plugin 'gmarik/Vundle.vim'
 
-Plugin 'joshdick/onedark.vim'
+" Plugin 'joshdick/onedark.vim'
+Plugin 'dracula/vim', { 'name': 'dracula' }
 
 " }}}
+
+" {{{ vim-airline
+"     ===========
+
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
+let g:airline#extensions#obsession#indicator_text = 'Obsession'
+
+let g:airline_theme='dracula'
 
 " }}}
 
 " {{{ vim-maximizer
-"     =========
+"     =============
 
 Plugin 'szw/vim-maximizer'
 
@@ -201,7 +211,7 @@ set nrformats-=octal
 
 " Colorscheme
 syntax on
-colorscheme onedark
+" colorscheme onedark
 
 " For clever completion with the :find command
 set path+=**
@@ -377,63 +387,63 @@ nnoremap <silent> ZD :if &diff \| exec ':qall' \| endif<CR>
 
 " MyStatusLine() {{{
 
-function! MyStatusLine()
-    let statusline = ""
-    " Filename (F -> full, f -> relative)
-    let statusline .= "%f"
-    " Buffer flags
-    let statusline .= "%( %h%1*%m%*%r%w%) "
-    " File format and type
-    let statusline .= "(%{&ff}%(\/%Y%))"
-    " Left/right separator
-    let statusline .= "%="
-    " Line & column
-    let statusline .= "(%l,%c%V) "
-    " Character under cursor (decimal)
-    let statusline .= "%03.3b "
-    " Character under cursor (hexadecimal)
-    let statusline .= "0x%02.2B "
-    " File progress
-    let statusline .= "| %P/%L"
-    " Obsession vim-session
-    for i in range(tabpagenr('$'))
-        " select the highlighting
-        if i + 1 == tabpagenr()
-            let statusline .= '%#TabLineSel#'
-        else
-            let statusline .= '%#TabLine#'
-    endif
+" function! MyStatusLine()
+"     let statusline = ""
+"     " Filename (F -> full, f -> relative)
+"     let statusline .= "%f"
+"     " Buffer flags
+"     let statusline .= "%( %h%1*%m%*%r%w%) "
+"     " File format and type
+"     let statusline .= "(%{&ff}%(\/%Y%))"
+"     " Left/right separator
+"     let statusline .= "%="
+"     " Line & column
+"     let statusline .= "(%l,%c%V) "
+"     " Character under cursor (decimal)
+"     let statusline .= "%03.3b "
+"     " Character under cursor (hexadecimal)
+"     let statusline .= "0x%02.2B "
+"     " File progress
+"     let statusline .= "| %P/%L"
+"     " Obsession vim-session
+"     for i in range(tabpagenr('$'))
+"         " select the highlighting
+"         if i + 1 == tabpagenr()
+"             let statusline .= '%#TabLineSel#'
+"         else
+"             let statusline .= '%#TabLine#'
+"     endif
 
-    " set the tab page number (for mouse clicks)
-    let statusline .= '%' . (i + 1) . 'T'
+"     " set the tab page number (for mouse clicks)
+"     let statusline .= '%' . (i + 1) . 'T'
 
-    " the label is made by MyTabLabel()
-    let statusline .= ' %{MyTabLabel(' . (i + 1) . ')} '
-    endfor
+"     " the label is made by MyTabLabel()
+"     let statusline .= ' %{MyTabLabel(' . (i + 1) . ')} '
+"     endfor
 
-    " after the last tab fill with TabLineFill and reset tab page nr
-    let statusline .= '%#TabLineFill#%T'
+"     " after the last tab fill with TabLineFill and reset tab page nr
+"     let statusline .= '%#TabLineFill#%T'
 
-    let statusline .= '%=' " Right-align after this
+"     let statusline .= '%=' " Right-align after this
 
-    if exists('g:this_obsession')
-        let statusline .= '%#diffadd#' " Use the "DiffAdd" color if in a session
-    endif
+"     if exists('g:this_obsession')
+"         let statusline .= '%#diffadd#' " Use the "DiffAdd" color if in a session
+"     endif
 
-    " add vim-obsession status if available
-    if exists(':Obsession')
-        let statusline .= "%{ObsessionStatus()}"
-        if exists('v:this_session') && v:this_session != ''
-            let s:obsession_string = v:this_session
-            let s:obsession_parts = split(s:obsession_string, '/')
-            let s:obsession_filename = s:obsession_parts[-1]
-            let statusline .= ' ' . s:obsession_filename . ' '
-            let statusline .= '%*' " Restore default color
-        endif
-    endif
+"     " add vim-obsession status if available
+"     if exists(':Obsession')
+"         let statusline .= "%{ObsessionStatus()}"
+"         if exists('v:this_session') && v:this_session != ''
+"             let s:obsession_string = v:this_session
+"             let s:obsession_parts = split(s:obsession_string, '/')
+"             let s:obsession_filename = s:obsession_parts[-1]
+"             let statusline .= ' ' . s:obsession_filename . ' '
+"             let statusline .= '%*' " Restore default color
+"         endif
+"     endif
 
-    return statusline
-endfunction
+"     return statusline
+" endfunction
 
 " }}}
 
