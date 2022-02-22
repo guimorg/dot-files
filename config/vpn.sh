@@ -84,8 +84,14 @@ restart_vpn()
 
 status_vpn()
 {
-  ps -a | grep openvpn
-  echo 'VPN running in this process.'
+  vpn_running=$(ps aux | grep "openvpn" | grep -v "grep")
+  is_running=$(echo ${vpn_running} | wc -l)
+  if [ $is_running -lt 1 ]; then
+    echo 'No VPN process is running...'
+  else
+    echo ${vpn_running}
+    echo '\nVPN processes running.'
+  fi
 }
 
 # -----------------------------------------------
