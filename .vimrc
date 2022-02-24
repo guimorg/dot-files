@@ -1,7 +1,5 @@
 " vim: fdm=marker foldenable sw=4 ts=4 sts=4
-" This is my .vimrc File, most of it came from Max Canto's .vimrc File
-" https://github.com/changemewtf/dotfiles/blob/master/vim/.vimrc
-
+" This is my .vimrc File, most of it came from Max Canto's .vimrc File " https://github.com/changemewtf/dotfiles/blob/master/vim/.vimrc 
 " {{{ Clear all autocommands
 
 " TODO: It might be more honest to put this in my ,v auto-source-vimrc binding
@@ -24,7 +22,21 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 " Plugin 'joshdick/onedark.vim'
-Plugin 'dracula/vim', { 'name': 'dracula' }
+" let g:dracula_colorterm = 0
+" Plugin 'dracula/vim', { 'name': 'dracula' }
+
+" }}}
+
+" {{{ ale
+
+Plugin 'dense-analysis/ale'
+
+let b:ale_fixers = {
+\    '*': ['remove_trailing_lines', 'trim_whitespace'],
+\    'python': ['black'],
+\}
+
+" let b:ale_linters = {'python': ['pyright']}
 
 " }}}
 
@@ -33,9 +45,17 @@ Plugin 'dracula/vim', { 'name': 'dracula' }
 
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+
 let g:airline#extensions#obsession#indicator_text = 'Obsession'
 
-let g:airline_theme='dracula'
+let g:airline_theme='base16_dracula'
+
+if !has('gui_running') && &term =~ '^\%(screen\|tmux\)'
+  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+
+set termguicolors
 
 " }}}
 
@@ -163,12 +183,12 @@ set undofile
 " {{{ vim-syntastic
 "     ==========
 
-Plugin 'vim-syntastic/syntastic'
+" Plugin 'vim-syntastic/syntastic'
 
 " OPTIONS:
 
-let g:syntastic_python_checkers = ['python3', 'flake8']
-let g:syntastic_python_pylint_exec = 'flake8'
+" let g:syntastic_python_checkers = ['python3', 'flake8']
+" let g:syntastic_python_pylint_exec = 'flake8'
 
 " }}}
 
@@ -267,7 +287,7 @@ set tabstop=2 shiftwidth=2 softtabstop=2
 set foldlevelstart=2
 
 " Status line
-set statusline=%!MyStatusLine()
+" set statusline=%!MyStatusLine()
 
 " Session saving
 set sessionoptions=blank,buffers,curdir,folds,help,tabpages,winsize,localoptions
@@ -284,11 +304,12 @@ augroup Markdown
   autocmd FileType markdown set wrap
 augroup END
 
+
 " Make the modification indicator [+] white on red background
-au ColorScheme * hi User1 gui=bold term=bold cterm=bold guifg=white guibg=red ctermfg=white ctermbg=red
+" au ColorScheme * hi User1 gui=bold term=bold cterm=bold guifg=white guibg=red ctermfg=white ctermbg=red
 
 " Tweak the color of the fold display column
-au ColorScheme * hi FoldColumn cterm=bold ctermbg=233 ctermfg=146
+" au ColorScheme * hi FoldColumn cterm=bold ctermbg=233 ctermfg=146
 
 " Spaces Only
 au FileType swift,mustache,markdown,cpp,hpp,vim,sh,html,htmldjango,css,sass,scss,javascript,coffee,python,ruby,eruby setl expandtab list
@@ -377,6 +398,9 @@ nnoremap <silent> ,k :if &diff \| exec 'normal [czz' \| endif<CR>
 nnoremap <silent> ,p :if &diff \| exec 'normal dp' \| endif<CR>
 nnoremap <silent> ,o :if &diff \| exec 'normal do' \| endif<CR>
 nnoremap <silent> ZD :if &diff \| exec ':qall' \| endif<CR>
+
+" hi SpellBad    ctermfg=015      ctermbg=000     cterm=none      guifg=#FFFFFF   guibg=#000000   gui=none
+hi SpellBad ctermfg=015 ctermbg=009 cterm=bold guibg=#ff0000 guifg=#000000 gui=bold
 
 " netrw
 " nnoremap <silent> <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>

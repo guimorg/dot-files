@@ -186,8 +186,21 @@ bindsym $mod+m exec volctrl All mute
 # bindsym $mod+Left exec light -U 5 && pkill -SIGRTMIN+4 i3block
 
 ###---System Control---###
-bindsym $mod+shift+z exec prompt "Are you sure you would like to reboot?" "sudo reboot"
-bindsym $mod+shift+x exec prompt "Are you sure you would like to shutdown?" "sudo shutdown"
+# Create Log out, Reboot, Poweroff bindings
+mode "(S)uspend, (L)ogout, (R)eboot, (P)oweroff" {
+        bindsym r exec --no-startup-id systemctl reboot
+        bindsym s exec --no-startup-id systemctl suspend; mode "default"
+        bindsym l exit
+        bindsym p exec --no-startup-id systemctl poweroff
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+bindsym $mod+Control+Shift+e mode "(S)uspend, (L)ogout, (R)eboot, (P)oweroff"
+# bindsym $mod+Shift+z exec prompt "Are you sure you would like to reboot?" "sudo reboot"
+# bindsym $mod+Shift+x exec prompt "Are you sure you would like to shutdown?" "sudo shutdown"
 bindsym $mod+Shift+b exec betterlockscreen -l
 
 ###---Update Packages---###
