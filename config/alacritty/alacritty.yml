@@ -97,7 +97,7 @@ window:
   #
   # Override the variant of the GTK theme. Commonly supported values are `dark`
   # and `light`. Set this to `None` to use the default theme variant.
-  gtk_theme_variant: None
+  gtk_theme_variant: 'dark'
 
 scrolling:
   # Maximum number of lines in the scrollback buffer.
@@ -117,7 +117,8 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: "Fira Code"
+    # family: "Fira Code"
+    family: "Liberation Mono"
 
     # The `style` can be specified to pick a specific face.
     style: Retina
@@ -156,7 +157,7 @@ font:
     #style: Bold Italic
 
   # Point size
-  size: 12.0
+  size: 10.0
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
@@ -188,47 +189,47 @@ font:
 # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: false
 
-# Colors (Tomorrow Night)
+# Colors (Ayu Dark)
 colors:
   # Default colors
   primary:
-    background: '0x282936'
-    foreground: '0xe9e9f4'
-
-  # Colors the cursor will use if `custom_cursor_colors` is true
-  cursor:
-    text: '0x282936'
-    cursor: '0xe9e9f4'
+    background: '0x0A0E14'
+    foreground: '0xB3B1AD'
 
   # Normal colors
   normal:
-    black:   '0x282936'
-    red:     '0xea51b2'
-    green:   '0xebff87'
-    yellow:  '0x00f769'
-    blue:    '0x62d6e8'
-    magenta: '0xb45bcf'
-    cyan:    '0xa1efe4'
-    white:   '0xe9e9f4'
+    black:   '0x01060E'
+    red:     '0xEA6C73'
+    green:   '0x91B362'
+    yellow:  '0xF9AF4F'
+    blue:    '0x53BDFA'
+    magenta: '0xFAE994'
+    cyan:    '0x90E1C6'
+    white:   '0xC7C7C7'
 
   # Bright colors
   bright:
-    black:   '0x626483'
-    red:     '0xea51b2'
-    green:   '0xebff87'
-    yellow:  '0x00f769'
-    blue:    '0x62d6e8'
-    magenta: '0xb45bcf'
-    cyan:    '0xa1efe4'
-    white:   '0xf7f7fb'
+    black:   '0x686868'
+    red:     '0xF07178'
+    green:   '0xC2D94C'
+    yellow:  '0xFFB454'
+    blue:    '0x59C2FF'
+    magenta: '0xFFEE99'
+    cyan:    '0x95E6CB'
+    white:   '0xFFFFFF'
 
-  indexed_colors:
-    - { index: 16, color: '0xb45bcf' }
-    - { index: 17, color: '0x00f769' }
-    - { index: 18, color: '0x3a3c4e' }
-    - { index: 19, color: '0x4d4f68' }
-    - { index: 20, color: '0x62d6e8' }
-    - { index: 21, color: '0xf1f2f8' }
+  # # Colors the cursor will use if `custom_cursor_colors` is true
+  # cursor:
+  #   text: '0x282936'
+  #   cursor: '0xe9e9f4'
+
+  # indexed_colors:
+  #   - { index: 16, color: '0xb45bcf' }
+  #   - { index: 17, color: '0x00f769' }
+  #   - { index: 18, color: '0x3a3c4e' }
+  #   - { index: 19, color: '0x4d4f68' }
+  #   - { index: 20, color: '0x62d6e8' }
+  #   - { index: 21, color: '0xf1f2f8' }
 
   # Transparent cell backgrounds
   #
