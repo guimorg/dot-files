@@ -310,6 +310,10 @@ augroup END
 
 " Tweak the color of the fold display column
 " au ColorScheme * hi FoldColumn cterm=bold ctermbg=233 ctermfg=146
+highlight Pmenu ctermbg=blue guibg=blue guifg=white ctermbg=white
+highlight PMenuSel ctermbg=white guibg=white guifg=black ctermfg=black
+" highlight PmenuSbar ctermbg=gray guibg=gray
+" highlight PmenuThumb ctermbg=red guibg=red
 
 " Spaces Only
 au FileType swift,mustache,markdown,cpp,hpp,vim,sh,html,htmldjango,css,sass,scss,javascript,coffee,python,ruby,eruby setl expandtab list
@@ -339,6 +343,7 @@ au FileType markdown setl linebreak
 
 " Syntax hilighting
 syntax enable
+" set hlsearch
 
 " }}}
 

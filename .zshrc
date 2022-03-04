@@ -1,4 +1,5 @@
-neofetch
+# neofetch
+fastfetch
 
 # autocompletion for git
 zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
