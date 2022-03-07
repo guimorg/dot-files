@@ -304,6 +304,11 @@ augroup Markdown
   autocmd FileType markdown set wrap
 augroup END
 
+augroup Mkdir
+  autocmd!
+  autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
+augroup END
+
 
 " Make the modification indicator [+] white on red background
 " au ColorScheme * hi User1 gui=bold term=bold cterm=bold guifg=white guibg=red ctermfg=white ctermbg=red
@@ -403,6 +408,25 @@ nnoremap <silent> ,k :if &diff \| exec 'normal [czz' \| endif<CR>
 nnoremap <silent> ,p :if &diff \| exec 'normal dp' \| endif<CR>
 nnoremap <silent> ,o :if &diff \| exec 'normal do' \| endif<CR>
 nnoremap <silent> ZD :if &diff \| exec ':qall' \| endif<CR>
+
+" Code Snippet Easy Copy Pasting
+function! CompleteYank()
+    redir @n | silent! :'<,'>number | redir END
+    let filename=expand("%")
+    let decoration=repeat('-', len(filename)+1)
+    let @+=decoration . "\n" . filename . ':' . "\n" . decoration . "\n" . @n
+endfunction
+vnoremap <leader>y :call CompleteYank()<CR>
+
+" Scroll Up/Down
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+nnoremap J <PageDown>
+nnoremap K <PageUp>
+
+" Interpreter
+nnoremap <leader>p :w !clear; python3<cr>
+xnoremap <leader>p :w !clear; python3<cr>
 
 " hi SpellBad    ctermfg=015      ctermbg=000     cterm=none      guifg=#FFFFFF   guibg=#000000   gui=none
 hi SpellBad ctermfg=015 ctermbg=009 cterm=bold guibg=#ff0000 guifg=#000000 gui=bold
