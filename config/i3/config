@@ -142,15 +142,18 @@ bindsym --release Num_Lock  exec pkill -SIGRTMIN+11 i3blocks
 
 ###---Start external scripts---###
 # Status Bar
-bar {
-    tray_output HDMI-2
-    tray_output primary
-    output HDMI-2
-    output primary
+# bar {
+#     tray_output HDMI-2
+#     tray_output primary
+#     output HDMI-2
+#     output primary
 
-    position bottom
-    status_command i3blocks
-}
+#     position bottom
+#     # status_command i3blocks
+# }
+
+exec_always --no-startup-id $HOME/.config/polybar/launch.sh
+
 # # BitTorrent daemon
 # exec --no-startup-id transmission-daemon
 # # Torrent RSS
