@@ -1,0 +1,7 @@
+#!/usr/bin/sh
+
+if [ -d "/proc/sys/net/ipv4/conf/tun0" ]; then
+	echo "%{F#FF0000}ifood"
+else
+	echo "%{F#FFFC00}home"
+fi

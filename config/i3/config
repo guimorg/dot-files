@@ -137,8 +137,8 @@ mode "resize" {
 }
 bindsym $mod+r mode "resize"
 
-bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks
-bindsym --release Num_Lock  exec pkill -SIGRTMIN+11 i3blocks
+# bindsym --release Caps_Lock exec pkill -SIGRTMIN+11 i3blocks
+# bindsym --release Num_Lock  exec pkill -SIGRTMIN+11 i3blocks
 
 ###---Start external scripts---###
 # Status Bar
@@ -171,11 +171,11 @@ exec --no-startup-id nm-applet
 # exec --no-startup-id xinput set-prop 11 295 1.9
 
 ###---Audio controls---###
-bindsym $mod+p exec volctrl Headphone 2%+
-bindsym $mod+shift+p exec volctrl Headphone 2%-
-bindsym $mod+Up exec volctrl Master 2%+
-bindsym $mod+Down exec volctrl Master 2%-
-bindsym $mod+m exec volctrl All mute
+# bindsym $mod+p exec volctrl Headphone 2%+
+# bindsym $mod+shift+p exec volctrl Headphone 2%-
+# bindsym $mod+Up exec volctrl Master 2%+
+# bindsym $mod+Down exec volctrl Master 2%-
+# bindsym $mod+m exec volctrl All mute
 
 ###---Toggle External Display---###
 # bindsym $mod+x exec multimonitor
@@ -190,18 +190,18 @@ bindsym $mod+m exec volctrl All mute
 
 ###---System Control---###
 # Create Log out, Reboot, Poweroff bindings
-mode "(S)uspend, (L)ogout, (R)eboot, (P)oweroff" {
-        bindsym r exec --no-startup-id systemctl reboot
-        bindsym s exec --no-startup-id systemctl suspend; mode "default"
-        bindsym l exit
-        bindsym p exec --no-startup-id systemctl poweroff
+# mode "(S)uspend, (L)ogout, (R)eboot, (P)oweroff" {
+#         bindsym r exec --no-startup-id systemctl reboot
+#         bindsym s exec --no-startup-id systemctl suspend; mode "default"
+#         bindsym l exit
+#         bindsym p exec --no-startup-id systemctl poweroff
 
-        # back to normal: Enter or Escape
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
+#         # back to normal: Enter or Escape
+#         bindsym Return mode "default"
+#         bindsym Escape mode "default"
+# }
 
-bindsym $mod+Control+Shift+e mode "(S)uspend, (L)ogout, (R)eboot, (P)oweroff"
+# bindsym $mod+Control+Shift+e mode "(S)uspend, (L)ogout, (R)eboot, (P)oweroff"
 # bindsym $mod+Shift+z exec prompt "Are you sure you would like to reboot?" "sudo reboot"
 # bindsym $mod+Shift+x exec prompt "Are you sure you would like to shutdown?" "sudo shutdown"
 bindsym $mod+Shift+b exec betterlockscreen -l
@@ -271,6 +271,7 @@ workspace_auto_back_and_forth yes
 focus_follows_mouse no
 
 bindsym $mod+Shift+Print --release exec "scrot -se 'xclip -selection clipboard -target image/png -i $f'"
+for_window [class="^.*"] border pixel 1
 
 # exec --no-startup-id feh --no-fehbg --bg-fill '/path/to/favorite-picture.jpg'
 
