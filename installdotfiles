@@ -24,6 +24,9 @@ ln -sf $path/config/i3 $HOME/.config/i3
 [ -d $HOME/.config/i3blocks ] && rm -rf $HOME/.config/i3blocks
 ln -sf $path/config/i3blocks $HOME/.config/i3blocks
 
+[ -d $HOME/.config/picom ] && rm -rf $HOME/.config/picom
+ln -sf $path/config/picom $HOME/.config/picom
+
 [ -d $HOME/.config/polybar ] && rm -rf $HOME/.config/polybar
 ln -sf $path/config/polybar $HOME/.config/polybar
 
@@ -48,3 +51,4 @@ ln -sf $path/.local/share/applications $HOME/.local/share/applications
 ln -sf $path/.local/share/fonts $HOME/.local/share/fonts
 
 sudo cp $path/config/vpn.sh /usr/local/bin/vpn
+sudo cp $path/config/get_file_extensions /usr/local/bin/get_file_extensions

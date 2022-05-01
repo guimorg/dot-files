@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+import argparse
+
+from collections import Counter
+from pathlib import Path
+from typing import List
+
+
+def main(file_path: Path):
+    extensions = list_extensions(file_path=file_path)
+    c = Counter(extensions)
+    print(c)
+
+
+def list_extensions(file_path: Path) -> List[str]:
+    path_extensions = []
+    for p in file_path.iterdir():
+        if p.is_dir():
+            ext = list_extensions(p)
+            path_extensions.extend(ext)
+        else:
+            path_extensions.append("".join(p.suffixes))
+    return path_extensions
+
+
+def path(file_path: str):
+    if Path(file_path).resolve().exists():
+        return Path(file_path)
+    raise ValueError(f"Path {file_path} is invalid")
+
+
+def cli():
+    parser = argparse.ArgumentParser(
+        description="Get file extension data"
+    )
+    parser.add_argument(
+        "path",
+        type=path,
+        help="Path to extract data from"
+    )
+    args = parser.parse_args()
+    main(file_path=args.path)
+
+
+if __name__ == "__main__":
+    cli()

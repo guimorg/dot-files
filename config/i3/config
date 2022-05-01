@@ -270,10 +270,12 @@ bindsym $mod+Return exec alacritty
 workspace_auto_back_and_forth yes
 focus_follows_mouse no
 
+exec_always --no-startup-id picom -CGb
+
 bindsym $mod+Shift+Print --release exec "scrot -se 'xclip -selection clipboard -target image/png -i $f'"
 for_window [class="^.*"] border pixel 1
 
-# exec --no-startup-id feh --no-fehbg --bg-fill '/path/to/favorite-picture.jpg'
+bindsym $mod+Ctrl+w exec ~/.config/i3/scripts/set-random-desktop-background
 
 #######################################################################
 # automatically start i3-config-wizard to offer the user to create a
