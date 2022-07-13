@@ -44,3 +44,9 @@ ccat() {
       *) highlight -O ansi "$1" --force;;
   esac
 }
+
+# Wacom stuff
+wacom_stuff() {
+	xsetwacom set $1 MapToOutput 1920x1080+1920+0
+	xsetwacom set $1 Area 0 0 15200 8550
+}

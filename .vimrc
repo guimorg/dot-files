@@ -40,6 +40,18 @@ let b:ale_fixers = {
 
 " }}}
 
+
+" {{{ vim-visual-multi
+"     ===========
+
+Plugin 'mg979/vim-visual-multi'
+
+let g:VM_maps = {}
+let g:VM_maps["Add Cursor Down"]    = '<C-j>'   " new cursor down
+let g:VM_maps["Add Cursor Up"]      = '<C-k>'   " new cursor up
+
+" }}}
+
 " {{{ vim-airline
 "     ===========
 
@@ -73,13 +85,6 @@ Plugin 'wsdjeg/vim-fetch'
 
 " }}}
 
-" {{{ vim-obsession
-"     ========
-
-Plugin 'tpope/vim-obsession'
-
-" }}}
-
 " {{{ vim-instant-markdown
 "     ====================
 
@@ -96,12 +101,24 @@ Plugin 'tpope/vim-obsession'
 " }}}
 "
 
+" {{{ vim-merginal
+"
+"     ============
+
+Plugin 'idanarye/vim-merginal'
+
+" }}}
+"
+
 " {{{ His Home-Row-ness the Pope of Tim
 "     =================================
 
 " vim-surround: s is a text-object for delimiters; ss linewise
 " ys to add surround
-" 1Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-surround'
+
+" vim-obsession
+Plugin 'tpope/vim-obsession'
 
 " vim-commentary: gc is an operator to toggle comments; gcc linewise
 Plugin 'tpope/vim-commentary'
@@ -144,14 +161,35 @@ Plugin 'tpope/vim-eunuch'
 "     ====================
 
 let g:netrw_banner=0        " disable banner
-let g:netrw_browse_split=4  " open in prior window
+let g:netrw_browse_split=1  " open in prior window
 let g:netrw_altv=1          " open splits to the right
 let g:netrw_liststyle=3     " tree view
-let g:netrw_winsize=25      " width of tree explorer
+let g:netrw_winsize=18      " width of tree explorer
 " hide gitignore'd files
 let g:netrw_list_hide=netrw_gitignore#Hide()
 " hide dotfiles by default (this is the string toggled by netrw-gh)
 let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+
+let g:NetrwIsOpen=0
+
+function! ToggleNetrw()
+    if g:NetrwIsOpen
+        let i = bufnr("$")
+        while (i >= 1)
+            if (getbufvar(i, "&filetype") == "netrw")
+                silent exe "bwipeout " . i 
+            endif
+            let i-=1
+        endwhile
+        let g:NetrwIsOpen=0
+    else
+        let g:NetrwIsOpen=1
+        silent Lexplore
+    endif
+endfunction
+
+" noremap <silent> <C-E> :call ToggleNetrw()<CR>
+nnoremap <silent> <leader>pv :call ToggleNetrw()<CR>
 
 " Opens netrw with vim
 " augroup ProjectDrawer
@@ -364,8 +402,8 @@ nnoremap <C-H> <C-W><C-H>
 noremap <C-w>m :MaximizerToggle<CR>
 
 " Newlines
-nnoremap <C-j> o<ESC>k
-nnoremap <C-k> O<ESC>j
+" nnoremap <C-J> o<ESC>k
+" nnoremap <C-K> O<ESC>j
 
 " Select the stuff I just pasted
 nnoremap gV `[V`]
@@ -385,6 +423,9 @@ let g:sessions_dir = '~/vim-sessions'
 nnoremap <Leader>ss :Obsession ' . g:session_dir . '/*.vim<C-D><BS><BS><BS><BS><BS>'
 nnoremap <Leader>sr :so ' . g:session_dir. '/*.vim<C-D><BS><BS><BS><BS><BS>'
 nnoremap <Leader>sp :Obsession<CR>
+
+" Merginal
+map <leader>gB :MerginalToggle<CR>
 
 " Instant Python constructors
 nnoremap ,c 0f(3wyt)o<ESC>pV:s/\([a-z_]\+\),\?/self.\1 = \1<C-v><CR>/g<CR>ddV?def<CR>j
@@ -431,10 +472,17 @@ xnoremap <leader>p :w !clear; python3<cr>
 " hi SpellBad    ctermfg=015      ctermbg=000     cterm=none      guifg=#FFFFFF   guibg=#000000   gui=none
 hi SpellBad ctermfg=015 ctermbg=009 cterm=bold guibg=#ff0000 guifg=#000000 gui=bold
 
-" netrw
-" nnoremap <silent> <leader>pv :wincmd v<bar> :Ex <bar> :vertical resize 30<CR>
+
 
 " }}}
+
+" if &term =~ '^screen'
+"     " tmux will send xterm-style keys when its xterm-keys option is on
+"     execute "set <xUp>=\e[1;*A"
+"     execute "set <xDown>=\e[1;*B"
+"     execute "set <xRight>=\e[1;*C"
+"     execute "set <xLeft>=\e[1;*D"
+" endif
 
 " Custom Functions {{{
 
