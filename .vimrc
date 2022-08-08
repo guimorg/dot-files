@@ -52,6 +52,13 @@ let g:VM_maps["Add Cursor Up"]      = '<C-k>'   " new cursor up
 
 " }}}
 
+" {{{ vim-gitgutter
+"     ===========
+
+Plugin 'airblade/vim-gitgutter'
+
+" }}}
+
 " {{{ vim-airline
 "     ===========
 
@@ -117,6 +124,9 @@ Plugin 'idanarye/vim-merginal'
 " ys to add surround
 Plugin 'tpope/vim-surround'
 
+" vim-unimpaired
+Plugin 'tpope/vim-unimpaired'
+
 " vim-obsession
 Plugin 'tpope/vim-obsession'
 
@@ -133,6 +143,9 @@ let g:markdown_fenced_languages = ['html', 'python', 'ruby', 'yaml', 'haml', 'ba
 
 " vim-fugitive: git is heaven
 Plugin 'tpope/vim-fugitive'
+
+" Command to add a co-author to a commit
+command! -nargs=+ Gca :r!git log -n100 --pretty=format:"\%an <\%ae>" | grep -i '<args>' | head -1 | xargs echo "Coauthored-by:"
 
 " vim-vinegar
 Plugin 'tpope/vim-vinegar'
@@ -159,37 +172,38 @@ Plugin 'tpope/vim-eunuch'
 
 " {{{ netrw: Configuration
 "     ====================
-
+"
+let g:netrw_chgwin = -1
 let g:netrw_banner=0        " disable banner
-let g:netrw_browse_split=1  " open in prior window
+let g:netrw_browse_split=4  " open in prior window
 let g:netrw_altv=1          " open splits to the right
 let g:netrw_liststyle=3     " tree view
-let g:netrw_winsize=18      " width of tree explorer
+let g:netrw_winsize=-28      " width of tree explorer
 " hide gitignore'd files
 let g:netrw_list_hide=netrw_gitignore#Hide()
 " hide dotfiles by default (this is the string toggled by netrw-gh)
 let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
+nnoremap <Leader>pv :Lexplore<CR>
 
-let g:NetrwIsOpen=0
+" let g:NetrwIsOpen=0
+" function! ToggleNetrw()
+"     if g:NetrwIsOpen
+"         let i = bufnr("$")
+"         while (i >= 1)
+"             if (getbufvar(i, "&filetype") == "netrw")
+"                 silent exe "bwipeout " . i
+"             endif
+"             let i-=1
+"         endwhile
+"         let g:NetrwIsOpen=0
+"     else
+"         let g:NetrwIsOpen=1
+"         silent Lexplore
+"     endif
+" endfunction
 
-function! ToggleNetrw()
-    if g:NetrwIsOpen
-        let i = bufnr("$")
-        while (i >= 1)
-            if (getbufvar(i, "&filetype") == "netrw")
-                silent exe "bwipeout " . i 
-            endif
-            let i-=1
-        endwhile
-        let g:NetrwIsOpen=0
-    else
-        let g:NetrwIsOpen=1
-        silent Lexplore
-    endif
-endfunction
-
-" noremap <silent> <C-E> :call ToggleNetrw()<CR>
-nnoremap <silent> <leader>pv :call ToggleNetrw()<CR>
+" " noremap <silent> <C-E> :call ToggleNetrw()<CR>
+" nnoremap <silent> <leader>pv :call ToggleNetrw()<CR>
 
 " Opens netrw with vim
 " augroup ProjectDrawer
@@ -472,7 +486,9 @@ xnoremap <leader>p :w !clear; python3<cr>
 " hi SpellBad    ctermfg=015      ctermbg=000     cterm=none      guifg=#FFFFFF   guibg=#000000   gui=none
 hi SpellBad ctermfg=015 ctermbg=009 cterm=bold guibg=#ff0000 guifg=#000000 gui=bold
 
-
+" Resize
+nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
+nnoremap <silent> <Leader>- :exe "resize " . (winheight(0) * 2/3)<CR>
 
 " }}}
 
@@ -554,11 +570,11 @@ cabbrev vsf vert sfind
 
 " {{{ MyTabLine()
 
-function MyTabLabel(n)
-  let buflist = tabpagebuflist(a:n)
-  let winnr = tabpagewinnr(a:n)
-  return bufname(buflist[winnr - 1])
-endfunction
+" function MyTabLabel(n)
+"   let buflist = tabpagebuflist(a:n)
+"   let winnr = tabpagewinnr(a:n)
+"   return bufname(buflist[winnr - 1])
+" endfunction
 
 " }}}
 

@@ -50,3 +50,12 @@ wacom_stuff() {
 	xsetwacom set $1 MapToOutput 1920x1080+1920+0
 	xsetwacom set $1 Area 0 0 15200 8550
 }
+
+# get waiter prefix
+waiter_prefix() {
+	shuf -n 1 ~/.config/waiterprefixes
+}
+
+kill_vpn() {
+	sudo pkill openfortivpn
+}
