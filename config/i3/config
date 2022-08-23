@@ -270,12 +270,30 @@ bindsym $mod+Return exec alacritty
 workspace_auto_back_and_forth yes
 focus_follows_mouse no
 
-exec_always --no-startup-id picom -CGb
+exec_always --no-startup-id picom --config ~/.config/picom.conf
+# exec_always --no-startup-id picom -CGb --config ~/.config/picom.conf
+# exec_always --no-startup-id compton
+# exec_always --no-startup-id picom --corner-radius 10
 
 bindsym $mod+Shift+Print --release exec "scrot -se 'xclip -selection clipboard -target image/png -i $f'"
-for_window [class="^.*"] border pixel 1
+
+# for_window [class="^.*"] border pixel 1
 
 bindsym $mod+Ctrl+w exec ~/.config/i3/scripts/set-random-desktop-background
+
+#Needed for i3-gaps
+#hide_edge_borders both
+for_window [class="^.*"] border pixel 2
+for_window [class="Alacritty"] border pixel 2
+gaps inner 10
+gaps outer 8
+
+hide_edge_borders both
+
+# smart_gaps on
+# hide_edge_borders smart
+
+# Global gaps
 
 #######################################################################
 # automatically start i3-config-wizard to offer the user to create a

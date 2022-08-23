@@ -27,6 +27,20 @@ Plugin 'gmarik/Vundle.vim'
 
 " }}}
 
+" {{{ committia
+"     =========
+
+Plugin 'rhysd/committia.vim'
+
+" }}}
+
+" {{{ gv
+"     ==
+
+Plugin 'junegunn/gv.vim'
+
+" }}}
+
 " {{{ ale
 
 Plugin 'dense-analysis/ale'
@@ -40,6 +54,13 @@ let b:ale_fixers = {
 
 " }}}
 
+" {{{ vim-test
+"     ========
+
+Plugin 'vim-test/vim-test'
+
+let test#python#runner = 'pytest'
+let test#strategy = "dispatch"
 
 " {{{ vim-visual-multi
 "     ===========
@@ -123,6 +144,9 @@ Plugin 'idanarye/vim-merginal'
 " vim-surround: s is a text-object for delimiters; ss linewise
 " ys to add surround
 Plugin 'tpope/vim-surround'
+
+" vim-dispatch
+Plugin 'tpope/vim-dispatch'
 
 " vim-unimpaired
 Plugin 'tpope/vim-unimpaired'
@@ -405,6 +429,12 @@ syntax enable
 " }}}
 
 " Key Mappings {{{
+
+nmap <silent> <leader>t :TestNearest<CR>
+nmap <silent> <leader>T :TestFile<CR>
+nmap <silent> <leader>a :TestSuite<CR>
+nmap <silent> <leader>l :TestLast<CR>
+nmap <silent> <leader>g :TestVisit<CR>
 
 "split navigations
 " nnoremap <C-J> <C-W><C-J>

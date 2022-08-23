@@ -1,6 +1,8 @@
 #!/usr/bin/sh
 
-if [ -d "/proc/sys/net/ipv4/conf/ppp0" ]; then
+OPENCONNECT=$(pgrep openconnect)
+
+if [ "${OPENCONNECT}" ] ; then
 	echo "%{F#FF0000}ifood"
 else
 	echo "%{F#FFFC00}home"
