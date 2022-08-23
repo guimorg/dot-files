@@ -15,6 +15,8 @@ ln -sf $path/.tmux.conf.local $HOME/.tmux.conf.local
 # Config dir
 [ ! -d $HOME/.config ] && mkdir $HOME/.config
 
+ln -sf $path/picom.conf $HOME/.config/picom.conf
+
 ln -sf $path/config/waiterprefixes $HOME/.config/waiterprefixes
 
 [ -d $HOME/.config/alacritty ] && rm -rf $HOME/.config/alacritty
@@ -26,8 +28,8 @@ ln -sf $path/config/i3 $HOME/.config/i3
 [ -d $HOME/.config/i3blocks ] && rm -rf $HOME/.config/i3blocks
 ln -sf $path/config/i3blocks $HOME/.config/i3blocks
 
-[ -d $HOME/.config/picom ] && rm -rf $HOME/.config/picom
-ln -sf $path/config/picom $HOME/.config/picom
+[ -d $HOME/.config/rofi ] && rm -rf $HOME/.config/rofi
+ln -sf $path/config/rofi $HOME/.config/rofi
 
 [ -d $HOME/.config/polybar ] && rm -rf $HOME/.config/polybar
 ln -sf $path/config/polybar $HOME/.config/polybar
