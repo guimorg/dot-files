@@ -27,6 +27,13 @@ Plugin 'gmarik/Vundle.vim'
 
 " }}}
 
+" {{{ context
+"     =======
+
+Plugin 'wellle/context.vim'
+
+"}}}
+
 " {{{ committia
 "     =========
 
@@ -62,6 +69,8 @@ Plugin 'vim-test/vim-test'
 let test#python#runner = 'pytest'
 let test#strategy = "dispatch"
 
+" }}}
+
 " {{{ vim-visual-multi
 "     ===========
 
@@ -86,7 +95,8 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
-let g:airline#extensions#obsession#indicator_text = 'Obsession'
+" let g:airline#extensions#obsession#indicator_text = 'Obsession'
+let g:airline_extensions = ['obsession', 'branch']
 
 let g:airline_theme='base16_dracula'
 
@@ -486,6 +496,9 @@ inoremap <C-d> <C-r>=strftime("%-l:%M%p")<CR>
 
 " UndoTree
 nnoremap <leader>u :UndotreeShow<CR>
+
+" Context
+nnoremap <leader>c :ContextToggle<CR>
 
 " Diff Mode
 nnoremap <silent> ,j :if &diff \| exec 'normal ]czz' \| endif<CR>
