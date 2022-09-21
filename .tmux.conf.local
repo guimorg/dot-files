@@ -48,23 +48,23 @@ tmux_conf_new_session_prompt=false
 tmux_conf_24b_colour=true
 
 # default theme
-tmux_conf_theme_colour_1="#080808"    # dark gray
-tmux_conf_theme_colour_2="#303030"    # gray
+tmux_conf_theme_colour_1="#282a36"    # dark gray
+tmux_conf_theme_colour_2="#282a36"    # gray
 tmux_conf_theme_colour_3="#8a8a8a"    # light gray
 tmux_conf_theme_colour_4="#00afff"    # light blue
-tmux_conf_theme_colour_5="#ffff00"    # yellow
-tmux_conf_theme_colour_6="#080808"    # dark gray
-tmux_conf_theme_colour_7="#e4e4e4"    # white
-tmux_conf_theme_colour_8="#080808"    # dark gray
-tmux_conf_theme_colour_9="#ffff00"    # yellow
-tmux_conf_theme_colour_10="#ff00af"   # pink
-tmux_conf_theme_colour_11="#5fff00"   # green
+tmux_conf_theme_colour_5="#f1fa8c"    # yellow
+tmux_conf_theme_colour_6="#282a36"    # dark gray
+tmux_conf_theme_colour_7="#f8f8f2"    # white
+tmux_conf_theme_colour_8="#282a36"    # dark gray
+tmux_conf_theme_colour_9="#f1fa8c"    # yellow
+tmux_conf_theme_colour_10="#ff79c6"   # pink
+tmux_conf_theme_colour_11="#50fa7b"   # green
 tmux_conf_theme_colour_12="#8a8a8a"   # light gray
-tmux_conf_theme_colour_13="#e4e4e4"   # white
-tmux_conf_theme_colour_14="#080808"   # dark gray
-tmux_conf_theme_colour_15="#080808"   # dark gray
-tmux_conf_theme_colour_16="#d70000"   # red
-tmux_conf_theme_colour_17="#e4e4e4"   # white
+tmux_conf_theme_colour_13="#f8f8f2"   # white
+tmux_conf_theme_colour_14="#282a36"   # dark gray
+tmux_conf_theme_colour_15="#282a36"   # dark gray
+tmux_conf_theme_colour_16="#6272a4"   # dark purple
+tmux_conf_theme_colour_17="#f8f8f2"   # white
 
 # default theme (ansi)
 #tmux_conf_theme_colour_1="colour0"
@@ -387,10 +387,12 @@ tmux_conf_uninstall_plugins_on_reload=true
 # visit https://github.com/tmux-plugins for available plugins
 #set -g @plugin 'tmux-plugins/tmux-copycat'
 #set -g @plugin 'tmux-plugins/tmux-cpu'
-#set -g @plugin 'tmux-plugins/tmux-resurrect'
-#set -g @plugin 'tmux-plugins/tmux-continuum'
-#set -g @continuum-restore 'on'
-
+# set -g @plugin 'guimorg/tmux-airline-dracula'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @resurrect-strategy-vim 'session'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @continuum-restore 'on'
+set -g @continuum-save-interval '30'
 
 # -- custom variables ----------------------------------------------------------
 

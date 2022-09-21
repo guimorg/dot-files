@@ -19,6 +19,12 @@ ln -sf $path/picom.conf $HOME/.config/picom.conf
 
 ln -sf $path/config/waiterprefixes $HOME/.config/waiterprefixes
 
+[ -d $HOME/.config/dunst ] && rm -rf $HOME/.config/dunst
+ln -sf $path/config/dunst $HOME/.config/dunst
+
+[ -d $HOME/.config/kitty ] && rm -rf $HOME/.config/kitty
+ln -sf $path/config/kitty $HOME/.config/kitty
+
 [ -d $HOME/.config/alacritty ] && rm -rf $HOME/.config/alacritty
 ln -sf $path/config/alacritty $HOME/.config/alacritty
 
@@ -54,5 +60,5 @@ ln -sf $path/.local/share/applications $HOME/.local/share/applications
 [ -d $HOME/.local/share/fonts ] && rm -r $HOME/.local/share/fonts
 ln -sf $path/.local/share/fonts $HOME/.local/share/fonts
 
-sudo cp $path/config/vpn.sh /usr/local/bin/vpn
+# sudo cp $path/config/vpn.sh /usr/local/bin/vpn
 sudo cp $path/config/get_file_extensions /usr/local/bin/get_file_extensions

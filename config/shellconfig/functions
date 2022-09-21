@@ -56,6 +56,10 @@ waiter_prefix() {
 	shuf -n 1 ~/.config/waiterprefixes
 }
 
+vpn() {
+	ifood-vpn-login -o
+}
+
 kill_vpn() {
-	sudo pkill openfortivpn
+	ifood-vpn-login -D
 }
