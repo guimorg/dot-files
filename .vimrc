@@ -27,6 +27,13 @@ Plugin 'gmarik/Vundle.vim'
 
 " }}}
 
+" {{{ Rust
+"     ====
+
+Plugin 'rust-lang/rust.vim'
+
+"}}}
+
 " {{{ context
 "     =======
 
