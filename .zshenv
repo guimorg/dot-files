@@ -14,3 +14,4 @@ export PAGER=less
 
 export SCRIPT_DIR=~/scripts
 export MONITORS=$(xrandr --query | grep " connected" | cut -d" " -f1)
+. "$HOME/.cargo/env"

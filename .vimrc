@@ -48,6 +48,25 @@ Plugin 'junegunn/gv.vim'
 
 " }}}
 
+
+" {{{ jedi-vim
+"     ==
+
+Plugin 'davidhalter/jedi-vim'
+
+let g:jedi#auto_initialization = 1
+let g:jedi#popup_on_dot = 0
+
+let g:jedi#completions_enabled = 1
+" let g:jedi#auto_vim_configuration = 1
+let g:jedi#show_call_signatures = 2
+let g:jedi#goto_command = "<leader>jg"
+let g:jedi#goto_definitions_command = "<leader>jd"
+let g:jedi#rename_command = "<leader>jr"
+let g:jedi#usages_command = "<leader>jn"
+
+" }}}
+
 " {{{ ale
 
 Plugin 'dense-analysis/ale'
@@ -95,7 +114,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
 
-" let g:airline#extensions#obsession#indicator_text = 'Obsession'
+let g:airline#extensions#obsession#indicator_text = 'Obsession'
 let g:airline_extensions = ['obsession', 'branch']
 
 let g:airline_theme='base16_dracula'
@@ -192,15 +211,16 @@ Plugin 'tpope/vim-eunuch'
 " {{{ NERDTree
 "     ========
 
-" Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/nerdtree'
 
 " OPTIONS:
 
 " Get rid of objects in C projects
-" let NERDTreeIgnore=['\~$', '.o$', 'bower_components', 'node_modules', '__pycache__']
+let NERDTreeIgnore=['\~$', '.o$', 'bower_components', 'node_modules', '__pycache__']
+let NERDTreeHijackNetrw=1
 " let NERDTreeWinSize=20
 " 
-" nmap <C-f> :NERDTreeToggle<CR>
+nmap <Leader>pv :NERDTreeToggle<CR>
 
 " }}}
 
@@ -211,13 +231,13 @@ let g:netrw_chgwin = -1
 let g:netrw_banner=0        " disable banner
 let g:netrw_browse_split=4  " open in prior window
 let g:netrw_altv=1          " open splits to the right
-let g:netrw_liststyle=3     " tree view
+let g:netrw_liststyle=1     " tree view
 let g:netrw_winsize=-28      " width of tree explorer
 " hide gitignore'd files
 let g:netrw_list_hide=netrw_gitignore#Hide()
 " hide dotfiles by default (this is the string toggled by netrw-gh)
 let g:netrw_list_hide.=',\(^\|\s\s\)\zs\.\S\+'
-nnoremap <Leader>pv :Lexplore<CR>
+" nnoremap <Leader>pv :Lexplore<CR>
 
 " let g:NetrwIsOpen=0
 " function! ToggleNetrw()
@@ -395,14 +415,19 @@ augroup Mkdir
   autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
 augroup END
 
+" Change the QuickFixLine background color
+" augroup vimrc_colors
+"     au!
+"     au ColorScheme * hi QuickFixLine ctermfg=NONE cterm=bold guifg=NONE gui=bold
+" augroup END
 
 " Make the modification indicator [+] white on red background
 " au ColorScheme * hi User1 gui=bold term=bold cterm=bold guifg=white guibg=red ctermfg=white ctermbg=red
 
 " Tweak the color of the fold display column
 " au ColorScheme * hi FoldColumn cterm=bold ctermbg=233 ctermfg=146
-highlight Pmenu ctermbg=blue guibg=blue guifg=white ctermbg=white
-highlight PMenuSel ctermbg=white guibg=white guifg=black ctermfg=black
+" highlight Pmenu ctermbg=blue guibg=blue guifg=white ctermbg=white
+" highlight PMenuSel ctermbg=white guibg=white guifg=black ctermfg=black
 " highlight PmenuSbar ctermbg=gray guibg=gray
 " highlight PmenuThumb ctermbg=red guibg=red
 
@@ -516,6 +541,10 @@ function! CompleteYank()
 endfunction
 vnoremap <leader>y :call CompleteYank()<CR>
 
+function! FindMarkers(marker)
+    :Ggrep a:marker <CR>:cw<CR>
+endfunction
+
 " Scroll Up/Down
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
@@ -524,10 +553,10 @@ nnoremap K <PageUp>
 
 " Interpreter
 nnoremap <leader>p :w !clear; python3<cr>
-xnoremap <leader>p :w !clear; python3<cr>
 
 " hi SpellBad    ctermfg=015      ctermbg=000     cterm=none      guifg=#FFFFFF   guibg=#000000   gui=none
-hi SpellBad ctermfg=015 ctermbg=009 cterm=bold guibg=#ff0000 guifg=#000000 gui=bold
+" hi SpellBad ctermfg=015 ctermbg=009 cterm=bold guibg=#ff0000 guifg=#000000 gui=bold
+hi QuickFixLine term=reverse ctermbg=52 cterm=bold gui=bold
 
 " Resize
 nnoremap <silent> <Leader>+ :exe "resize " . (winheight(0) * 3/2)<CR>
@@ -622,3 +651,83 @@ cabbrev vsf vert sfind
 " }}}
 
 " }}}
+
+" presentation mode
+noremap <Left> :silent bp<CR> :redraw!<CR>
+noremap <Right> :silent bn<CR> :redraw!<CR>
+nmap <F5> :set relativenumber! number! showmode! showcmd! hidden! ruler!<CR>
+nmap <F2> :call DisplayPresentationBoundaries()<CR>
+nmap <F3> :call FindExecuteCommand()<CR>
+
+" jump to slides
+nmap <F9> :call JumpFirstBuffer()<CR> :redraw!<CR>
+nmap <F10> :call JumpSecondToLastBuffer()<CR> :redraw!<CR>
+nmap <F11> :call JumpLastBuffer()<CR> :redraw!<CR>
+
+" makes Ascii art font
+nmap <leader>F :.!toilet -w 200 -f standard<CR>
+nmap <leader>f :.!toilet -w 200 -f small<CR>
+" makes Ascii border
+nmap <leader>1 :.!toilet -w 200 -f term -F border<CR>
+
+let g:presentationBoundsDisplayed = 0
+function! DisplayPresentationBoundaries()
+  if g:presentationBoundsDisplayed
+    match
+    set colorcolumn=0
+    let g:presentationBoundsDisplayed = 0
+  else
+    highlight lastoflines ctermbg=darkred guibg=darkred
+    match lastoflines /\%23l/
+    set colorcolumn=80
+    let g:presentationBoundsDisplayed = 1
+  endif
+endfunction
+
+function! FindExecuteCommand()
+  let line = search('\S*!'.'!:.*')
+  if line > 0
+    let command = substitute(getline(line), "\S*!"."!:*", "", "")
+    execute "silent !". command
+    execute "normal gg0"
+    redraw
+  endif
+endfunction
+
+function! JumpFirstBuffer()
+  execute "buffer 1"
+endfunction
+
+function! JumpSecondToLastBuffer()
+  execute "buffer " . (len(Buffers()) - 1)
+endfunction
+
+function! JumpLastBuffer()
+  execute "buffer " . len(Buffers())
+endfunction
+
+function! Buffers()
+  let l:buffers = filter(range(1, bufnr('$')), 'bufexists(v:val)')
+  return l:buffers
+endfunction
+
+" Automatically source an eponymous <file>.vim or <file>.<ext>.vim if it exists, as a bulked-up
+" modeline and to provide file-specific customizations.
+function! s:AutoSource()
+    let l:testedScripts = ['syntax.vim']
+    if expand('<afile>:e') !=# 'vim'
+        " Don't source the edited Vimscript file itself.
+        call add(l:testedScripts, 'syntax.vim')
+    endif
+
+    for l:filespec in l:testedScripts
+        if filereadable(l:filespec)
+            execute 'source' fnameescape(l:filespec)
+        endif
+    endfor
+
+    call FindExecuteCommand()
+endfunction
+augroup AutoSource
+    autocmd! BufNewFile,BufRead * call <SID>AutoSource()
+augroup END

@@ -19,6 +19,9 @@ ln -sf $path/picom.conf $HOME/.config/picom.conf
 
 ln -sf $path/config/waiterprefixes $HOME/.config/waiterprefixes
 
+[ -d $HOME/.config/eww ] && rm -rf $HOME/.config/eww
+ln -sf $path/config/eww $HOME/.config/eww
+
 [ -d $HOME/.config/dunst ] && rm -rf $HOME/.config/dunst
 ln -sf $path/config/dunst $HOME/.config/dunst
 
