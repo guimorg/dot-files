@@ -1,24 +1,52 @@
+# zmodload zsh/zprof
+
+### Added by Zinit's installer
+if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
+    print -P "%F{33} %F{220}Installing %F{33}ZDHARMA-CONTINUUM%F{220} Initiative Plugin Manager (%F{33}zdharma-continuum/zinit%F{220})…%f"
+    command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.local/share/zinit/zinit.git" && \
+        print -P "%F{33} %F{34}Installation successful.%f%b" || \
+        print -P "%F{160} The clone has failed.%f%b"
+fi
+
+source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+
+# Load a few important annexes, without Turbo
+# (this is currently required for annexes)
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-as-monitor \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl \
+    zdharma-continuum/zinit-annex-rust
+
+### End of Zinit's installer chunk
+
+# Load plugins with zinit
+zinit light zsh-users/zsh-autosuggestions
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-docker
+zinit light starship/starship
+zinit light asdf-vm/asdf
+zinit light MichaelAquilina/zsh-you-should-use
+zinit snippet OMZP::git/git.plugin.zsh
+zinit snippet OMZP::pyenv/pyenv.plugin.zsh
+
 # neofetch
-fastfetch
+# fastfetch
+pfetch
 
 # autocompletion for git
-zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
-fpath=(~/.zsh $fpath)
+# zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash
+# fpath=(~/.zsh $fpath)
 
-[[ $- != *i* ]] && return
+# [[ $- != *i* ]] && return
 
 # HISTSIZE=1000
 # SAVEHIST=1000
 # HISTFILE=~/.cache/zsh/history
-
-# Initialize the completion system
-autoload -Uz compinit
-zstyle ':completion:*' menu select
-zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-
-zmodload zsh/complist
-compinit
-_comp_options+=(globdots)		# Include hidden files.
 
 # vi-mode ftw
 set -o vi
@@ -37,60 +65,23 @@ set -o vi
 # }
 # zle -N zle-keymap-select
 
-# ci", ci', ci`, di", etc
-autoload -U select-quoted
-zle -N select-quoted
-for m in visual viopp; do
-  for c in {a,i}{\',\",\`}; do
-    bindkey -M $m $c select-quoted
-  done
-done
-
-# # ci{, ci(, ci<, di{, etc
-autoload -U select-bracketed
-zle -N select-bracketed
-for m in visual viopp; do
-  for c in {a,i}${(s..)^:-'()[]{}<>bB'}; do
-    bindkey -M $m $c select-bracketed
-  done
-done
-
 precmd() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
-plugins=(
-	zsh-autosuggestions
-	fast-syntax-highlighting
-	docker
-	zsh-pyenv
-	you-should-use
-	asdf
-	command-not-found
-	git
-)
+# plugins=(
+# 	zsh-autosuggestions
+# 	fast-syntax-highlighting
+# 	docker
+# 	zsh-pyenv
+# 	you-should-use
+# 	asdf
+# 	command-not-found
+# 	git
+# )
 
 for f in ~/.config/shellconfig/*; do source "$f"; done
-# Cache completion if nothing changed - faster startup time
-typeset -i updated_at=$(date +'%j' -r ~/.zcompdump 2>/dev/null || stat -f '%Sm' -t '%j' ~/.zcompdump 2>/dev/null)
-if [ $(date +'%j') != $updated_at ]; then
-  compinit -i
-else
-  compinit -C -i
-fi
-
-# # Enhanced form of menu completion called `menu selection'
-zmodload -i zsh/complist
-
-eval "$(pyenv virtualenv-init -)"
-
-source $ZSH/oh-my-zsh.sh
 
 autoload -U +X bashcompinit && bashcompinit
 autoload -U colors && colors
-
-# append completions to fpath
-fpath=(${ASDF_DIR}/completions $fpath)
-# initialise completions with ZSH's compinit
-autoload -Uz compinit && compinit
 
 SPACESHIP_PROMPT_ADD_NEWLINE=false
 SPACESHIP_PROMPT_SEPARATE_LINE=false
@@ -123,7 +114,7 @@ SPACESHIP_VI_MODE_SHOW=false
 SPACESHIP_JOBS_SHOW=false
 
 . $HOME/.cargo/env
-. $HOME/.asdf/asdf.sh
+# . $HOME/.asdf/asdf.sh
 
 eval "$(starship init zsh)"
 fpath+=${ZDOTDIR:-~}/.zsh_functions
