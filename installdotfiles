@@ -34,11 +34,14 @@ ln -sf $path/config/alacritty $HOME/.config/alacritty
 [ -d $HOME/.config/i3 ] && rm -rf $HOME/.config/i3
 ln -sf $path/config/i3 $HOME/.config/i3
 
-[ -d $HOME/.config/i3blocks ] && rm -rf $HOME/.config/i3blocks
-ln -sf $path/config/i3blocks $HOME/.config/i3blocks
+# [ -d $HOME/.config/i3blocks ] && rm -rf $HOME/.config/i3blocks
+# ln -sf $path/config/i3blocks $HOME/.config/i3blocks
 
 [ -d $HOME/.config/rofi ] && rm -rf $HOME/.config/rofi
 ln -sf $path/config/rofi $HOME/.config/rofi
+
+[ -d $HOME/.config/nvim ] && rm -rf $HOME/.config/nvim
+ln -sf $path/config/nvim $HOME/.config/nvim
 
 [ -d $HOME/.config/polybar ] && rm -rf $HOME/.config/polybar
 ln -sf $path/config/polybar $HOME/.config/polybar
