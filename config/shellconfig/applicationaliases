@@ -17,7 +17,7 @@ alias gitconfig='vim ~/.gitconfig'
 
 alias r=ranger
 alias v=vim
-alias nv=neovim
+alias nv=nvim
 alias tmux="tmux -2"
 alias t='tmux attach || tmux new-session'
 alias ta='tmux attach -t'
