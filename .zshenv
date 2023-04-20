@@ -13,4 +13,11 @@ export OPENER=xdg-open
 export PAGER=less
 
 export SCRIPT_DIR=~/scripts
-export MONITORS=$(xrandr --query | grep " connected" | cut -d" " -f1)
+if [ "$(uname)" = "Darwin" ]; then
+  # set MONITORS to an empty string on Mac
+  export MONITORS=""
+else
+  # set MONITORS based on xrandr output on Ubuntu
+  export MONITORS=$(xrandr --query | grep " connected" | cut -d" " -f1)
+fi
+. "$HOME/.cargo/env"
