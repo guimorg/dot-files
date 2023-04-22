@@ -64,6 +64,7 @@ require('lazy').setup({
 	{'mbbill/undotree'},
 	{'tpope/vim-obsession'},
 	{'tpope/vim-surround'},
+	{'nvim-tree/nvim-web-devicons'},
 	{'akinsho/bufferline.nvim', requires = 'nvim-tree/nvim-web-devicons'},
 	{ -- Set lualine as statusline
 		'nvim-lualine/lualine.nvim',
