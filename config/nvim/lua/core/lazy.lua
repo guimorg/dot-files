@@ -110,5 +110,10 @@ require('lazy').setup({
 		},
 		build = ":TSUpdate",
 	},
+	{
+		'jose-elias-alvarez/null-ls.nvim',
+		dependencies = {'nvim-lua/plenary.nvim' }
+	},
+
 }, {})
 
