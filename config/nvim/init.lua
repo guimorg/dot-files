@@ -1,7 +1,4 @@
 require("core.vim_options")
-require("core.keymaps")
-require("core.mason-config")
-require("core.gopls")
 
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
@@ -16,3 +13,7 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 require("core.lazy")
+
+require("core.keymaps")
+require("core.mason-config")
+require("core.gopls")
