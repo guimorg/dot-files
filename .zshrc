@@ -26,8 +26,8 @@ zinit light-mode for \
 # Load plugins with zinit
 zinit light zsh-users/zsh-autosuggestions
 zinit light zsh-users/zsh-syntax-highlighting
-zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-docker
+zinit light marlonrichert/zsh-autocomplete
 zinit light starship/starship
 zinit light asdf-vm/asdf
 zinit light MichaelAquilina/zsh-you-should-use
@@ -52,18 +52,18 @@ pfetch
 set -o vi
 
 # Change cursor shape for different vi modes.
-# function zle-keymap-select {
-#   if [[ ${KEYMAP} == vicmd ]] ||
-#      [[ $1 = 'block' ]]; then
-#     echo -ne '\e[1 q'
-#   elif [[ ${KEYMAP} == main ]] ||
-#        [[ ${KEYMAP} == viins ]] ||
-#        [[ ${KEYMAP} = '' ]] ||
-#        [[ $1 = 'beam' ]]; then
-#     echo -ne '\e[5 q'
-#   fi
-# }
-# zle -N zle-keymap-select
+function zle-keymap-select {
+  if [[ ${KEYMAP} == vicmd ]] ||
+     [[ $1 = 'block' ]]; then
+    echo -ne '\e[1 q'
+  elif [[ ${KEYMAP} == main ]] ||
+       [[ ${KEYMAP} == viins ]] ||
+       [[ ${KEYMAP} = '' ]] ||
+       [[ $1 = 'beam' ]]; then
+    echo -ne '\e[5 q'
+  fi
+}
+zle -N zle-keymap-select
 
 precmd() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 

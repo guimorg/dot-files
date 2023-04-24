@@ -3,6 +3,7 @@ export PATH=${HOME}/.local/bin:${HOME}/.pyenv/plugins/pyenv-virtualenv/shims:${H
 export PATH=$HOME/.config/rofi/scripts:$PATH
 export ZSH=${HOME}/.oh-my-zsh
 export ZSH_THEME="spaceship"
+export ZSH_PYENV_VIRTUALENV=true
 
 export STARSHIP_CONFIG=~/.config/starship.toml
 
