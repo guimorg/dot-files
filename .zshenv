@@ -22,3 +22,4 @@ else
   export MONITORS=$(xrandr --query | grep " connected" | cut -d" " -f1)
 fi
 . "$HOME/.cargo/env"
+skip_global_compinit=1

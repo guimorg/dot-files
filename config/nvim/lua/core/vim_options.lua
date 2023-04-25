@@ -43,3 +43,5 @@ vim.opt.shortmess = vim.opt.shortmess + { c = true }
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true
+
+vim.env.PATH = vim.env.PATH .. ":" .. "${HOME}/.pyenv/shims"

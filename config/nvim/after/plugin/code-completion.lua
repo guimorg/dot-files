@@ -145,9 +145,9 @@ null_ls.setup({
     }),
     null_ls.builtins.formatting.black,
     null_ls.builtins.formatting.isort,
-    null_ls.builtins.formatting.pyflyby.with({
-      timeout = 5000
-    }),
+    -- null_ls.builtins.formatting.pyflyby.with({
+    --   timeout = 5000
+    -- }),
     null_ls.builtins.formatting.beautysh,
     null_ls.builtins.formatting.shfmt,
     null_ls.builtins.diagnostics.hadolint,
