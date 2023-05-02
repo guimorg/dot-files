@@ -82,9 +82,16 @@ require("lazy").setup({
 			},
 		},
 	},
-	{ "antoinemadec/FixCursorHold.nvim", lazy = true },
+	{ "antoinemadec/FixCursorHold.nvim" },
 	{ "nvim-tree/nvim-tree.lua" },
-	{ "nvim-neotest/neotest" },
+	{
+		"nvim-neotest/neotest",
+		requires = {
+			"nvim-lua/plenary.nvim",
+			"nvim-treesitter/nvim-treesitter",
+			"antoinemadec/FixCursorHold.nvim",
+		},
+	},
 	{ "nvim-neotest/neotest-python" },
 	{
 		-- Add indentation guides even on blank lines
@@ -131,10 +138,11 @@ require("lazy").setup({
 		"rcarriga/nvim-dap-ui",
 	},
 	{ "nvim-telescope/telescope-dap.nvim" },
-	{ "Pocco81/DAPInstall.nvim" },
 	{ "theHamsta/nvim-dap-virtual-text" },
 	{ "github/copilot.vim" },
 	{ "dcampos/nvim-snippy" },
 	{ "windwp/nvim-autopairs" },
 	{ "akinsho/toggleterm.nvim", version = "*", config = true },
+	{ "wsdjeg/vim-fetch" },
+	{ "ray-x/lsp_signature.nvim" },
 }, {})

@@ -12,7 +12,7 @@ local on_attach = function(_, bufnr)
 
 		vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
 	end
-
+	vim.lsp.buf.format({ timeout_ms = 10000 })
 	nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 	nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
@@ -148,15 +148,21 @@ vim.env.PATH = vim.env.PATH .. ":" .. "${HOME}/.pyenv/shims"
 null_ls.setup({
 	sources = {
 		null_ls.builtins.formatting.stylua,
+		null_ls.builtins.formatting.black.with({
+			timeout = 5000,
+		}),
+		null_ls.builtins.formatting.isort.with({
+			timeout = 5000,
+		}),
 		null_ls.builtins.diagnostics.eslint,
-		null_ls.builtins.diagnostics.flake8,
+		null_ls.builtins.diagnostics.flake8.with({
+			timeout = 5000,
+		}),
 		null_ls.builtins.diagnostics.mypy.with({
 			timeout = 5000,
 		}),
-		null_ls.builtins.formatting.black,
-		null_ls.builtins.formatting.isort,
 		null_ls.builtins.formatting.pyflyby.with({
-		  timeout = 5000
+			timeout = 5000,
 		}),
 		null_ls.builtins.formatting.beautysh,
 		null_ls.builtins.formatting.shfmt,
@@ -167,5 +173,13 @@ null_ls.setup({
 	},
 })
 
+require("nvim-autopairs").setup({})
 local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+
+require("lsp_signature").setup({
+	bind = true, -- This is mandatory, otherwise border config won't get registered.
+	handler_opts = {
+		border = "rounded",
+	},
+})

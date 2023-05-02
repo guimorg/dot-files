@@ -3,13 +3,13 @@ local neotest = require("neotest")
 neotest.setup({
 	adapters = {
 		require("neotest-python")({
-			dap = { justMyCode = true },
+			dap = { justMyCode = false },
 		}),
 	},
 })
 
 require("neodev").setup({
-	library = { plugins = { "neotest" }, types = true },
+	library = { plugins = { "neotest", "nvim-dap-ui" }, types = true },
 })
 
 vim.keymap.set("n", "<localleader>tcf", function()
@@ -30,5 +30,5 @@ vim.keymap.set("n", "<localleader>tl", function()
 	neotest.output.open({ last_run = true, enter = true })
 end, { desc = "[T]est [L]ast" })
 vim.keymap.set("n", "<localleader>tfd", function()
-	neotest.run.run( { strategy = "dap" })
+	neotest.run.run({ strategy = "dap" })
 end, { desc = "[T]est [F]ile [D]ap" })
