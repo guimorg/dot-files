@@ -134,4 +134,7 @@ require("lazy").setup({
 	{ "Pocco81/DAPInstall.nvim" },
 	{ "theHamsta/nvim-dap-virtual-text" },
 	{ "github/copilot.vim" },
+	{ "dcampos/nvim-snippy" },
+	{ "windwp/nvim-autopairs" },
+	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 }, {})
