@@ -12,7 +12,7 @@ local on_attach = function(_, bufnr)
 
 		vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
 	end
-	vim.lsp.buf.format({ timeout_ms = 10000 })
+	vim.lsp.buf.format({ timeout_ms = 5000 })
 	nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 	nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
@@ -149,7 +149,7 @@ null_ls.setup({
 	sources = {
 		null_ls.builtins.formatting.stylua,
 		null_ls.builtins.formatting.black.with({
-			timeout = 5000,
+			timeout = 10000,
 		}),
 		null_ls.builtins.formatting.isort.with({
 			timeout = 5000,
@@ -161,9 +161,9 @@ null_ls.setup({
 		null_ls.builtins.diagnostics.mypy.with({
 			timeout = 5000,
 		}),
-		null_ls.builtins.formatting.pyflyby.with({
-			timeout = 5000,
-		}),
+		-- null_ls.builtins.formatting.pyflyby.with({
+		-- 	timeout = 5000,
+		-- }),
 		null_ls.builtins.formatting.beautysh,
 		null_ls.builtins.formatting.shfmt,
 		null_ls.builtins.diagnostics.hadolint,
