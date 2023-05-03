@@ -6,8 +6,8 @@ util = require "lspconfig/util"
 -- gopls by lspconfig.gopls
 -- we can then set it up using the setup and insert the needed configuration
 lspconfig.gopls.setup {
-	cmd = {"gopls", "serve"},
-	filetypes = {"go", "gomod"},
+	cmd = { "gopls", "serve" },
+	filetypes = { "go", "gomod" },
 	root_dir = util.root_pattern("go.work", "go.mod", ".git"),
 	settings = {
 		gopls = {

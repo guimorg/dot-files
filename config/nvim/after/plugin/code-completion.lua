@@ -177,9 +177,9 @@ require("nvim-autopairs").setup({})
 local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
-require("lsp_signature").setup({
-	bind = true, -- This is mandatory, otherwise border config won't get registered.
-	handler_opts = {
-		border = "rounded",
-	},
-})
+-- require("lsp_signature").setup({
+-- 	bind = true, -- This is mandatory, otherwise border config won't get registered.
+-- 	handler_opts = {
+-- 		border = "rounded",
+-- 	},
+-- })

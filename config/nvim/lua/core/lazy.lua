@@ -69,19 +69,19 @@ require("lazy").setup({
 	{ "tpope/vim-surround" },
 	{ "nvim-tree/nvim-web-devicons" },
 	{ "akinsho/bufferline.nvim", requires = "nvim-tree/nvim-web-devicons" },
-	{
-		-- Set lualine as statusline
-		"nvim-lualine/lualine.nvim",
-		-- See `:help lualine.txt`
-		opts = {
-			options = {
-				icons_enabled = true,
-				theme = "dracula",
-				component_separators = "|",
-				section_separators = "",
-			},
-		},
-	},
+	-- {
+	-- 	-- Set lualine as statusline
+	-- 	"nvim-lualine/lualine.nvim",
+	-- 	-- See `:help lualine.txt`
+	-- 	opts = {
+	-- 		options = {
+	-- 			icons_enabled = true,
+	-- 			theme = "dracula",
+	-- 			component_separators = "|",
+	-- 			section_separators = "",
+	-- 		},
+	-- 	},
+	-- },
 	{ "antoinemadec/FixCursorHold.nvim" },
 	{ "nvim-tree/nvim-tree.lua" },
 	{
@@ -141,8 +141,17 @@ require("lazy").setup({
 	{ "theHamsta/nvim-dap-virtual-text" },
 	{ "github/copilot.vim" },
 	{ "dcampos/nvim-snippy" },
+	{ "dcampos/cmp-snippy" },
 	{ "windwp/nvim-autopairs" },
 	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 	{ "wsdjeg/vim-fetch" },
 	{ "ray-x/lsp_signature.nvim" },
+	{ "goolord/alpha-nvim" },
+	{ "romgrk/barbar.nvim" },
+	{ "nvimdev/galaxyline.nvim" },
+	{ "stevearc/dressing.nvim" },
+	{ "ggandor/lightspeed.nvim" },
+	{ "/rcarriga/nvim-notify" },
+	{ "MunifTanjim/nui.nvim" },
+	{ "folke/noice.nvim" },
 }, {})
