@@ -49,6 +49,7 @@ ccat() {
 wacom_stuff() {
 	xsetwacom set $1 MapToOutput 1920x1080+1920+0
 	xsetwacom set $1 Area 0 0 15200 8550
+	xsetwacom set $1 PressureCurve 0 20 80 100
 }
 
 # get waiter prefix

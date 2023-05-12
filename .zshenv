@@ -1,6 +1,7 @@
 export GREP_COLOR='1;35;40'
 export PATH=${HOME}/.local/bin:${HOME}/.pyenv/plugins/pyenv-virtualenv/shims:${HOME}/.pyenv/shims:${HOME}/.pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:${HOME}/.cargo/bin:${HOME}/git/networkmanager-dmenu
 export PATH=$HOME/.config/rofi/scripts:$PATH
+export PATH=/usr/local/go/bin:$PATH
 export ZSH=${HOME}/.oh-my-zsh
 export ZSH_THEME="spaceship"
 export ZSH_PYENV_VIRTUALENV=true

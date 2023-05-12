@@ -51,6 +51,9 @@ local servers = {
 	-- gopls = {},
 	pyright = {},
 	bashls = {},
+	tflint = {},
+	terraformls = {},
+	yamlls = {},
 	-- rust_analyzer = {},
 	-- tsserver = {},
 
@@ -142,25 +145,33 @@ cmp.setup({
 	},
 })
 
+require("mason-null-ls").setup({
+	ensure_installed = {
+		"jsonlint",
+		"tflint",
+		"yamllint",
+		"yamlfmt",
+		"flake8",
+		"mypy",
+		"beautysh",
+		"docformatter",
+		"shfmt",
+		"sqlfluff",
+		"hadolint",
+		"stylua",
+	},
+	automatic_setup = true,
+})
 local null_ls = require("null-ls")
 vim.env.PATH = vim.env.PATH .. ":" .. "${HOME}/.pyenv/shims"
-
 null_ls.setup({
 	sources = {
 		null_ls.builtins.formatting.stylua,
-		null_ls.builtins.formatting.black.with({
-			timeout = 10000,
-		}),
-		null_ls.builtins.formatting.isort.with({
-			timeout = 5000,
-		}),
+		null_ls.builtins.formatting.black,
+		null_ls.builtins.formatting.isort,
 		null_ls.builtins.diagnostics.eslint,
-		null_ls.builtins.diagnostics.flake8.with({
-			timeout = 5000,
-		}),
-		null_ls.builtins.diagnostics.mypy.with({
-			timeout = 5000,
-		}),
+		null_ls.builtins.diagnostics.flake8,
+		null_ls.builtins.diagnostics.mypy,
 		-- null_ls.builtins.formatting.pyflyby.with({
 		-- 	timeout = 5000,
 		-- }),
@@ -176,10 +187,3 @@ null_ls.setup({
 require("nvim-autopairs").setup({})
 local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
-
--- require("lsp_signature").setup({
--- 	bind = true, -- This is mandatory, otherwise border config won't get registered.
--- 	handler_opts = {
--- 		border = "rounded",
--- 	},
--- })
