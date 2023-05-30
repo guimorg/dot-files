@@ -162,4 +162,5 @@ require("lazy").setup({
 	{ "/rcarriga/nvim-notify" },
 	{ "MunifTanjim/nui.nvim" },
 	{ "folke/noice.nvim" },
+	{ "wakatime/vim-wakatime" },
 }, {})
