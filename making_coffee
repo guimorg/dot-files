@@ -2,16 +2,16 @@
 
 set -euo pipefail
 
-function coffeelog(){
-cat << "EOF"
+function coffeelog() {
+	cat <<"EOF"
 ~-_
 _-~
 c|_|
 EOF
-    printf "\n\n\e[32m ${1} \e[0m\n\n"
+	printf "\n\n\e[32m ${1} \e[0m\n\n"
 }
 
-cat << "EOF"
+cat <<"EOF"
 Preparing some coffee...
  ((     ___
   ))  \___/_
@@ -24,7 +24,7 @@ coffeelog "I'll be right right back!"
 
 sleep ${1}
 
-cat << "EOF"
+cat <<"EOF"
 Yummy!
          ,-"-.
        _r-----i          _

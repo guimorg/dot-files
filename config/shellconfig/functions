@@ -58,7 +58,7 @@ waiter_prefix() {
 }
 
 vpn() {
-	ifood-vpn-login -o
+	ifood-vpn-login -o --use-stored --otp-code $1
 }
 
 kill_vpn() {

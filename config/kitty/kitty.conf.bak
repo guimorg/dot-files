@@ -1,6 +1,4 @@
-background_opacity 0.92
-confirm_os_window_close 0
-
+background_opacity 0.9
 # Tab bar
 tab_bar_style fade
 tab_fade 1
@@ -11,8 +9,10 @@ enable_audio_bell no
 font_family Fira Code Nerd Font Mono
 font_size 11.0
 window_padding_width 10
+include dracula.conf
+
 
 # BEGIN_KITTY_THEME
-# Catppuccin-Macchiato
+# Catppuccin-Latte
 include current-theme.conf
 # END_KITTY_THEME

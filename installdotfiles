@@ -11,6 +11,7 @@ ln -sf $path/.zshrc $HOME/.zshrc
 ln -sf $path/.vimrc $HOME/.vimrc
 ln -sf $path/.tmux.conf $HOME/.tmux.conf
 ln -sf $path/.tmux.conf.local $HOME/.tmux.conf.local
+ln -sf $path/.Xresources $HOME/.Xresources
 
 # Config dir
 [ ! -d $HOME/.config ] && mkdir $HOME/.config
@@ -66,5 +67,6 @@ ln -sf $path/.local/share/applications $HOME/.local/share/applications
 [ -d $HOME/.local/share/fonts ] && rm -r $HOME/.local/share/fonts
 ln -sf $path/.local/share/fonts $HOME/.local/share/fonts
 
+ln -sf $path/tmux-sessionizer $HOME/.local/bin/tmux-sessionizer
 # sudo cp $path/config/vpn.sh /usr/local/bin/vpn
 sudo cp $path/config/get_file_extensions /usr/local/bin/get_file_extensions

@@ -54,6 +54,7 @@ local servers = {
 	tflint = {},
 	terraformls = {},
 	yamlls = {},
+	jsonls = {},
 	-- rust_analyzer = {},
 	-- tsserver = {},
 
@@ -155,10 +156,15 @@ require("mason-null-ls").setup({
 		"mypy",
 		"beautysh",
 		"docformatter",
+		"jsonlint",
 		"shfmt",
 		"sqlfluff",
 		"hadolint",
 		"stylua",
+		"hadolint",
+		"shfmt",
+		"debugpy",
+		"pyright",
 	},
 	automatic_setup = true,
 })

@@ -3,7 +3,7 @@
 OPENCONNECT=$(pgrep openconnect)
 
 if [ "${OPENCONNECT}" ] ; then
-	echo "%{F#FF0000}ifood"
+	echo "%{F#FF0000}"
 else
-	echo "%{F#FFFC00}home"
+	echo "%{F#FFFC00}"
 fi
