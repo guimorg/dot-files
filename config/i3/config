@@ -284,7 +284,7 @@ bindsym $mod+Mod1+q exec --no-startup-id ~/.config/rofi/applets/music/music
 # bindsym $mod+Mod1+k exec kdenlive
 # bindsym $mod+Mod1+o exec obs
 # bindsym $mod+Mod1+g exec gimp
-bindsym $mod+Mod1+b exec google-chrome
+# bindsym $mod+Mod1+b exec google-chrome
 # bindsym $mod+Mod1+e exec brave
 # bindsym $mod+Mod1+f exec dolphin
 # bindsym $mod+Mod1+r exec st -e lf
@@ -332,6 +332,10 @@ bindsym $mod+z          gaps outer current plus 5
 bindsym $mod+Shift+z   gaps outer current minus 5
 
 hide_edge_borders both
+
+bindsym $mod+Mod1+t exec setxkbmap -layout br -variant thinkpad
+bindsym $mod+Mod1+b exec setxkbmap -layout us -variant intl
+bindsym $mod+Mod1+e exec setxkbmap -layout us
 
 # smart_gaps on
 # hide_edge_borders smart
