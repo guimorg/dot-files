@@ -3,7 +3,8 @@ local neotest = require("neotest")
 neotest.setup({
 	adapters = {
 		require("neotest-python")({
-			dap = { justMyCode = false },
+			dap = { justMyCode = false, console = "integratedTerminal" },
+			args = {"--no-cov"}
 		}),
 	},
 })
