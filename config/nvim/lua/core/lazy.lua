@@ -22,7 +22,7 @@ require("lazy").setup({
 
 			-- Useful status updates for LSP
 			-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-			{ "j-hui/fidget.nvim",       opts = {},    tag = "legacy" },
+			{ "j-hui/fidget.nvim", opts = {}, tag = "legacy" },
 
 			-- Additional lua configuration, makes nvim stuff amazing!
 			"folke/neodev.nvim",
@@ -42,7 +42,7 @@ require("lazy").setup({
 		dependencies = { "hrsh7th/cmp-nvim-lsp", "L3MON4D3/LuaSnip", "saadparwaiz1/cmp_luasnip" },
 	},
 	-- Useful plugin to show you pending keybinds.
-	{ "folke/which-key.nvim",           opts = {} },
+	{ "folke/which-key.nvim", opts = {} },
 	{
 		-- Adds git releated signs to the gutter, as well as utilities for managing changes
 		"lewis6991/gitsigns.nvim",
@@ -76,7 +76,7 @@ require("lazy").setup({
 	{ "tpope/vim-obsession" },
 	{ "tpope/vim-surround" },
 	{ "nvim-tree/nvim-web-devicons" },
-	{ "akinsho/bufferline.nvim",        requires = "nvim-tree/nvim-web-devicons" },
+	{ "akinsho/bufferline.nvim", requires = "nvim-tree/nvim-web-devicons" },
 	-- {
 	-- 	-- Set lualine as statusline
 	-- 	"nvim-lualine/lualine.nvim",
@@ -106,13 +106,13 @@ require("lazy").setup({
 		"lukas-reineke/indent-blankline.nvim",
 		-- Enable `lukas-reineke/indent-blankline.nvim`
 		-- See `:help indent_blankline.txt`
+		main = "ibl",
 		opts = {
-			char = "┊",
-			show_trailing_blankline_indent = false,
+			indent = { char = "┊" },
 		},
 	},
 	-- "gc" to comment visual regions/lines
-	{ "numToStr/Comment.nvim",         opts = {} },
+	{ "numToStr/Comment.nvim", opts = {} },
 	-- Fuzzy Finder (files, lsp, etc)
 	{ "nvim-telescope/telescope.nvim", version = "*", dependencies = { "nvim-lua/plenary.nvim" } },
 	{
@@ -151,12 +151,15 @@ require("lazy").setup({
 	{ "dcampos/nvim-snippy" },
 	{ "dcampos/cmp-snippy" },
 	{ "windwp/nvim-autopairs" },
-	{ "akinsho/toggleterm.nvim",          version = "*", config = true },
+	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 	{ "wsdjeg/vim-fetch" },
 	{ "ray-x/lsp_signature.nvim" },
 	{ "goolord/alpha-nvim" },
 	{ "romgrk/barbar.nvim" },
-	{ "nvimdev/galaxyline.nvim" },
+	{
+		"nvimdev/galaxyline.nvim",
+		requires = { "kyazdani42/nvim-web-devicons", opt = true },
+	},
 	{ "stevearc/dressing.nvim" },
 	{ "ggandor/lightspeed.nvim" },
 	{ "/rcarriga/nvim-notify" },
@@ -165,4 +168,10 @@ require("lazy").setup({
 	{ "tpope/vim-repeat" },
 	{ "wakatime/vim-wakatime" },
 	{ "ThePrimeagen/git-worktree.nvim" },
+	{
+		"m4xshen/hardtime.nvim",
+		dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+		opts = {},
+	},
+	{ "ray-x/lsp_signature.nvim" },
 }, {})
