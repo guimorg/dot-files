@@ -56,11 +56,3 @@ wacom_stuff() {
 waiter_prefix() {
 	shuf -n 1 ~/.config/waiterprefixes
 }
-
-vpn() {
-	ifood-vpn-login -o --use-stored --otp-code $1
-}
-
-kill_vpn() {
-	ifood-vpn-login -D
-}
