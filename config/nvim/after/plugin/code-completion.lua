@@ -39,6 +39,7 @@ local on_attach = function(_, bufnr)
 	vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
 		vim.lsp.buf.format()
 	end, { desc = "Format current buffer with LSP" })
+	nmap("<leader>f", ":Format<CR>", "[F]ormat")
 end
 
 -- Enable the following language servers
@@ -173,11 +174,15 @@ vim.env.PATH = vim.env.PATH .. ":" .. "${HOME}/.pyenv/shims"
 null_ls.setup({
 	sources = {
 		null_ls.builtins.formatting.stylua,
-		null_ls.builtins.formatting.black,
-		null_ls.builtins.formatting.isort,
+		-- null_ls.builtins.formatting.black,
+		-- null_ls.builtins.formatting.isort,
 		null_ls.builtins.diagnostics.eslint,
-		null_ls.builtins.diagnostics.flake8,
-		null_ls.builtins.diagnostics.mypy,
+		null_ls.builtins.diagnostics.flake8.with({
+			prefer_local = "$(whereis flake8)",
+		}),
+		null_ls.builtins.diagnostics.mypy.with({
+			prefer_local = "$(whereis mypy)",
+		}),
 		-- null_ls.builtins.formatting.pyflyby.with({
 		-- 	timeout = 5000,
 		-- }),
@@ -192,4 +197,31 @@ null_ls.setup({
 
 require("nvim-autopairs").setup({})
 local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+local ts_utils = require("nvim-treesitter.ts_utils")
+
+local ts_node_func_parens_disabled = {
+  -- ecma
+  named_imports = true,
+  -- rust
+  use_declaration = true,
+}
+
+local default_handler = cmp_autopairs.filetypes["*"]["("].handler
+cmp_autopairs.filetypes["*"]["("].handler = function(char, item, bufnr, rules, commit_character)
+  local node_type = ts_utils.get_node_at_cursor():type()
+  if ts_node_func_parens_disabled[node_type] then
+    if item.data then
+      item.data.funcParensDisabled = true
+    else
+      char = ""
+    end
+  end
+  default_handler(char, item, bufnr, rules, commit_character)
+end
+
+cmp.event:on(
+  "confirm_done",
+  cmp_autopairs.on_confirm_done({
+    sh = false,
+  })
+)

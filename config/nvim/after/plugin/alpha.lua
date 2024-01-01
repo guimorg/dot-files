@@ -8,7 +8,6 @@ end
 local dashboard = require("alpha.themes.dashboard")
 local if_nil = vim.F.if_nil
 local fn = vim.fn
-local icons = require("core.icons")
 
 local thingy = io.popen('echo "$(LANG=en_us_88591; date +%a) $(date +%d) $(LANG=en_us_88591; date +%b)" | tr -d "\n"')
 if thingy == nil then
@@ -19,6 +18,28 @@ thingy:close()
 
 local datetime = os.date(" %H:%M")
 
+dashboard.section.header.val = {
+	"██████████████████████████████████████████████████████████",
+	"██████████████████████████████████████████████████████████",
+	"██████████████████████████████████████████████████████████",
+	"████████████  ██        ██  ██████████████████████████████",
+	"████████████                ██████████████████████████████",
+	"████████████                  ████████████████████████████",
+	"██████████    ██    ██          ██████████████████████████",
+	"██████████                        ████████████████████████",
+	"██████████      ████                  ████████████████████",
+	"██████████  ██  ██    ██                            ██████",
+	"██████████    ████████                        ████████████",
+	"██████████                                    ████████████",
+	"██████████                                    ████████████",
+	"██████████                                    ████████████",
+	"██████████                                    ████████████",
+	"██████████                                  ██████████████",
+	"████████████                                ██████████████",
+	"████████████    ████    ████████    ████    ██████████████",
+	"████████████    ████    ████████    ████    ██████████████",
+	"████████████  ██████  ██████████  ██████  ████████████████",
+}
 dashboard.section.header.type = "text"
 dashboard.section.header.opts = {
 	position = "center",
@@ -96,17 +117,17 @@ dashboard.section.buttons.val = {
 	-- 	{}
 	-- ),
 	-- button("<S-P>", icons.t .. " " .. "Find Word", "<cmd>lua require('plugins.telescope.pickers.multi-rg')()<CR>", {}),
-	button("SPC s h", icons.fileRecent .. " " .. "Recents", "<cmd>Telescope oldfiles hidden=true<CR>", {}),
+	button("SPC s h", " " .. " " .. "Recents", "<cmd>Telescope oldfiles hidden=true<CR>", {}),
 	-- button(
 	-- 	"SPC / s d",
 	-- 	icons.timer .. " " .. "Load Current Dir Session",
 	-- 	"<cmd>SessionManager load_current_dir_session<CR>",
 	-- 	{}
 	-- ),
-	button("SPC / u", icons.container .. " " .. "Update Plugins", "<cmd>Lazy update<CR>", {}),
-	button("SPC / i", icons.container .. " " .. "Manage Plugins", "<cmd>Lazy<CR>", {}),
-	button("SPC / c", icons.cog .. " " .. "Settings", "<cmd>e $MYVIMRC<CR>", {}),
-	button("-", icons.exit .. " " .. "Exit", "<cmd>exit<CR>", {}),
+	button("SPC / u", " " .. " " .. "Update Plugins", "<cmd>Lazy update<CR>", {}),
+	button("SPC / i", " " .. " " .. "Manage Plugins", "<cmd>Lazy<CR>", {}),
+	button("SPC / c", " " .. " " .. "Settings", "<cmd>e $MYVIMRC<CR>", {}),
+	button("-", "󰿅 " .. " " .. "Exit", "<cmd>exit<CR>", {}),
 }
 
 local function file_exists(file)

@@ -118,5 +118,6 @@ SPACESHIP_JOBS_SHOW=false
 
 eval "$(starship init zsh)"
 fpath+=${ZDOTDIR:-~}/.zsh_functions
+fpath+=~/.zfunc
 
 bindkey -v

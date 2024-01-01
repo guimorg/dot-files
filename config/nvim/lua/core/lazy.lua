@@ -22,7 +22,7 @@ require("lazy").setup({
 
 			-- Useful status updates for LSP
 			-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-			{ "j-hui/fidget.nvim", opts = {}, tag = "legacy" },
+			{ "j-hui/fidget.nvim",       opts = {},    tag = "legacy" },
 
 			-- Additional lua configuration, makes nvim stuff amazing!
 			"folke/neodev.nvim",
@@ -33,7 +33,7 @@ require("lazy").setup({
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			"williamboman/mason.nvim",
-			"jose-elias-alvarez/null-ls.nvim",
+			"nvimtools/none-ls.nvim"
 		},
 	},
 	{
@@ -42,7 +42,7 @@ require("lazy").setup({
 		dependencies = { "hrsh7th/cmp-nvim-lsp", "L3MON4D3/LuaSnip", "saadparwaiz1/cmp_luasnip" },
 	},
 	-- Useful plugin to show you pending keybinds.
-	{ "folke/which-key.nvim", opts = {} },
+	{ "folke/which-key.nvim",           opts = {} },
 	{
 		-- Adds git releated signs to the gutter, as well as utilities for managing changes
 		"lewis6991/gitsigns.nvim",
@@ -76,7 +76,7 @@ require("lazy").setup({
 	{ "tpope/vim-obsession" },
 	{ "tpope/vim-surround" },
 	{ "nvim-tree/nvim-web-devicons" },
-	{ "akinsho/bufferline.nvim", requires = "nvim-tree/nvim-web-devicons" },
+	{ "akinsho/bufferline.nvim",        requires = "nvim-tree/nvim-web-devicons" },
 	-- {
 	-- 	-- Set lualine as statusline
 	-- 	"nvim-lualine/lualine.nvim",
@@ -112,7 +112,7 @@ require("lazy").setup({
 		},
 	},
 	-- "gc" to comment visual regions/lines
-	{ "numToStr/Comment.nvim", opts = {} },
+	{ "numToStr/Comment.nvim",         opts = {} },
 	-- Fuzzy Finder (files, lsp, etc)
 	{ "nvim-telescope/telescope.nvim", version = "*", dependencies = { "nvim-lua/plenary.nvim" } },
 	{
@@ -133,7 +133,7 @@ require("lazy").setup({
 		build = ":TSUpdate",
 	},
 	{
-		"jose-elias-alvarez/null-ls.nvim",
+		"nvimtools/none-ls.nvim",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
 	{
@@ -148,10 +148,18 @@ require("lazy").setup({
 	{ "nvim-telescope/telescope-dap.nvim" },
 	{ "theHamsta/nvim-dap-virtual-text" },
 	{ "github/copilot.vim" },
+	-- {
+	-- 	"zbirenbaum/copilot.lua",
+	-- 	cmd = "Copilot",
+	-- 	event = "InsertEnter",
+	-- 	config = function()
+	-- 		require("copilot").setup({})
+	-- 	end,
+	-- },
 	{ "dcampos/nvim-snippy" },
 	{ "dcampos/cmp-snippy" },
 	{ "windwp/nvim-autopairs" },
-	{ "akinsho/toggleterm.nvim", version = "*", config = true },
+	{ "akinsho/toggleterm.nvim",          version = "*", config = true },
 	{ "wsdjeg/vim-fetch" },
 	{ "ray-x/lsp_signature.nvim" },
 	{ "goolord/alpha-nvim" },
