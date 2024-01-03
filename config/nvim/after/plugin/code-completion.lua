@@ -93,10 +93,25 @@ mason_lspconfig.setup_handlers({
 -- nvim-cmp setup
 local cmp = require("cmp")
 local luasnip = require("luasnip")
+local lspkind = require("lspkind")
 
 luasnip.config.setup({})
+local has_words_before = function()
+	if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+		return false
+	end
+	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
+	return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+end
 
 cmp.setup({
+	formatting = {
+		format = lspkind.cmp_format({
+			mode = "symbol",
+			maxwidth = 50,
+			ellipsis_char = "...",
+		}),
+	},
 	enabled = function()
 		local context = require("cmp.config.context")
 		if vim.api.nvim_get_mode().mode == "c" then
@@ -110,7 +125,32 @@ cmp.setup({
 			luasnip.lsp_expand(args.body)
 		end,
 	},
+	sorting = {
+		priority_weight = 2,
+		comparators = {
+			require("copilot_cmp.comparators").prioritize,
+
+			-- Below is the default comparitor list and order for nvim-cmp
+			cmp.config.compare.offset,
+			-- cmp.config.compare.scopes, --this is commented in nvim-cmp too
+			cmp.config.compare.exact,
+			cmp.config.compare.score,
+			cmp.config.compare.recently_used,
+			cmp.config.compare.locality,
+			cmp.config.compare.kind,
+			cmp.config.compare.sort_text,
+			cmp.config.compare.length,
+			cmp.config.compare.order,
+		},
+	},
 	mapping = cmp.mapping.preset.insert({
+		-- ["<Tab>"] = vim.schedule_wrap(function(fallback)
+		-- 	if cmp.visible() and has_words_before() then
+		-- 		cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
+		-- 	else
+		-- 		fallback()
+		-- 	end
+		-- end),
 		["<C-d>"] = cmp.mapping.scroll_docs(-4),
 		["<C-f>"] = cmp.mapping.scroll_docs(4),
 		["<C-Space>"] = cmp.mapping.complete({}),
@@ -138,12 +178,12 @@ cmp.setup({
 		end, { "i", "s" }),
 	}),
 	sources = {
-		{ name = "nvim_lsp" },
-		{ name = "luasnip" },
-		{ name = "copilot" },
-		{ name = "snippy" },
-		{ name = "emoji" },
-		{ name = "nerdfont" },
+		{ name = "nvim_lsp", group_index = 2 },
+		{ name = "luasnip",  group_index = 2 },
+		{ name = "copilot",  group_index = 2 },
+		{ name = "snippy",   group_index = 2 },
+		{ name = "emoji",    group_index = 2 },
+		{ name = "nerdfont", group_index = 2 },
 	},
 })
 
@@ -200,28 +240,28 @@ local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 local ts_utils = require("nvim-treesitter.ts_utils")
 
 local ts_node_func_parens_disabled = {
-  -- ecma
-  named_imports = true,
-  -- rust
-  use_declaration = true,
+	-- ecma
+	named_imports = true,
+	-- rust
+	use_declaration = true,
 }
 
 local default_handler = cmp_autopairs.filetypes["*"]["("].handler
 cmp_autopairs.filetypes["*"]["("].handler = function(char, item, bufnr, rules, commit_character)
-  local node_type = ts_utils.get_node_at_cursor():type()
-  if ts_node_func_parens_disabled[node_type] then
-    if item.data then
-      item.data.funcParensDisabled = true
-    else
-      char = ""
-    end
-  end
-  default_handler(char, item, bufnr, rules, commit_character)
+	local node_type = ts_utils.get_node_at_cursor():type()
+	if ts_node_func_parens_disabled[node_type] then
+		if item.data then
+			item.data.funcParensDisabled = true
+		else
+			char = ""
+		end
+	end
+	default_handler(char, item, bufnr, rules, commit_character)
 end
 
 cmp.event:on(
-  "confirm_done",
-  cmp_autopairs.on_confirm_done({
-    sh = false,
-  })
+	"confirm_done",
+	cmp_autopairs.on_confirm_done({
+		sh = false,
+	})
 )

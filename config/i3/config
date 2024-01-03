@@ -189,6 +189,8 @@ exec_always --no-startup-id $HOME/.config/polybar/launch.sh
 # exec --no-startup-id transmission-daemon
 # # Torrent RSS
 # exec --no-startup-id transmission-rss -f
+exec --no-startup-id /usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 --exit-with-session i3
+# exec --no-startup-id lxpolkit
 #Wifi Applet
 exec --no-startup-id nm-applet
 # Load Xresources
@@ -210,6 +212,7 @@ exec --no-startup-id nm-applet
 
 ###---Toggle External Display---###
 # bindsym $mod+x exec multimonitor
+# exec --no-startup-id autorandr --load default --force
 
 ####---Bookmarks/Search---####
 #bindsym $mod+s exec sch "google-chrome"

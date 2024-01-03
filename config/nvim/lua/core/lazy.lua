@@ -33,7 +33,7 @@ require("lazy").setup({
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			"williamboman/mason.nvim",
-			"nvimtools/none-ls.nvim"
+			"nvimtools/none-ls.nvim",
 		},
 	},
 	{
@@ -147,19 +147,26 @@ require("lazy").setup({
 	},
 	{ "nvim-telescope/telescope-dap.nvim" },
 	{ "theHamsta/nvim-dap-virtual-text" },
-	{ "github/copilot.vim" },
-	-- {
-	-- 	"zbirenbaum/copilot.lua",
-	-- 	cmd = "Copilot",
-	-- 	event = "InsertEnter",
-	-- 	config = function()
-	-- 		require("copilot").setup({})
-	-- 	end,
-	-- },
+	-- { "github/copilot.vim" },
+	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		config = function()
+			require("copilot").setup({})
+		end,
+	},
 	{ "dcampos/nvim-snippy" },
 	{ "dcampos/cmp-snippy" },
+	{
+		"zbirenbaum/copilot-cmp",
+		config = function()
+			require("copilot_cmp").setup()
+		end,
+	},
 	{ "windwp/nvim-autopairs" },
-	{ "akinsho/toggleterm.nvim",          version = "*", config = true },
+	{ "onsails/lspkind.nvim" },
+	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 	{ "wsdjeg/vim-fetch" },
 	{ "ray-x/lsp_signature.nvim" },
 	{ "goolord/alpha-nvim" },
