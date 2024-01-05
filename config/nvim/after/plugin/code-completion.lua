@@ -310,10 +310,10 @@ null_ls.setup({
 		-- null_ls.builtins.formatting.isort,
 		null_ls.builtins.diagnostics.eslint,
 		null_ls.builtins.diagnostics.flake8.with({
-			prefer_local = "$(whereis flake8)",
+			prefer_local = "~/.pyenv/shims/flake8",
 		}),
 		null_ls.builtins.diagnostics.mypy.with({
-			prefer_local = "$(whereis mypy)",
+			prefer_local = "~/.pyenv/shims/mypy",
 		}),
 		-- null_ls.builtins.formatting.pyflyby.with({
 		-- 	timeout = 5000,
