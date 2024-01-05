@@ -12,7 +12,7 @@ local on_attach = function(_, bufnr)
 
 		vim.keymap.set("n", keys, func, { buffer = bufnr, desc = desc })
 	end
-	vim.lsp.buf.format({ timeout_ms = 5000 })
+	-- vim.lsp.buf.format({ timeout_ms = 5000 })
 	nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 	nmap("<leader>ca", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
@@ -67,49 +67,64 @@ local servers = {
 	},
 }
 
-require("neodev").setup()
-
--- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
-
 -- Ensure the servers above are installed
 local mason_lspconfig = require("mason-lspconfig")
-
-mason_lspconfig.setup({
-	ensure_installed = vim.tbl_keys(servers),
-})
-
-mason_lspconfig.setup_handlers({
-	function(server_name)
-		require("lspconfig")[server_name].setup({
-			capabilities = capabilities,
-			on_attach = on_attach,
-			settings = servers[server_name],
-		})
-	end,
-})
 
 -- nvim-cmp setup
 local cmp = require("cmp")
 local luasnip = require("luasnip")
 local lspkind = require("lspkind")
 
-luasnip.config.setup({})
-local has_words_before = function()
-	if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
-		return false
-	end
-	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-	return col ~= 0 and vim.api.nvim_buf_get_text(0, line - 1, 0, line - 1, col, {})[1]:match("^%s*$") == nil
+-- nvim-cmp supports additional completion capabilities, so broadcast that to servers
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
+
+local function lsp_server_config(server_name)
+	local config = {
+		capabilities = capabilities,
+		on_attach = on_attach,
+		settings = servers[server_name],
+	}
+	return config
 end
 
+local server_names = vim.tbl_keys(servers)
+for _, server_name in ipairs(server_names) do
+	local success, server_config = pcall(lsp_server_config, server_name)
+	if success then
+		require("lspconfig")[server_name].setup(server_config)
+	else
+		vim.notify("Error setting up LSP for " .. server_name)
+	end
+end
+
+require("neodev").setup()
+
+mason_lspconfig.setup({
+	ensure_installed = vim.tbl_keys(servers),
+	priority = {
+		pyright = 1,
+		yamlls = 2,
+		jsonls = 3,
+		bashls = 4,
+		terraformls = 5,
+		tflint = 6,
+	},
+})
+
+luasnip.config.setup({})
+vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
+
 cmp.setup({
+	experimental = {
+		native_menu = false,
+	},
 	formatting = {
 		format = lspkind.cmp_format({
 			mode = "symbol",
-			maxwidth = 50,
+			max_width = 50,
 			ellipsis_char = "...",
+			symbol_map = { Copilot = "" },
 		}),
 	},
 	enabled = function()
@@ -129,61 +144,138 @@ cmp.setup({
 		priority_weight = 2,
 		comparators = {
 			require("copilot_cmp.comparators").prioritize,
-
-			-- Below is the default comparitor list and order for nvim-cmp
 			cmp.config.compare.offset,
-			-- cmp.config.compare.scopes, --this is commented in nvim-cmp too
 			cmp.config.compare.exact,
 			cmp.config.compare.score,
-			cmp.config.compare.recently_used,
-			cmp.config.compare.locality,
+
+			-- copied from cmp-under, but I don't think I need the plugin for this.
+			-- I might add some more of my own.
+			function(entry1, entry2)
+				local _, entry1_under = entry1.completion_item.label:find("^_+")
+				local _, entry2_under = entry2.completion_item.label:find("^_+")
+				entry1_under = entry1_under or 0
+				entry2_under = entry2_under or 0
+				if entry1_under > entry2_under then
+					return false
+				elseif entry1_under < entry2_under then
+					return true
+				end
+			end,
+
 			cmp.config.compare.kind,
 			cmp.config.compare.sort_text,
 			cmp.config.compare.length,
 			cmp.config.compare.order,
 		},
 	},
-	mapping = cmp.mapping.preset.insert({
-		-- ["<Tab>"] = vim.schedule_wrap(function(fallback)
-		-- 	if cmp.visible() and has_words_before() then
-		-- 		cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-		-- 	else
-		-- 		fallback()
-		-- 	end
-		-- end),
+	mapping = {
+		["<C-n>"] = cmp.mapping.select_next_item({ behavior = cmp.SelectBehavior.Insert }),
+		["<C-p>"] = cmp.mapping.select_prev_item({ behavior = cmp.SelectBehavior.Insert }),
 		["<C-d>"] = cmp.mapping.scroll_docs(-4),
 		["<C-f>"] = cmp.mapping.scroll_docs(4),
-		["<C-Space>"] = cmp.mapping.complete({}),
-		["<CR>"] = cmp.mapping.confirm({
-			behavior = cmp.ConfirmBehavior.Replace,
-			select = true,
+		["<C-e>"] = cmp.mapping.abort(),
+		["<c-y>"] = cmp.mapping(
+			cmp.mapping.confirm({
+				behavior = cmp.ConfirmBehavior.Insert,
+				select = true,
+			}),
+			{ "i", "c" }
+		),
+		["<M-y>"] = cmp.mapping(
+			cmp.mapping.confirm({
+				behavior = cmp.ConfirmBehavior.Replace,
+				select = false,
+			}),
+			{ "i", "c" }
+		),
+
+		["<c-space>"] = cmp.mapping({
+			i = cmp.mapping.complete(),
+			c = function(
+				_ --[[fallback]]
+			)
+				if cmp.visible() then
+					if not cmp.confirm({ select = true }) then
+						return
+					end
+				else
+					cmp.complete()
+				end
+			end,
 		}),
-		["<C-Tab>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_next_item()
-			elseif luasnip.expand_or_jumpable() then
-				luasnip.expand_or_jump()
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
-		["<S-Tab>"] = cmp.mapping(function(fallback)
-			if cmp.visible() then
-				cmp.select_prev_item()
-			elseif luasnip.jumpable(-1) then
-				luasnip.jump(-1)
-			else
-				fallback()
-			end
-		end, { "i", "s" }),
-	}),
+
+		-- ["<tab>"] = false,
+		["<tab>"] = cmp.config.disable,
+
+		-- ["<tab>"] = cmp.mapping {
+		--   i = cmp.config.disable,
+		--   c = function(fallback)
+		--     fallback()
+		--   end,
+		-- },
+
+		-- Testing
+		["<c-q>"] = cmp.mapping.confirm({
+			behavior = cmp.ConfirmBehavior.Replace,
+			select = false,
+		}),
+
+		-- If you want tab completion :'(
+		--  First you have to just promise to read `:help ins-completion`.
+		--
+		-- ["<Tab>"] = function(fallback)
+		--   if cmp.visible() then
+		--     cmp.select_next_item()
+		--   else
+		--     fallback()
+		--   end
+		-- end,
+		-- ["<S-Tab>"] = function(fallback)
+		--   if cmp.visible() then
+		--     cmp.select_prev_item()
+		--   else
+		--     fallback()
+		--   end
+		-- end,
+	},
+	-- mapping = cmp.mapping.preset.insert({
+	-- 	["<C-d>"] = cmp.mapping.scroll_docs(-4),
+	-- 	["<C-f>"] = cmp.mapping.scroll_docs(4),
+	-- 	["<C-Space>"] = cmp.mapping.complete({}),
+	-- 	["<CR>"] = cmp.mapping.confirm({
+	-- 		behavior = cmp.ConfirmBehavior.Replace,
+	-- 		select = true,
+	-- 	}),
+	-- 	["<C-Tab>"] = cmp.mapping(function(fallback)
+	-- 		if cmp.visible() then
+	-- 			cmp.select_next_item()
+	-- 		elseif luasnip.expand_or_jumpable() then
+	-- 			luasnip.expand_or_jump()
+	-- 		else
+	-- 			fallback()
+	-- 		end
+	-- 	end, { "i", "s" }),
+	-- 	["<S-Tab>"] = cmp.mapping(function(fallback)
+	-- 		if cmp.visible() then
+	-- 			cmp.select_prev_item()
+	-- 		elseif luasnip.jumpable(-1) then
+	-- 			luasnip.jump(-1)
+	-- 		else
+	-- 			fallback()
+	-- 		end
+	-- 	end, { "i", "s" }),
+	-- }),
 	sources = {
-		{ name = "nvim_lsp", group_index = 2 },
-		{ name = "luasnip",  group_index = 2 },
-		{ name = "copilot",  group_index = 2 },
-		{ name = "snippy",   group_index = 2 },
-		{ name = "emoji",    group_index = 2 },
-		{ name = "nerdfont", group_index = 2 },
+		{ name = "nvim_lua" },
+		{ name = "nvim_lsp" },
+		{ name = "luasnip" },
+		{ name = "copilot" },
+		{ name = "snippy" },
+		{ name = "path" },
+	},
+	{
+		{ name = "path" },
+		{ name = "buffer", keyword_length = 5 },
 	},
 })
 

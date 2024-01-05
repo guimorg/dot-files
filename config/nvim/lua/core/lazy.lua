@@ -176,7 +176,7 @@ require("lazy").setup({
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
 	},
 	{ "stevearc/dressing.nvim" },
-	{ "ggandor/lightspeed.nvim" },
+	{ "ggandor/leap.nvim" },
 	{ "/rcarriga/nvim-notify" },
 	{ "MunifTanjim/nui.nvim" },
 	-- { "folke/noice.nvim" },
@@ -189,4 +189,5 @@ require("lazy").setup({
 		opts = {},
 	},
 	{ "ray-x/lsp_signature.nvim" },
+	{ "tjdevries/colorbuddy.nvim" }
 }, {})
