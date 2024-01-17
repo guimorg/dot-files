@@ -12,6 +12,7 @@ require("lazy").setup({
 
 	-- NOTE: This is where your plugins related to LSP can be installed.
 	--  The configuration is done below. Search for lspconfig to find it below.
+	{'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
 	{
 		-- LSP Configuration & Plugins
 		"neovim/nvim-lspconfig",

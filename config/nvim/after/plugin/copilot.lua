@@ -47,10 +47,8 @@ require("copilot").setup({
 	copilot_node_command = "node", -- Node.js version must be > 18.x
 	server_opts_overrides = {},
 })
-
--- write a function for hello world:
+require('copilot_cmp').setup()
 
 local copilot_suggestion = require("copilot.suggestion")
-
 vim.keymap.set("n", "<leader>ct", copilot_suggestion.toggle_auto_trigger, { desc = "[C]opilot [T]oggle Suggestion" })
 vim.keymap.set("n", "<leader>cp", ":Copilot panel<CR>", { desc = "[C]opilot [P]anel" })
