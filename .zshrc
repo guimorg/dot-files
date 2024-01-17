@@ -34,9 +34,9 @@ zinit light MichaelAquilina/zsh-you-should-use
 zinit snippet OMZP::git/git.plugin.zsh
 zinit snippet OMZP::pyenv/pyenv.plugin.zsh
 
-# neofetch
+neofetch --config ~/.config/neofetch/config.conf --image_size none --backend kitty --source ~/.config/neofetch/pictures/kitty.png
 # fastfetch
-pfetch
+# pfetch
 
 # autocompletion for git
 # zstyle ':completion:*:*:git:*' script ~/.zsh/git-completion.bash

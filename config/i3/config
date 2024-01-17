@@ -212,7 +212,7 @@ exec --no-startup-id nm-applet
 
 ###---Toggle External Display---###
 # bindsym $mod+x exec multimonitor
-# exec --no-startup-id autorandr --load default --force
+# exec --no-startup-id autorandr -c
 
 ####---Bookmarks/Search---####
 #bindsym $mod+s exec sch "google-chrome"

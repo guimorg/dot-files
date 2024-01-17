@@ -279,32 +279,33 @@ cmp.setup({
 	},
 })
 
-require("mason-null-ls").setup({
-	ensure_installed = {
-		"jsonlint",
-		"tflint",
-		"yamllint",
-		"yamlfmt",
-		"flake8",
-		"mypy",
-		"beautysh",
-		"docformatter",
-		"jsonlint",
-		"shfmt",
-		"sqlfluff",
-		"hadolint",
-		"stylua",
-		"hadolint",
-		"shfmt",
-		"debugpy",
-		"pyright",
-	},
-	automatic_setup = true,
-})
+-- require("mason-null-ls").setup({
+-- 	ensure_installed = {
+-- 		"jsonlint",
+-- 		"tflint",
+-- 		"yamllint",
+-- 		"yamlfmt",
+-- 		"flake8",
+-- 		"mypy",
+-- 		"beautysh",
+-- 		"docformatter",
+-- 		"jsonlint",
+-- 		"shfmt",
+-- 		"sqlfluff",
+-- 		"hadolint",
+-- 		"stylua",
+-- 		"hadolint",
+-- 		"shfmt",
+-- 		"debugpy",
+-- 		"pyright",
+-- 	},
+-- 	automatic_setup = true,
+-- })
 local null_ls = require("null-ls")
 vim.env.PATH = vim.env.PATH .. ":" .. "${HOME}/.pyenv/shims"
 null_ls.setup({
 	sources = {
+		null_ls.builtins.code_actions.refactoring,
 		null_ls.builtins.formatting.stylua,
 		-- null_ls.builtins.formatting.black,
 		-- null_ls.builtins.formatting.isort,
@@ -321,6 +322,7 @@ null_ls.setup({
 		null_ls.builtins.formatting.beautysh,
 		null_ls.builtins.formatting.shfmt,
 		null_ls.builtins.diagnostics.hadolint,
+		null_ls.builtins.diagnostics.vulture,
 		null_ls.builtins.diagnostics.sqlfluff.with({
 			extra_args = { "--dialect", "postgres" },
 		}),
