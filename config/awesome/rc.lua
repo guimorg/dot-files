@@ -835,7 +835,7 @@ end)
 -- }}}
 
 -- Spawn applications
-awful.spawn.with_shell("~/.config/awesome/scripts/autostart.sh")
+-- awful.spawn.with_shell("~/.config/awesome/scripts/autostart.sh")
 awful.spawn("/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 --exit-with-session awesome")
 awful.spawn("nm-applet")
 awful.spawn.with_shell("picom --config ~/.config/picom.conf")

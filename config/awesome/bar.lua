@@ -57,7 +57,8 @@ bling.widget.tag_preview.enable {
 tags = sharedtags({
 	{ name = "main", layout = awful.layout.layouts[1] },
 	{ name = "dev",  screen = 2,                      layout = awful.layout.layouts[1] },
-	{ name = "www",  screen = 2,                      layout = awful.layout.layouts[16] },
+	{ name = "www",  screen = 2,                      layout = awful.layout.layouts[1] },
+	{ name = "notes",  screen = 2,                      layout = awful.layout.layouts[1] },
 	{ name = "misc", layout = awful.layout.layouts[1] },
 	{ name = "chat", screen = 1,                      layout = awful.layout.layouts[1] },
 })
