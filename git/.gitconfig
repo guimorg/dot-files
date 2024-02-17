@@ -1,0 +1,5 @@
+[user]
+	email = ggimenezjr@gmail.com
+	signingkey = C1D0878EEEEB6C97
+[commit]
+	gpgsign = true

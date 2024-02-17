@@ -1,70 +1,6 @@
 #!/bin/sh
 path=$(pwd)
 
-# Home Directory
-ln -sf $path/.bash_profile $HOME/.bash_profile
-ln -sf $path/.bashrc $HOME/.bashrc
-ln -sf $path/.profile $HOME/.profile
-ln -sf $path/.zcompdump $HOME/.zcompdump
-ln -sf $path/.zshenv $HOME/.zshenv
-ln -sf $path/.zshrc $HOME/.zshrc
-ln -sf $path/.vimrc $HOME/.vimrc
-ln -sf $path/.tmux.conf $HOME/.tmux.conf
-ln -sf $path/.tmux.conf.local $HOME/.tmux.conf.local
-ln -sf $path/.Xresources $HOME/.Xresources
-
-# Config dir
-[ ! -d $HOME/.config ] && mkdir $HOME/.config
-
-ln -sf $path/picom.conf $HOME/.config/picom.conf
-
-ln -sf $path/config/waiterprefixes $HOME/.config/waiterprefixes
-
-[ -d $HOME/.config/eww ] && rm -rf $HOME/.config/eww
-ln -sf $path/config/eww $HOME/.config/eww
-
-[ -d $HOME/.config/dunst ] && rm -rf $HOME/.config/dunst
-ln -sf $path/config/dunst $HOME/.config/dunst
-
-[ -d $HOME/.config/kitty ] && rm -rf $HOME/.config/kitty
-ln -sf $path/config/kitty $HOME/.config/kitty
-
-[ -d $HOME/.config/alacritty ] && rm -rf $HOME/.config/alacritty
-ln -sf $path/config/alacritty $HOME/.config/alacritty
-
-[ -d $HOME/.config/i3 ] && rm -rf $HOME/.config/i3
-ln -sf $path/config/i3 $HOME/.config/i3
-
-[ -d $HOME/.config/neofetch ] && rm -rf $HOME/.config/neofetch
-ln -sf $path/config/neofetch $HOME/.config/neofetch
-
-[ -d $HOME/.config/awesome ] && rm -rf $HOME/.config/awesome
-ln -sf $path/config/awesome $HOME/.config/awesome
-
-# [ -d $HOME/.config/i3blocks ] && rm -rf $HOME/.config/i3blocks
-# ln -sf $path/config/i3blocks $HOME/.config/i3blocks
-
-[ -d $HOME/.config/rofi ] && rm -rf $HOME/.config/rofi
-ln -sf $path/config/rofi $HOME/.config/rofi
-
-[ -d $HOME/.config/nvim ] && rm -rf $HOME/.config/nvim
-ln -sf $path/config/nvim $HOME/.config/nvim
-
-[ -d $HOME/.config/polybar ] && rm -rf $HOME/.config/polybar
-ln -sf $path/config/polybar $HOME/.config/polybar
-
-[ -d $HOME/.config/ranger ] && rm -rf $HOME/.config/ranger
-ln -sf $path/config/ranger $HOME/.config/ranger
-
-[ -d $HOME/.config/shellconfig ] && rm -rf $HOME/.config/shellconfig
-ln -sf $path/config/shellconfig $HOME/.config/shellconfig
-
-ln -sf $path/config/starship.toml $HOME/.config/starship.toml
-# ln -sf $path/config/wall.png $HOME/.config/wall.png
-
-[ ! -d $HOME/.config/skeletons ] && mkdir -p $HOME/.config/skeletons
-ln -sf $path/config/skeletons $HOME/.config/skeletons
-
 # Local directory
 [ ! -d $HOME/.local ] && mkdir -p $HOME/.local/share
 [ ! -d $HOME/.local/share ] && mkdir $HOME/.local/share
@@ -73,6 +9,8 @@ ln -sf $path/.local/share/applications $HOME/.local/share/applications
 [ -d $HOME/.local/share/fonts ] && rm -r $HOME/.local/share/fonts
 ln -sf $path/.local/share/fonts $HOME/.local/share/fonts
 
-ln -sf $path/tmux-sessionizer $HOME/.local/bin/tmux-sessionizer
+stow bash config git tmux vim zsh -t $HOME
+
+ln -sf $path/tmux/tmux-sessionizer $HOME/.local/bin/tmux-sessionizer
 # sudo cp $path/config/vpn.sh /usr/local/bin/vpn
-sudo cp $path/config/get_file_extensions /usr/local/bin/get_file_extensions
+# sudo cp $path/config/get_file_extensions /usr/local/bin/get_file_extensions

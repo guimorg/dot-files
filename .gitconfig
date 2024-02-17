@@ -1,7 +1,0 @@
-[user]
-	email = guilherme.amorim@ifood.com.br
-	name = Guilherme
-[core]
-	editor = vim
-[init]
-	defaultBranch = main
