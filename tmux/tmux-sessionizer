@@ -3,7 +3,7 @@
 if [[ $# -eq 1 ]]; then
 	selected=$1
 else
-	selected=$(find ~/git -mindepth 1 -maxdepth 2 -type d -not -path '*/.*'| fzf)
+	selected=$(find ~/projects -mindepth 2 -maxdepth 3 -type d -not -path '*/.*'| fzf)
 fi
 
 if [[ -z $selected ]]; then

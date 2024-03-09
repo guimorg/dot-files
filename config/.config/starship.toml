@@ -2,8 +2,8 @@
 
 add_newline = true
 
-[character]
-success_symbol = '[➜](bold green)'
+# [character]
+# success_symbol = '[➜](bold green)'
 
 [aws]
 format = 'on [$symbol($profile )]($style)'

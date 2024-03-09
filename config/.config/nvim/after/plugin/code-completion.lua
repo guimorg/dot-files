@@ -341,6 +341,7 @@ end)
 
 local servers = {
 	ruff_lsp = {},
+	pyright = {},
 	bashls = {},
 	tflint = {},
 	terraformls = {},
@@ -367,6 +368,7 @@ require('mason-lspconfig').setup({
 
 	ensure_installed = vim.tbl_keys(servers),
 	priority = {
+		pyright = 1,
 		ruff_lsp = 1,
 		ruff = 1,
 		yamlls = 2,
