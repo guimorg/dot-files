@@ -348,6 +348,8 @@ local servers = {
 	yamlls = {},
 	jsonls = {},
 
+	gopls = {},
+
 	lua_ls = {
 		Lua = {
 			workspace = { checkThirdParty = false },
@@ -364,13 +366,19 @@ require('mason-lspconfig').setup({
 			local lua_opts = lsp_zero.nvim_lua_ls()
 			require('lspconfig').lua_ls.setup(lua_opts)
 		end,
+		gopls = function()
+			require("lspconfig").gopls.setup({
+				filetypes = { "go", "gomod", "gowork", "gotmpl" }
+			})
+		end
 	},
 
 	ensure_installed = vim.tbl_keys(servers),
 	priority = {
-		pyright = 1,
+		gopls = 1,
 		ruff_lsp = 1,
 		ruff = 1,
+		pyright = 2,
 		yamlls = 2,
 		jsonls = 3,
 		bashls = 4,

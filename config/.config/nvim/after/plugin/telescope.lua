@@ -6,7 +6,31 @@ require("telescope").setup({
 				["<C-d>"] = false,
 			},
 		},
+		vimgrep_arguments = {
+			"rg",
+			"-L",
+			"--color=never",
+			"--no-heading",
+			"--with-filename",
+			"--line-number",
+			"--column",
+			"--smart-case"
+		},
+		previewer = true,
+		file_previewer = require("telescope.previewers").vim_buffer_cat.new,
+		grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
+		qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
 	},
+	pickers = {
+		find_files = {
+			hidden = true,
+		},
+		live_grep = {
+			additional_args = function(_ts)
+				return {"--hidden"}
+			end
+		}
+	}
 })
 
 -- Enable telescope fzf native, if installed

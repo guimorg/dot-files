@@ -1,4 +1,5 @@
 require("lazy").setup({
+	"christoomey/vim-tmux-navigator",
 	-- Git related plugins
 	"tpope/vim-fugitive",
 	-- GitHub integration for omni-completion (issues or project collaborator usernames)
@@ -7,12 +8,19 @@ require("lazy").setup({
 
 	-- automatic detection of the identation stype used in a file adjustinf shiftwidth and tabstop
 	"tpope/vim-sleuth",
+	{
+		"cappyzawa/trim.nvim",
+		event = "VeryLazy",
+		opts = {
+			ft_blocklist = { "markdown" },
+		},
+	},
 
 	"folke/trouble.nvim",
 
 	-- NOTE: This is where your plugins related to LSP can be installed.
 	--  The configuration is done below. Search for lspconfig to find it below.
-	{'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
+	{ 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x' },
 	{
 		-- LSP Configuration & Plugins
 		"neovim/nvim-lspconfig",
@@ -40,10 +48,34 @@ require("lazy").setup({
 	{
 		-- Autocompletion
 		"hrsh7th/nvim-cmp",
-		dependencies = { "hrsh7th/cmp-nvim-lsp", "L3MON4D3/LuaSnip", "saadparwaiz1/cmp_luasnip" },
+		event = "InsertEnter",
+		dependencies = {
+			{
+				"L3MON4D3/LuaSnip",
+				dependencies = "rafamadriz/friendly-snippets",
+				opt = { history = true, updateevents = "TextChanged,TextChangedI" },
+			},
+			{
+				"windwp/nvim-autopairs",
+				opts = {
+					fast_wrap = {},
+					disable_filetype = { "TelescopePrompt", "vim" },
+				},
+				config = function(_, opts)
+					require("nvim-autopairs").setup(opts)
+					local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+					require("cmp").event:on("confirm_done", cmp_autopairs.on_confirm_done())
+				end,
+			},
+			"saadparwaiz1/cmp_luasnip",
+			"hrsh7th/cmp-nvim-lua",
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-path",
+		},
 	},
 	-- Useful plugin to show you pending keybinds.
-	{ "folke/which-key.nvim",           opts = {} },
+	{ "folke/which-key.nvim",      opts = {} },
 	{
 		-- Adds git releated signs to the gutter, as well as utilities for managing changes
 		"lewis6991/gitsigns.nvim",
@@ -112,7 +144,15 @@ require("lazy").setup({
 	-- "gc" to comment visual regions/lines
 	{ "numToStr/Comment.nvim",         opts = {} },
 	-- Fuzzy Finder (files, lsp, etc)
-	{ "nvim-telescope/telescope.nvim", version = "*", dependencies = { "nvim-lua/plenary.nvim" } },
+	{
+		"nvim-telescope/telescope.nvim",
+		version = "*",
+		cmd = "Telescope",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-treesitter/nvim-treesitter",
+		},
+	},
 	{
 		"nvim-telescope/telescope-fzf-native.nvim",
 		-- NOTE: If you are having trouble with this installation,
@@ -162,7 +202,6 @@ require("lazy").setup({
 			require("copilot_cmp").setup()
 		end,
 	},
-	{ "windwp/nvim-autopairs" },
 	{ "onsails/lspkind.nvim" },
 	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 	{ "wsdjeg/vim-fetch" },
@@ -187,5 +226,6 @@ require("lazy").setup({
 		opts = {},
 	},
 	{ "ray-x/lsp_signature.nvim" },
-	{ "tjdevries/colorbuddy.nvim" }
+	{ "tjdevries/colorbuddy.nvim" },
+	{ "stevearc/oil.nvim" }
 }, {})

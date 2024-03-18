@@ -6,7 +6,5 @@
 	sort = -committerdate
 [includeIf "gitdir:~/projects/work/"]
 	path = ~/projects/work/.gitconfig
-[includeIf "gitdir:~/projects/oss/"]
-	path = ~/projects/oss/.gitconfig
 [push]
 	autoSetupRemote = true
