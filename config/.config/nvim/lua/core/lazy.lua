@@ -18,9 +18,7 @@ require("lazy").setup({
 
 	"folke/trouble.nvim",
 
-	-- NOTE: This is where your plugins related to LSP can be installed.
-	--  The configuration is done below. Search for lspconfig to find it below.
-	{ 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x' },
+	-- { 'VonHeikemen/lsp-zero.nvim', branch = 'v3.x' },
 	{
 		-- LSP Configuration & Plugins
 		"neovim/nvim-lspconfig",
@@ -28,10 +26,11 @@ require("lazy").setup({
 			-- Automatically install LSPs to stdpath for neovim
 			{ "williamboman/mason.nvim", config = true },
 			"williamboman/mason-lspconfig.nvim",
+			'WhoIsSethDaniel/mason-tool-installer.nvim',
 
 			-- Useful status updates for LSP
 			-- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-			{ "j-hui/fidget.nvim",       opts = {},    tag = "legacy" },
+			{ "j-hui/fidget.nvim",       opts = {} },
 
 			-- Additional lua configuration, makes nvim stuff amazing!
 			"folke/neodev.nvim",
@@ -52,8 +51,20 @@ require("lazy").setup({
 		dependencies = {
 			{
 				"L3MON4D3/LuaSnip",
-				dependencies = "rafamadriz/friendly-snippets",
-				opt = { history = true, updateevents = "TextChanged,TextChangedI" },
+				build = (function()
+					if vim.fn.has "win32" == 1 or vim.fn.executable 'make' == 0 then
+						return
+					end
+					return 'make install_jsregexp'
+				end)(),
+				dependencies = {
+					{
+						'rafamadriz/friendly-snippets',
+						config = function()
+							require('luasnip.loaders.from_vscode').lazy_load()
+						end,
+					},
+				}
 			},
 			{
 				"windwp/nvim-autopairs",
@@ -68,14 +79,12 @@ require("lazy").setup({
 				end,
 			},
 			"saadparwaiz1/cmp_luasnip",
-			"hrsh7th/cmp-nvim-lua",
 			"hrsh7th/cmp-nvim-lsp",
-			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
 		},
 	},
 	-- Useful plugin to show you pending keybinds.
-	{ "folke/which-key.nvim",      opts = {} },
+	{ "folke/which-key.nvim",           opts = {} },
 	{
 		-- Adds git releated signs to the gutter, as well as utilities for managing changes
 		"lewis6991/gitsigns.nvim",
@@ -104,7 +113,7 @@ require("lazy").setup({
 	{ "ThePrimeagen/harpoon" },
 	{ "mbbill/undotree" },
 	{ "tpope/vim-obsession" },
-	{ "tpope/vim-surround" },
+	-- { "tpope/vim-surround" },
 	{ "nvim-tree/nvim-web-devicons" },
 	{ "akinsho/bufferline.nvim",        requires = "nvim-tree/nvim-web-devicons" },
 	-- {
@@ -130,6 +139,7 @@ require("lazy").setup({
 			"antoinemadec/FixCursorHold.nvim",
 		},
 	},
+	{ "nvim-neotest/neotest-go" },
 	{ "nvim-neotest/neotest-python" },
 	{
 		-- Add indentation guides even on blank lines
@@ -142,25 +152,26 @@ require("lazy").setup({
 		},
 	},
 	-- "gc" to comment visual regions/lines
-	{ "numToStr/Comment.nvim",         opts = {} },
+	{ "numToStr/Comment.nvim",            opts = {} },
 	-- Fuzzy Finder (files, lsp, etc)
 	{
 		"nvim-telescope/telescope.nvim",
-		version = "*",
-		cmd = "Telescope",
+		event = "VimEnter",
+		branch = "0.1.x",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
+			{
+				"nvim-telescope/telescope-fzf-native.nvim",
+				-- NOTE: If you are having trouble with this installation,
+				--       refer to the README for telescope-fzf-native for more instructions.
+				build = "make",
+				cond = function()
+					return vim.fn.executable("make") == 1
+				end,
+			},
+			"nvim-telescope/telescope-ui-select.nvim",
 			"nvim-treesitter/nvim-treesitter",
 		},
-	},
-	{
-		"nvim-telescope/telescope-fzf-native.nvim",
-		-- NOTE: If you are having trouble with this installation,
-		--       refer to the README for telescope-fzf-native for more instructions.
-		build = "make",
-		cond = function()
-			return vim.fn.executable("make") == 1
-		end,
 	},
 	{
 		-- Highlight, edit, and navigate code
@@ -180,9 +191,7 @@ require("lazy").setup({
 	{
 		"mfussenegger/nvim-dap-python",
 	},
-	{
-		"rcarriga/nvim-dap-ui",
-	},
+	{ "rcarriga/nvim-dap-ui",             dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" } },
 	{ "nvim-telescope/telescope-dap.nvim" },
 	{ "theHamsta/nvim-dap-virtual-text" },
 	-- { "github/copilot.vim" },
@@ -202,10 +211,10 @@ require("lazy").setup({
 			require("copilot_cmp").setup()
 		end,
 	},
-	{ "onsails/lspkind.nvim" },
+	-- { "onsails/lspkind.nvim" },
 	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 	{ "wsdjeg/vim-fetch" },
-	{ "ray-x/lsp_signature.nvim" },
+	-- { "ray-x/lsp_signature.nvim" },
 	{ "goolord/alpha-nvim" },
 	{ "romgrk/barbar.nvim" },
 	{
@@ -213,7 +222,7 @@ require("lazy").setup({
 		requires = { "kyazdani42/nvim-web-devicons", opt = true },
 	},
 	{ "stevearc/dressing.nvim" },
-	{ "ggandor/leap.nvim" },
+	-- { "ggandor/leap.nvim" },
 	{ "/rcarriga/nvim-notify" },
 	{ "MunifTanjim/nui.nvim" },
 	-- { "folke/noice.nvim" },
@@ -225,7 +234,64 @@ require("lazy").setup({
 		dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
 		opts = {},
 	},
-	{ "ray-x/lsp_signature.nvim" },
 	{ "tjdevries/colorbuddy.nvim" },
-	{ "stevearc/oil.nvim" }
-}, {})
+	{ "stevearc/oil.nvim" },
+	{ 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+	{ -- Collection of various small independent plugins/modules
+		'echasnovski/mini.nvim',
+		config = function()
+			-- Better Around/Inside textobjects
+			--
+			-- Examples:
+			--  - va)  - [V]isually select [A]round [)]paren
+			--  - yinq - [Y]ank [I]nside [N]ext [']quote
+			--  - ci'  - [C]hange [I]nside [']quote
+			require('mini.ai').setup { n_lines = 500 }
+
+			-- Add/delete/replace surroundings (brackets, quotes, etc.)
+			--
+			-- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
+			-- - sd'   - [S]urround [D]elete [']quotes
+			-- - sr)'  - [S]urround [R]eplace [)] [']
+			require('mini.surround').setup()
+
+			require("mini.pairs").setup()
+			-- ... and there is more!
+			--  Check out: https://github.com/echasnovski/mini.nvim
+		end,
+	},
+	{
+		"ray-x/go.nvim",
+		dependencies = { -- optional packages
+			"ray-x/guihua.lua",
+			"neovim/nvim-lspconfig",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		config = function()
+			require("go").setup()
+		end,
+		event = { "CmdlineEnter" },
+		ft = { "go", 'gomod' },
+		build = ':lua require("go.install").update_all_sync()' -- if you need to install/update all binaries
+	}
+}, {
+	ui = {
+		-- If you are using a Nerd Font: set icons to an empty table which will use the
+		-- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
+		icons = vim.g.have_nerd_font and {} or {
+			cmd = '⌘',
+			config = '🛠',
+			event = '📅',
+			ft = '📂',
+			init = '⚙',
+			keys = '🗝',
+			plugin = '🔌',
+			runtime = '💻',
+			require = '🌙',
+			source = '📄',
+			start = '🚀',
+			task = '📌',
+			lazy = '💤 ',
+		},
+	},
+})

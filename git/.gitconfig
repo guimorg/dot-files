@@ -8,3 +8,5 @@
 	path = ~/projects/work/.gitconfig
 [push]
 	autoSetupRemote = true
+[user]
+	name = Guilherme de Amorim

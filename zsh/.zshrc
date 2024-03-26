@@ -121,3 +121,4 @@ fpath+=${ZDOTDIR:-~}/.zsh_functions
 fpath+=~/.zfunc
 
 bindkey -v
+export PATH=/home/guimorg/.local/bin:${PATH}:/home/guimorg/.npm-global/bin
