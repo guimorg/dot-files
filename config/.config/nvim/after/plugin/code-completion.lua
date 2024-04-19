@@ -59,10 +59,22 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
+require('go').setup {
+	lsp_cfg = false,
+	goimports = 'gopls', -- if set to 'gopls' will use golsp format
+	gofmt = 'gopls', -- if set to gopls will use golsp format
+	tag_transform = false,
+	test_dir = '',
+	comment_placeholder = '   ',
+	lsp_keymaps = false,
+	lsp_gofumpt = true, -- true: set default gofmt in gopls format to gofumpt
+	dap_debug = true,
+}
+local go_cfg = require 'go.lsp'.config()
 
 local servers = {
 	clangd = {},
-	gopls = {},
+	gopls = go_cfg,
 	ruff_lsp = {},
 	pyright = {},
 	bashls = {},
@@ -110,8 +122,11 @@ cmp.setup({
 		{ name = 'luasnip' },
 		{ name = 'path' },
 		{ name = 'copilot' },
+		{ name = 'gopls' }
 	},
-	completion = { completeopt = "menu,menuone,noinsert" },
+	completion = {
+		completeopt = "menu,menuone,noinsert"
+	},
 	mapping = cmp.mapping.preset.insert({
 		['<C-p>'] = cmp.mapping.select_prev_item(),
 		['<C-n>'] = cmp.mapping.select_next_item(),
