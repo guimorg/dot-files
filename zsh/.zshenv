@@ -1,10 +1,18 @@
 export GREP_COLOR='1;35;40'
-export PATH=${HOME}/.local/bin:${HOME}/.pyenv/plugins/pyenv-virtualenv/shims:${HOME}/.pyenv/shims:${HOME}/.pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:${HOME}/.cargo/bin:${HOME}/git/networkmanager-dmenu
+export GOPATH=${HOME}/go
+export GOBIN=${GOPATH}/bin
+export PATH=${HOME}/.local/bin:${HOME}/.pyenv/plugins/pyenv-virtualenv/shims:${HOME}/.pyenv/shims:${HOME}/.pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:${HOME}/.cargo/bin:${HOME}/git/networkmanager-dmenu:${GOPATH}/bin
 export PATH=$HOME/.config/rofi/scripts:$PATH
 export PATH=/usr/local/go/bin:$PATH
+export PATH=$HOME/.emacs.d/bin:$PATH
 export ZSH=${HOME}/.oh-my-zsh
 export ZSH_THEME="spaceship"
 export ZSH_PYENV_VIRTUALENV=true
+
+export HISTFILE=~/.zsh_history
+export SAVEHIST=10000
+export HISTSIZE=25000
+export HISTTIMEFORMAT="[%F %T] "
 
 export STARSHIP_CONFIG=~/.config/starship.toml
 
