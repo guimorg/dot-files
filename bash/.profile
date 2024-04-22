@@ -39,6 +39,11 @@ export LESS_TERMCAP_so=$'\e[01;33m'
 export LESS_TERMCAP_ue=$'\e[0m'
 export LESS_TERMCAP_us=$'\e[1;4;31m'
 
-export PATH=~/.npm-global/bin:$PATH
+export GOPATH=${HOME}/go
+export GOBIN=${GOPATH}/bin
+export PATH=${HOME}/.local/bin:${HOME}/.pyenv/plugins/pyenv-virtualenv/shims:${HOME}/.pyenv/shims:${HOME}/.pyenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:${HOME}/.cargo/bin:${HOME}/git/networkmanager-dmenu:${GOPATH}/bin
+export PATH=$HOME/.config/rofi/scripts:$PATH
+export PATH=/usr/local/go/bin:$PATH
+export PATH=$HOME/.emacs.d/bin:$PATH
 
 . "$HOME/.cargo/env"
