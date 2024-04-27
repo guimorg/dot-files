@@ -50,5 +50,8 @@
 ;; (unpin! t)
 
 (package! tldr)
-(package! org-super-agenda)
+;; (package! org-super-agenda)
 (package! wakatime-mode)
+(disable-packages! py-isort pyimport)
+(package! switch-buffer-functions)
+(package! dockerfile-mode)

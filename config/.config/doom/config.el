@@ -6,8 +6,8 @@
 
 ;; Some functionality uses this to identify you, e.g. GPG configuration, email
 ;; clients, file templates and snippets. It is optional.
-;; (setq user-full-name "John Doe"
-;;       user-mail-address "john@doe.com")
+(setq user-full-name "Guilherme de Amorim"
+      user-mail-address "ggimenezjr@gmail.com")
 
 ;; Doom exposes five (optional) variables for controlling fonts in Doom:
 ;;
@@ -21,8 +21,9 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-;;(setq doom-font (font-spec :family "Fira Code" :size 12 :weight 'semi-light)
-;;      doom-variable-pitch-font (font-spec :family "Fira Sans" :size 13))
+(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 14 :weight 'semi-light)
+     ;; doom-variable-pitch-font (font-spec :family "Alegreya" :size 13)
+     )
 ;;
 ;; If you or Emacs can't find your font, use 'M-x describe-font' to look them
 ;; up, `M-x eval-region' to execute elisp code, and 'M-x doom/reload-font' to
@@ -78,30 +79,66 @@
 ;; Projectile Config
 (setq projectile-project-search-path '("~/projects/work" "~/projects/oss"))
 
-(defun make-youtube-link (youtube_id)
-  (browse-uril (concat "https://www.youtube.com/embed/" youtube_id)))
+;; (flycheck-define-checker python-ruff
+;;   "A Python syntax and style checker using Ruff."
+;;   :command ("ruff" "fix" source)
+;;   :error-patterns
+;;   ((error line-start (file-name) ":" line ":" (message) line-end))
+;;   :modes python-mode)
+;; (add-to-list 'flycheck-checkers 'python-ruff)
 
-(after! org
-  (org-link-set-parameters "yt" #'make-youtube-link)
-  )
+;; (after! flycheck
+;;   (setq flycheck-python-ruff-executable "ruff")  ; Ensure the path is correct
+;;   (require 'flycheck-ruff)  ; Assuming you have a flycheck-ruff package or similar
+;;   (flycheck-add-next-checker 'python-flake8 'python-ruff))
 
-;; Org Super Agenda
-(use-package! org-super-agenda
-  :after org-agenda
+;; (after! python
+;;   ;; Disable or adjust hooks that setup isort, black, etc.
+;;   (remove-hook 'python-mode-hook #'pyimport-mode)
+;;   (remove-hook 'python-mode-hook #'blacken-mode))
+
+;; Disable exit confirmation
+(setq confirm-kill-emacs nil)
+
+;; Better buffer management
+(map! "C-x b"   #'counsel-buffer-or-recentf
+      "C-x C-b"  #'counsel-switch-buffer)
+(defun zz/counsel-buffer-or-recentf-candidates ()
+  "Return candidates for `counsel-buffer-or-recentf'."
+  (require 'recentf)
+  (recentf-mode)
+  (let ((buffers
+         (delq nil
+               (mapcar (lambda (b)
+                         (when (buffer-file-name b)
+                           (abbreviate-file-name (buffer-file-name b))))
+                       (delq (current-buffer) (buffer-list))))))
+    (append
+     buffers
+     (cl-remove-if (lambda (f) (member f buffers))
+                   (counsel-recentf-candidates)))))
+
+(advice-add #'counsel-buffer-or-recentf-candidates
+            :override #'zz/counsel-buffer-or-recentf-candidates)
+
+(use-package! switch-buffer-functions
+  :after recentf
+  :preface
+  (defun my-recentf-track-visited-file (_prev _curr)
+    (and buffer-file-name
+         (recentf-add-file buffer-file-name)))
   :init
-  (setq org-super-agenda-groups '((:name "Today"
-                                         :time-grid t
-                                         :scheduled today)
-                                  (:name "Due today"
-                                         :deadline today)
-                                  (:name "Important"
-                                         :priority "A")
-                                  (:name "Overdue"
-                                         :deadline past)
-                                  (:name "Due soon"
-                                         :deadline future)
-                                  (:name "Big Outcomes"
-                                         :tag "bo")))
-  :config
-  (org-super-agenda-mode)
-  )
+  (add-hook 'switch-buffer-functions #'my-recentf-track-visited-file))
+
+;; Docker
+;; (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+;; (put 'dockerfile-image-name 'safe-local-variable #'stringp)
+;; (defun plain-pipe-for-process () (setq-local process-connection-type nil))
+;; (add-hook 'compilation-mode-hook 'plain-pipe-for-process)
+
+;; Flycheck
+(after! flycheck
+  (setq-default flycheck-disabled-checkers
+                '(
+                  python-pylint python-flake8
+                  )))

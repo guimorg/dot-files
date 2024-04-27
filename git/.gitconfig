@@ -10,3 +10,5 @@
 	autoSetupRemote = true
 [user]
 	name = Guilherme de Amorim
+[init]
+	defaultBranch = main
