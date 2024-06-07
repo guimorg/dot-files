@@ -126,3 +126,4 @@ eval "$(starship init bash)"
 export PATH=/home/guimorg/.local/bin:${PATH}
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+export PATH=/home/guimorg/.local/bin:${PATH}
