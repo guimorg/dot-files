@@ -170,6 +170,7 @@ theme.mpd = lain.widget.mpd({
 })
 
 local vpnwidget = require("widgets.vpn")
+local gitlabwidget = require("widgets.gitlab")
 
 -- MEM
 local memicon = wibox.widget.imagebox(theme.widget_mem)
@@ -320,6 +321,9 @@ function theme.at_screen_connect(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
+            arrl_ld,
+            gitlabwidget,
+            arrl_ld,
             keyboardlayout,
             spr,
             arrl_ld,
