@@ -169,8 +169,12 @@ theme.mpd = lain.widget.mpd({
     end
 })
 
+-- vpn
 local vpnwidget = require("widgets.vpn")
-local gitlabwidget = require("widgets.gitlab")
+--
+-- -- gitlab
+local gitlabwidgetassignedtome = require("widgets.gitlab_merge_requests_assigned_to_me")
+local gitlabwidgetiamthereviewer = require("widgets.gitlab_merge_requests_i_am-the_reviewer")
 
 -- MEM
 local memicon = wibox.widget.imagebox(theme.widget_mem)
@@ -321,8 +325,11 @@ function theme.at_screen_connect(s)
         { -- Right widgets
             layout = wibox.layout.fixed.horizontal,
             wibox.widget.systray(),
+            gitlabwidgetassignedtome,
             arrl_ld,
-            gitlabwidget,
+            gitlabwidgetiamthereviewer,
+            arrl_ld,
+            vpnwidget,
             arrl_ld,
             keyboardlayout,
             spr,
@@ -332,11 +339,9 @@ function theme.at_screen_connect(s)
             arrl_dl,
             volicon,
             theme.volume.widget,
-            -- arrl_ld,
-            -- wibox.container.background(mailicon, theme.bg_focus),
+            arrl_ld,
+            wibox.container.background(mailicon, theme.bg_focus),
             --wibox.container.background(theme.mail.widget, theme.bg_focus),
-            arrl_dl,
-            vpnwidget,
             arrl_dl,
             memicon,
             mem.widget,

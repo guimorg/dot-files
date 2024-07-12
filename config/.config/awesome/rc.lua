@@ -273,7 +273,7 @@ end)
 
 -- Create a wibox for each screen and add it
 awful.screen.connect_for_each_screen(function(s) set_wallpaper(s) end)
-awful.screen.connect_for_each_screen(function(s) beautiful.at_screen_connect(s) end)
+awful.screen.connect_for_each_screen(function(s) beautiful.get().at_screen_connect(s) end)
 
 local bling = require("bling")
 bling.module.flash_focus.enable()
@@ -914,7 +914,7 @@ tag.connect_signal("property::selected", backham)
 -- }}}
 
 awful.spawn.with_shell("picom --config ~/.config/picom.conf")
-awful.spawn.with_shell("autorandr --cycle")
+-- awful.spawn.with_shell("autorandr --cycle")
 awful.spawn.with_shell("xscreensaver -no-splash")
 awful.spawn("nm-applet")
 awful.spawn("/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1 --exit-with-session awesome")

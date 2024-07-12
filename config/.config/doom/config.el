@@ -964,62 +964,62 @@ Late deadlines first, then scheduled, then non-late deadlines"
 
 ;; NEW
 ;; Modify the way that entries with time specifications are displayed
-(customize-set-variable 'org-agenda-use-time-grid t)
-(customize-set-variable 'org-agenda-time-grid
-                        (quote ((daily today require-timed)
-                                #("-----------------------------------"
-                                  0 35 (org-heading t))
-                                (0 2400))))
-(customize-set-variable 'org-agenda-current-time-string
-                        #("now - - - - - - - - - - - - - - - -"
-                          0 35 (org-heading t)))
-;; Modify the way that deadlines are displayed
-(customize-set-variable 'org-agenda-deadline-leaders
-                        '("Deadline:  " "----- In %3d d.: -----"))
-;; And scheduled items
-(customize-set-variable 'org-agenda-scheduled-leaders
-                        '(">> Scheduled: <<" "** Sched.%2dx: **"))
+;; (customize-set-variable 'org-agenda-use-time-grid t)
+;; (customize-set-variable 'org-agenda-time-grid
+;;                         (quote ((daily today require-timed)
+;;                                 #("-----------------------------------"
+;;                                   0 35 (org-heading t))
+;;                                 (0 2400))))
+;; (customize-set-variable 'org-agenda-current-time-string
+;;                         #("now - - - - - - - - - - - - - - - -"
+;;                           0 35 (org-heading t)))
+;; ;; Modify the way that deadlines are displayed
+;; (customize-set-variable 'org-agenda-deadline-leaders
+;;                         '("Deadline:  " "----- In %3d d.: -----"))
+;; ;; And scheduled items
+;; (customize-set-variable 'org-agenda-scheduled-leaders
+;;                         '(">> Scheduled: <<" "** Sched.%2dx: **"))
 
-;; Don't warn me of an upcoming deadline if I schedule the entry
-(customize-set-variable 'org-agenda-skip-deadline-prewarning-if-scheduled t)
-;; Don't show scheduled entries that have been completed
-(customize-set-variable 'org-agenda-skip-scheduled-if-done t)
+;; ;; Don't warn me of an upcoming deadline if I schedule the entry
+;; (customize-set-variable 'org-agenda-skip-deadline-prewarning-if-scheduled t)
+;; ;; Don't show scheduled entries that have been completed
+;; (customize-set-variable 'org-agenda-skip-scheduled-if-done t)
 
-;; Don't start with context lines from entry body
-(customize-set-variable 'org-agenda-start-with-entry-text-mode nil)
-;; If context lines are enabled, show up to 4 lines
-(customize-set-variable 'org-agenda-entry-text-maxlines 4)
+;; ;; Don't start with context lines from entry body
+;; (customize-set-variable 'org-agenda-start-with-entry-text-mode nil)
+;; ;; If context lines are enabled, show up to 4 lines
+;; (customize-set-variable 'org-agenda-entry-text-maxlines 4)
 
-;; Pull data for agenda from these files
-(customize-set-variable 'org-agenda-files
-                        '("~/notes/main.org"))
+;; ;; ;; Pull data for agenda from these files
+;; ;; (customize-set-variable 'org-agenda-files
+;; ;;                         '("~/notes/main.org"))
 
-;; Don't slow down startup when generating the agenda
-(customize-set-variable 'org-agenda-inhibit-startup nil)
+;; ;; Don't slow down startup when generating the agenda
+;; (customize-set-variable 'org-agenda-inhibit-startup nil)
 
-;; Show 14 days per page in the agenda
-(customize-set-variable 'org-agenda-span 14)
-;; Show upcoming deadlines for the 4 weeks
-(customize-set-variable 'org-deadline-warning-days 28)
-;; Start the agenda on today
-(customize-set-variable 'org-agenda-start-on-weekday nil)
+;; ;; Show 14 days per page in the agenda
+;; (customize-set-variable 'org-agenda-span 14)
+;; ;; Show upcoming deadlines for the 4 weeks
+;; (customize-set-variable 'org-deadline-warning-days 28)
+;; ;; Start the agenda on today
+;; (customize-set-variable 'org-agenda-start-on-weekday nil)
 
-;; Set default priority to C
-(customize-set-variable 'org-default-priority 67)
-;; Color-code priorities
-(customize-set-variable 'org-agenda-fontify-priorities t)
-(customize-set-variable 'org-priority-faces
-                        (quote ((65 :foreground "magenta" :weight bold)
-                                (66 :foreground "green3")
-                                (67 :foreground "orange"))))
+;; ;; Set default priority to C
+;; (customize-set-variable 'org-default-priority 67)
+;; ;; Color-code priorities
+;; (customize-set-variable 'org-agenda-fontify-priorities t)
+;; (customize-set-variable 'org-priority-faces
+;;                         (quote ((65 :foreground "magenta" :weight bold)
+;;                                 (66 :foreground "green3")
+;;                                 (67 :foreground "orange"))))
 
-;; Increase line spacing and highlight current line
-(defun ll/org/agenda/appearance-hook ()
-  (setq line-spacing 4)
-  (hl-line-mode 1))
-(add-hook 'org-finalize-agenda-hook #'ll/org/agenda/appearance-hook)
+;; ;; Increase line spacing and highlight current line
+;; (defun ll/org/agenda/appearance-hook ()
+;;   (setq line-spacing 4)
+;;   (hl-line-mode 1))
+;; (add-hook 'org-finalize-agenda-hook #'ll/org/agenda/appearance-hook)
 
-;; Log when tasks completed
-(customize-set-variable 'org-log-done t)
-;; Show clocked items for the day in the agenda
-(customize-set-variable 'org-agenda-start-with-log-mode t)
+;; ;; Log when tasks completed
+;; (customize-set-variable 'org-log-done t)
+;; ;; Show clocked items for the day in the agenda
+;; (customize-set-variable 'org-agenda-start-with-log-mode t)
