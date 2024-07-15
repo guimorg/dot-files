@@ -6,6 +6,7 @@ export PATH=$HOME/.config/rofi/scripts:$PATH
 export PATH=/usr/local/go/bin:$PATH
 export PATH=${HOME}/.npm-global/bin:$PATH
 export PATH=$HOME/.emacs.d/bin:$PATH
+export PATH=/opt/homebrew/bin:$PATH
 export ZSH=${HOME}/.oh-my-zsh
 export ZSH_THEME="spaceship"
 export ZSH_PYENV_VIRTUALENV=true

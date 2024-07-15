@@ -118,20 +118,20 @@ require("lazy").setup({
 	{ "tpope/vim-obsession" },
 	-- { "tpope/vim-surround" },
 	{ "nvim-tree/nvim-web-devicons" },
-	{ "akinsho/bufferline.nvim",        requires = "nvim-tree/nvim-web-devicons" },
-	-- {
-	-- 	-- Set lualine as statusline
-	-- 	"nvim-lualine/lualine.nvim",
-	-- 	-- See `:help lualine.txt`
-	-- 	opts = {
-	-- 		options = {
-	-- 			icons_enabled = true,
-	-- 			theme = "dracula",
-	-- 			component_separators = "|",
-	-- 			section_separators = "",
-	-- 		},
-	-- 	},
-	-- },
+	-- { "akinsho/bufferline.nvim",        requires = "nvim-tree/nvim-web-devicons" },
+	{
+		-- Set lualine as statusline
+		"nvim-lualine/lualine.nvim",
+		-- See `:help lualine.txt`
+		opts = {
+			options = {
+				icons_enabled = true,
+				theme = "dracula",
+				component_separators = "|",
+				section_separators = "",
+			},
+		},
+	},
 	{ "antoinemadec/FixCursorHold.nvim" },
 	{ "nvim-tree/nvim-tree.lua" },
 	{
@@ -219,26 +219,26 @@ require("lazy").setup({
 	{ "wsdjeg/vim-fetch" },
 	-- { "ray-x/lsp_signature.nvim" },
 	{ "goolord/alpha-nvim" },
-	{ "romgrk/barbar.nvim" },
-	{
-		"nvimdev/galaxyline.nvim",
-		requires = { "kyazdani42/nvim-web-devicons", opt = true },
-	},
+	-- { "romgrk/barbar.nvim" },
+	-- {
+	-- 	"nvimdev/galaxyline.nvim",
+	-- 	requires = { "kyazdani42/nvim-web-devicons", opt = true },
+	-- },
 	{ "stevearc/dressing.nvim" },
 	-- { "ggandor/leap.nvim" },
-	{ "/rcarriga/nvim-notify" },
+	-- { "/rcarriga/nvim-notify" },
 	{ "MunifTanjim/nui.nvim" },
 	-- { "folke/noice.nvim" },
 	{ "tpope/vim-repeat" },
 	{ "wakatime/vim-wakatime" },
 	{ "ThePrimeagen/git-worktree.nvim" },
-	{
-		"m4xshen/hardtime.nvim",
-		dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
-		opts = {},
-	},
+	-- {
+	-- 	"m4xshen/hardtime.nvim",
+	-- 	dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+	-- 	opts = {},
+	-- },
 	{ "tjdevries/colorbuddy.nvim" },
-	{ "stevearc/oil.nvim" },
+	-- { "stevearc/oil.nvim" },
 	{ 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 	{ -- Collection of various small independent plugins/modules
 		'echasnovski/mini.nvim',

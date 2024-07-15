@@ -1,14 +1,23 @@
 [rerere]
 	enable = true
+
 [column]
 	ui = auto
+
 [branch]
 	sort = -committerdate
+
 [includeIf "gitdir:~/projects/work/"]
 	path = ~/projects/work/.gitconfig
+
+[includeIf "gitdir:~/projects/oss/"]
+	path = ~/projects/oss/.gitconfig
+
 [push]
 	autoSetupRemote = true
+
 [user]
 	name = Guilherme de Amorim
+
 [init]
 	defaultBranch = main

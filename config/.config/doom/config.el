@@ -118,6 +118,9 @@
      (cl-remove-if (lambda (f) (member f buffers))
                    (counsel-recentf-candidates)))))
 
+(use-package! wakatime-mode)
+(global-wakatime-mode)
+
 (advice-add #'counsel-buffer-or-recentf-candidates
             :override #'zz/counsel-buffer-or-recentf-candidates)
 
