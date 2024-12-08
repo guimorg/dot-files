@@ -55,3 +55,6 @@
 (disable-packages! py-isort pyimport)
 (package! switch-buffer-functions)
 (package! dockerfile-mode)
+(package! peep-dired)
+(package! all-the-icons)
+(package! all-the-icons-dired)

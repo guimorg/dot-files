@@ -1,0 +1,35 @@
+layout_uv() {
+    PYPROJECT_TOML="${PYPROJECT_TOML:-pyproject.toml}"
+    if [[ ! -f "$PYPROJECT_TOML" ]]; then
+        log_status "No pyproject.toml found. Not setting anything"
+        return
+    fi
+
+    VIRTUAL_ENV="$PWD/.venv"
+
+    if [[ -z $VIRTUAL_ENV || ! -d $VIRTUAL_ENV ]]; then
+        log_status "No virtual environment exists. Setting up a uv eaccordingly"
+
+        real_python_bin=`python -c 'import sys;print(sys.executable)'`
+        log_status "Target python version is `"$real_python_bin" --version`"
+
+        uv venv --python="$real_python_bin"
+        if [[ $? != 0 ]]; then
+            log_status "Not setting anything"
+            return
+        fi
+    fi
+
+    if [[ "$VIRTUAL_ENV" =~ ^"$PWD" ]]; then
+        rel_path=${VIRTUAL_ENV#"$PWD"}
+        venv_name="`basename ${PWD}`$rel_path"
+    else
+        venv_name="`basename ${VIRTUAL_ENV}`"
+    fi
+
+    PATH_add "$VIRTUAL_ENV/bin"
+    export VENV_ACTIVE=1
+    export VIRTUAL_ENV
+
+    export ENVRC_ANNOT="(+uv $venv_name)"
+}

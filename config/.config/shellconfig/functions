@@ -1,18 +1,3 @@
-mcd () {
-    # Creates dir and cd into dir
-    mkdir -p ${1}
-    cd ${1}
-}
-
-inject_init_py() {
-	if [[ -d ${1} ]]; then
-		touch ${1}/__init__.py
-	else
-		echo "${1} is not a directory, please try again"
-		exit 1
-	fi
-}
-
 md_to_html() {
 	# Really ugly way to render markdown files
 	# I need to make this prettier, but for now
@@ -55,4 +40,19 @@ wacom_stuff() {
 # get waiter prefix
 waiter_prefix() {
 	shuf -n 1 ~/.config/waiterprefixes
+}
+
+direnv-uv-init() {
+    if [[ ! -f "pyproject.toml" ]]; then
+        uv init --python=`python --version|awk '{ print $2 ; }'|awk -F "." '{ print $1 "."  $2 ; }'`
+        if [[ $? != 0 ]]; then
+            echo Aborting
+            return
+        fi
+    fi
+
+    cat >.envrc <<EOF
+layout uv
+EOF
+    direnv allow
 }

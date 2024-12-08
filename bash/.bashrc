@@ -127,3 +127,4 @@ export PATH=/home/guimorg/.local/bin:${PATH}
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 export PATH=/home/guimorg/.local/bin:${PATH}
+eval "$(uv generate-shell-completion bash)"

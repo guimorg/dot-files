@@ -1,16 +1,4 @@
 #!/bin/sh
 path=$(pwd)
 
-# Local directory
-[ ! -d $HOME/.local ] && mkdir -p $HOME/.local/share
-[ ! -d $HOME/.local/share ] && mkdir $HOME/.local/share
-[ -d $HOME/.local/share/applications ] && rm -rf $HOME/.local/share/applications
-ln -sf $path/.local/share/applications $HOME/.local/share/applications
-[ -d $HOME/.local/share/fonts ] && rm -r $HOME/.local/share/fonts
-ln -sf $path/.local/share/fonts $HOME/.local/share/fonts
-
-stow bash config git tmux vim zsh ohmyposh -t $HOME
-
-ln -sf $path/tmux/tmux-sessionizer $HOME/.local/bin/tmux-sessionizer
-# sudo cp $path/config/vpn.sh /usr/local/bin/vpn
-# sudo cp $path/config/get_file_extensions /usr/local/bin/get_file_extensions
+stow direnv dbt emacs bash config git tmux vim zsh ohmyposh -t $HOME

@@ -4,4 +4,5 @@
 (package! lsp-pyright)
 (package! ruff-format)
 (package! python-pytest)
-(package! pyenv-mode)
+;; (package! pyenv-mode)
+;; (package! pet)

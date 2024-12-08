@@ -1,4 +1,5 @@
 ;;; private/my-python/config.el -*- lexical-binding: t; -*-
+
 (defvar +python-ipython-command '("ipython" "-i" "--simple-prompt" "--no-color-info")
   "Command to initialize the ipython REPL for `+python/open-ipython-repl'.")
 
@@ -9,11 +10,17 @@
   (pushnew! projectile-project-root-files "pyproject.toml" "requirements.txt" "setup.py"))
 
 (use-package! python
+  :mode ("[./]flake8\\'" . conf-mode)
+  :mode ("/Pipfile\\'" . conf-mode)
   :init
   (setq python-environment-directory doom-cache-dir
         python-indent-guess-indent-offset-verbose nil)
 
   (add-hook 'python-mode-local-vars-hook #'lsp! 'append)
+  ;; Use "mspyls" in eglot if in PATH
+  (when (executable-find "Microsoft.Python.LanguageServer")
+    (set-eglot-client! 'python-mode '("Microsoft.Python.LanguageServer")))
+
   (add-hook 'python-mode-local-vars-hook #'tree-sitter! 'append)
 
   :config
@@ -22,6 +29,7 @@
     :send-region #'python-shell-send-region
     :send-buffer #'python-shell-send-buffer)
   (set-docsets! '(python-mode inferior-python-mode) "Python 3" "NumPy" "SciPy" "Pandas")
+
   (set-ligatures! 'python-mode
     ;; Functional
     :def "def"
@@ -40,8 +48,11 @@
     :for "for"
     :return "return" :yield "yield")
 
-  ;; ;; Stop the spam!
-  ;; (setq python-indent-guess-indent-offset-verbose nil)
+  ;; Stop the spam!
+  (setq python-indent-guess-indent-offset-verbose nil)
+
+  ;; Default to Python 3. Prefer the versioned Python binaries since some
+  ;; systems link the unversioned one to Python 2.
   (when (and (executable-find "python3")
              (string= python-shell-interpreter "python"))
     (setq python-shell-interpreter "python3"))
@@ -59,15 +70,8 @@
         ;; Try to compile using the appropriate version of Python for
         ;; the file.
         (setq-local flycheck-python-pycompile-executable executable)
-        ;; We might be running inside a virtualenv, in which case the
-        ;; modules won't be available. But calling the executables
-        ;; directly will work.
-	(setq-local flycheck-python-ruff-executable "ruff")
-	(setq-local flycheck-python-mypy-executable "mypy")
-        )))
+        (setq-local flycheck-python-mypy-executable "mypy"))))
 
-  (advice-add #'pythonic-activate :after-while #'+modeline-update-env-in-all-windows-h)
-  (advice-add #'pythonic-deactivate :after #'+modeline-clear-env-in-all-windows-h)
   (setq-hook! 'python-mode-hook tab-width python-indent-offset))
 
 (use-package! python-pytest
@@ -83,27 +87,9 @@
         "t" #'python-pytest-function-dwim
         "T" #'python-pytest-function
         "r" #'python-pytest-repeat
-        "p" #'python-pytest-dispatch))
+       "p" #'python-pytest-dispatch))
 
-(defun projectile-pyenv-mode-set ()
-  "Set pyenv version matching project name."
-  (let ((project (projectile-project-name)))
-    (if (member project (pyenv-mode-versions))
-        (pyenv-mode-set project)
-      (pyenv-mode-unset))))
-
-(add-hook 'projectile-after-switch-project-hook 'projectile-pyenv-mode-set)
-
-(use-package! pyenv-mode
-  ;; :after python
-  :config
-  (when (executable-find "pyenv")
-    (pyenv-mode +1)
-    (add-to-list 'exec-path (expand-file-name "shims" (or (getenv "PYENV_ROOT") "~/.pyenv"))))
-  (add-hook 'python-mode-local-vars-hook #'+python-pyenv-mode-set-auto-h)
-  (add-hook 'doom-switch-buffer-hook #'+python-pyenv-mode-set-auto-h)
-)
-
-  (use-package! lsp-pyright
-    :init
-    :after lsp-mode)
+(use-package! lsp-pyright
+  :init
+  (when (executable-find "basedpyright")
+    (setq lsp-pyright-langserver-command "basedpyright")))

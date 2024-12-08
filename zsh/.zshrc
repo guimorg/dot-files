@@ -35,7 +35,7 @@ zinit snippet OMZP::git/git.plugin.zsh
 zinit snippet OMZP::aws
 zinit snippet OMZP::command-not-found
 zinit snippet OMZP::sudo
-zinit snippet OMZP::pyenv/pyenv.plugin.zsh
+# zinit snippet OMZP::pyenv/pyenv.plugin.zsh
 zinit light Aloxaf/fzf-tab
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
@@ -98,9 +98,25 @@ fi
 
 export PATH=/home/guimorg/.local/bin:${PATH}
 eval "$(luarocks path --bin)"
-eval "$(pyenv virtualenv-init -)"
+# eval "$(pyenv virtualenv-init -)"
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
 export MODULAR_HOME="/Users/thexuh/.modular"
 export PATH="/Users/thexuh/.modular/pkg/packages.modular.com_max/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/thexuh/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/thexuh/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/thexuh/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/thexuh/google-cloud-sdk/completion.zsh.inc'; fi
+
+# pnpm
+export PNPM_HOME="/Users/thexuh/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+eval "$(uv generate-shell-completion zsh)"
+eval "$(direnv hook zsh)"
