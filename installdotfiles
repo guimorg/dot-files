@@ -1,4 +1,4 @@
 #!/bin/sh
 path=$(pwd)
 
-stow direnv dbt emacs bash config git tmux vim zsh ohmyposh -t $HOME
+stow direnv dbt emacs bash config git tmux vim zsh ohmyposh kanata -t $HOME
