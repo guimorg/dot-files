@@ -74,10 +74,15 @@
 
   (setq-hook! 'python-mode-hook tab-width python-indent-offset))
 
+(add-hook! python-mode
+  (advice-add 'python-pytest-file :before
+              (lambda (&rest args)
+                (setq python-pytest-executable (+python-executable-find "pytest")))))
+
 (use-package! python-pytest
   :commands python-pytest-dispatch
   :init
-  (map! ;;:after python
+  (map! :after python
         :localleader
         :map python-mode-map
         :prefix ("t" . "test")

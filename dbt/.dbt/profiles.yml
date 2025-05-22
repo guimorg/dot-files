@@ -11,7 +11,7 @@ wander:
       priority: interactive
       threads: 4
       maximum_bytes_billed: 200_000_000_000  # 200 GB
-      job_execution_timeout_seconds: 600
+      job_execution_timeout_seconds: 1200
       job_retries: 1
     prod:
       type: bigquery
@@ -23,5 +23,5 @@ wander:
       priority: interactive
       threads: 4
       maximum_bytes_billed: 600_000_000_000  # 400 GB
-      job_execution_timeout_seconds: 600
+      job_execution_timeout_seconds: 1200
       job_retries: 1
