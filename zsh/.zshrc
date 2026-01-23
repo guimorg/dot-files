@@ -1,4 +1,4 @@
-neofetch --config ~/.config/neofetch/config.conf --image_size none --backend kitty --source ~/.config/neofetch/pictures/kitty.png
+neofetch --config ~/.config/neofetch/config.conf # --image_size none --backend kitty --source ~/.config/neofetch/pictures/kitty.png
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
@@ -137,3 +137,7 @@ export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
 export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 export PATH="/opt/homebrew/opt/apache-flink@1/bin:$PATH"
+export PATH="/nix/var/nix/profiles/default/bin:$PATH"
+pass-cli ssh-agent load >/dev/null 2>&1
+
+[ -f ~/.zsh_nix ] && source ~/.zsh_nix

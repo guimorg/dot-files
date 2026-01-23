@@ -1,0 +1,26 @@
+if [ -n "$IN_NIX_SHELL" ] || [ -n "$FLOX_ENV" ]; then
+    export PS1="%F{cyan}[nix]%f $PS1"
+fi
+
+if command -v nix &> /dev/null; then
+    alias nix-shell='nix-shell --run zsh'
+    alias nix-dev='nix develop'
+    alias nix-update='nix flake update'
+fi
+
+if command -v flox &> /dev/null; then
+    alias fx='flox'
+    alias fxa='flox activate'
+    alias fxi='flox install'
+    alias fxs='flox search'
+fi
+
+if [ -n "$IN_NIX_SHELL" ]; then
+    alias dotfiles-install='nix run .#install'
+    alias dotfiles-reinstall='nix run .#reinstall'
+    alias dotfiles-uninstall='nix run .#uninstall'
+    
+    if [ "$(uname)" = "Darwin" ]; then
+        alias apps-install='nix run .#install-apps'
+    fi
+fi

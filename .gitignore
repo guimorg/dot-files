@@ -26,3 +26,15 @@ tags
 
 # Lazy
 lazy-lock.json
+
+# Fonts (managed by Nix)
+.local/
+
+# Nix
+result
+result-*
+.direnv/
+
+# Flox
+.flox/cache/
+.flox/run/

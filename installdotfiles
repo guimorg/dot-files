@@ -1,4 +1,14 @@
 #!/bin/sh
+
+echo "⚠️  This script is deprecated!"
+echo "Dotfiles now install automatically with: nix develop"
+echo ""
+echo "Continuing with manual installation..."
+echo ""
+
 path=$(pwd)
 
-stow direnv dbt emacs bash config git tmux vim zsh ohmyposh kanata -t $HOME
+stow direnv dbt emacs bash config git tmux vim zsh ohmyposh kanata wezterm -t $HOME
+
+echo ""
+echo "✅ Done! Consider using 'nix develop' or 'flox activate' instead."
