@@ -1,27 +1,29 @@
 local M = {}
 
 local servers = {
-	{ name = "ty", cmd = "ty" },
-	{ name = "ruff", cmd = "ruff" },
-	{ name = "gopls", cmd = "gopls" },
-	{ name = "lua_ls", cmd = "lua-language-server" },
-	{ name = "clangd", cmd = "clangd" },
-	{ name = "bashls", cmd = "bash-language-server" },
-	{ name = "jsonls", cmd = "vscode-json-language-server" },
-	{ name = "yamlls", cmd = "yaml-language-server" },
-	{ name = "terraformls", cmd = "terraform-ls" },
-	{ name = "tflint", cmd = "tflint" },
+	"ty",
+	"ruff",
+	"gopls",
+	"lua_ls",
+	"clangd",
+	"bashls",
+	"jsonls",
+	"yamlls",
+	"terraformls",
+	"tflint",
 }
 
-vim.lsp.config["*"] = {
-	capabilities = (function()
-		local capabilities = vim.lsp.protocol.make_client_capabilities()
-		local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-		if has_cmp then
-			capabilities = vim.tbl_deep_extend("force", capabilities, cmp_nvim_lsp.default_capabilities())
-		end
-		return capabilities
-	end)(),
+local server_cmds = {
+	ty = "ty",
+	ruff = "ruff",
+	gopls = "gopls",
+	lua_ls = "lua-language-server",
+	clangd = "clangd",
+	bashls = "bash-language-server",
+	jsonls = "vscode-json-language-server",
+	yamlls = "yaml-language-server",
+	terraformls = "terraform-ls",
+	tflint = "tflint",
 }
 
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -76,12 +78,15 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 local enabled_servers = {}
 for _, server in ipairs(servers) do
-	if vim.fn.executable(server.cmd) == 1 then
-		table.insert(enabled_servers, server.name)
+	local cmd = server_cmds[server]
+	if cmd and vim.fn.executable(cmd) == 1 then
+		table.insert(enabled_servers, server)
 	end
 end
 
-vim.lsp.enable(enabled_servers)
+if #enabled_servers > 0 then
+	vim.lsp.enable(enabled_servers)
+end
 
 vim.api.nvim_create_user_command("LspRestart", function()
 	vim.cmd("LspStop")
