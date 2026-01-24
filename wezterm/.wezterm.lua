@@ -14,7 +14,7 @@ config.color_scheme = "Catppuccin Mocha"
 config.cursor_blink_rate = 800
 config.cursor_thickness = "2 px"
 config.window_background_opacity = 0.85
-config.default_prog = { "/usr/local/bin/zsh" }
+config.default_prog = { "/bin/zsh" }
 config.use_dead_keys = false
 
 config.colors = {
