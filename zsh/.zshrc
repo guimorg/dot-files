@@ -1,4 +1,6 @@
-neofetch --config ~/.config/neofetch/config.conf # --image_size none --backend kitty --source ~/.config/neofetch/pictures/kitty.png
+if [[ -o interactive ]] && [[ -z "$ZSHRC_SOURCED" ]]; then
+    neofetch --config ~/.config/neofetch/config.conf
+fi
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
@@ -10,7 +12,12 @@ if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
 fi
 
 autoload -Uz compinit
-compinit
+
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
+  compinit
+else
+  compinit -C
+fi
 
 source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
@@ -26,16 +33,24 @@ zinit light-mode for \
 
 ### End of Zinit's installer chunk
 
-# Load plugins with zinit
-zinit light zsh-users/zsh-syntax-highlighting
-zinit light zsh-users/zsh-docker
-zinit light asdf-vm/asdf
-zinit light MichaelAquilina/zsh-you-should-use
-zinit snippet OMZP::git/git.plugin.zsh
-zinit snippet OMZP::aws
-zinit snippet OMZP::command-not-found
-zinit snippet OMZP::sudo
-# zinit snippet OMZP::pyenv/pyenv.plugin.zsh
+# Load plugins with zinit (using turbo mode for faster startup)
+zinit wait lucid for \
+  atinit"zicompinit; zicdreplay" \
+    zsh-users/zsh-syntax-highlighting \
+  blockf atpull'zinit creinstall -q .' \
+    zsh-users/zsh-completions \
+  atload"_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions
+
+zinit wait"1" lucid for \
+  zsh-users/zsh-docker \
+  asdf-vm/asdf \
+  MichaelAquilina/zsh-you-should-use \
+  OMZP::git/git.plugin.zsh \
+  OMZP::aws \
+  OMZP::command-not-found \
+  OMZP::sudo
+
 zinit light Aloxaf/fzf-tab
 
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
@@ -74,12 +89,10 @@ fpath+=~/.zfunc
 
 bindkey -v
 
-zinit cdreplay -q
+bindkey -v '^?' backward-delete-char
+bindkey -v '^H' backward-delete-char
 
-source <(fzf --zsh)
-export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
-export FZF_CTRL_T_COMMAND="${FZF_DEFAULT_COMMAND}"
-export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+zinit cdreplay -q
 
 _fzf_compgen_path() {
 	fd --hidden --exclude .git . "$1"
@@ -98,10 +111,21 @@ fi
 
 export PATH=/home/guimorg/.local/bin:${PATH}
 eval "$(luarocks path --bin)"
-# eval "$(pyenv virtualenv-init -)"
+
 export PYENV_ROOT="$HOME/.pyenv"
 [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init -)"
+
+pyenv() {
+  unset -f pyenv
+  eval "$(command pyenv init -)"
+  pyenv "$@"
+}
+
+python() {
+  unset -f pyenv python
+  eval "$(command pyenv init -)"
+  python "$@"
+}
 export MODULAR_HOME="/Users/thexuh/.modular"
 export PATH="/Users/thexuh/.modular/pkg/packages.modular.com_max/bin:$PATH"
 
@@ -129,8 +153,31 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+nvm() {
+  unset -f nvm node npm npx
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  nvm "$@"
+}
+
+node() {
+  unset -f nvm node npm npx
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  node "$@"
+}
+
+npm() {
+  unset -f nvm node npm npx
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  npm "$@"
+}
+
+npx() {
+  unset -f nvm node npm npx
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+  npx "$@"
+}
 export PATH="/opt/homebrew/opt/openjdk@11/bin:$PATH"
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
@@ -141,3 +188,5 @@ export PATH="/nix/var/nix/profiles/default/bin:$PATH"
 pass-cli ssh-agent load >/dev/null 2>&1
 
 [ -f ~/.zsh_nix ] && source ~/.zsh_nix
+
+export ZSHRC_SOURCED=1

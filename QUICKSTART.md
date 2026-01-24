@@ -42,8 +42,9 @@ Once in the Nix/Flox environment, you have:
 **Fonts**: Nerd Fonts automatically symlinked to `~/Library/Fonts` (macOS) or `~/.local/share/fonts` (Linux)
 
 **macOS Apps** (on first activation):
-- Alacritty, WezTerm, Kitty installed to `~/Applications/Nix/`
-- Make them searchable: System Settings → Siri & Spotlight → Remove `~/Applications/Nix` from exclusion list
+- Alacritty, WezTerm, Kitty installed to `~/Applications/Nix Apps/`
+- Uses proper macOS aliases for native Spotlight integration
+- Apps should be automatically searchable via Spotlight (⌘ + Space)
 
 ## Useful Aliases (from .zsh_nix)
 
@@ -150,3 +151,14 @@ You can gradually migrate away from:
 - **sdkman** → Use Nix's Java/JVM tools
 
 The Nix environment provides everything these tools did, but declaratively and reproducibly.
+
+## Taking It Further: nix-darwin
+
+Want full system management? See [NIXDARWIN.md](NIXDARWIN.md) for:
+
+- **System-wide configuration** - macOS preferences as code
+- **Declarative Homebrew** - Manage Homebrew with [nix-homebrew](https://github.com/zhaofengli/nix-homebrew)
+- **More apps** - Access Homebrew's larger app catalog
+- **Complete reproducibility** - Entire system in version control
+
+**Note**: Current setup is great standalone! Only add nix-darwin if you want system-level configuration.

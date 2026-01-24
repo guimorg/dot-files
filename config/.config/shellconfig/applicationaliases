@@ -30,3 +30,11 @@ alias grep='grep --color=always'
 alias ifood-aws-login='ifood-aws-login -o -u $(op item get sso --vault "iFood" --fields username) -p $(op item get sso --vault "iFood" --fields password) --otp-code $(op item get sso --vault "iFood" --otp)'
 alias vpn='ifood-vpn-login -o -u $(op item get sso --vault "iFood" --fields username) -p $(op item get sso --vault "iFood" --fields password) --otp-code $(op item get sso --vault "iFood" --otp)'
 alias kill_vpn='ifood-vpn-login -D'
+
+darwin-switch() {
+  sudo darwin-rebuild switch --flake ~/projects/oss/dot-files#darwin-system "$@"
+}
+
+darwin-update() {
+  cd ~/projects/oss/dot-files && nix flake update && sudo darwin-rebuild switch --flake .#darwin-system && cd -
+}

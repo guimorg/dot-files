@@ -29,7 +29,7 @@ Environment activates automatically when you `cd` into the directory.
 **Dev Tools**: git, tmux, vim, neovim, zsh, direnv, stow  
 **Package Managers**: uv, bun, pnpm, cargo  
 **Fonts**: Nerd Fonts (FiraCode, Hack, JetBrains Mono, Roboto Mono, Noto, Overpass)  
-**macOS Apps**: Alacritty, WezTerm, Kitty (automatically installed to ~/Applications/Nix)
+**macOS Apps**: Alacritty, WezTerm, Kitty (automatically installed to ~/Applications/Nix Apps with macOS aliases)
 
 ## Configuration
 
@@ -49,3 +49,12 @@ nix flake update
 ✅ Declarative - configuration as code  
 ✅ Fast - binary caching  
 ✅ Isolated - no global state pollution
+
+## Next Steps
+
+Ready for more? See [NIXDARWIN.md](NIXDARWIN.md) for:
+- **nix-darwin** - Full macOS system management
+- **nix-homebrew** - Declarative Homebrew integration
+- **System settings** - Configure macOS preferences as code
+
+Current setup works great standalone! Only migrate if you want system-wide configuration.

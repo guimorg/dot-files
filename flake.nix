@@ -1,16 +1,40 @@
 {
-  description = "Dotfiles with Nix flakes";
+  description = "Dotfiles with Nix flakes and nix-darwin";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    flake-utils.url = "github:numtide/flake-utils";
+    nix-darwin = {
+      url = "github:nix-darwin/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, flake-utils, home-manager }:
+  outputs = { self, nixpkgs, nix-darwin, home-manager, flake-utils }:
+    let
+      username = "thexuh";
+      system = "aarch64-darwin";
+    in
+    {
+      darwinConfigurations."darwin-system" = nix-darwin.lib.darwinSystem {
+        inherit system;
+        specialArgs = { inherit username; };
+        modules = [
+          ./darwin-configuration.nix
+          home-manager.darwinModules.home-manager
+          {
+            home-manager.useGlobalPkgs = true;
+            home-manager.useUserPackages = true;
+            home-manager.backupFileExtension = "backup";
+            home-manager.users.${username} = import ./home.nix;
+          }
+        ];
+      };
+    } //
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = import nixpkgs {
@@ -57,6 +81,7 @@
             nerd-fonts.bitstream-vera-sans-mono
             nerd-fonts.droid-sans-mono
           ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+            mkalias
             alacritty
             wezterm
             kitty
@@ -68,7 +93,7 @@
             export PAGER=less
             export GOPATH=$HOME/go
             export GOBIN=$HOME/go/bin
-            export GREP_COLOR='1;35;40'
+            export GREP_COLORS='mt=1;35;40'
             export HISTFILE=~/.zsh_history
             export SAVEHIST=10000
             export HISTSIZE=25000
@@ -107,21 +132,20 @@
             
             if [ "$(uname)" = "Darwin" ] && [ ! -f "$HOME/.apps-installed" ]; then
               echo "📱 Installing macOS applications..."
-              mkdir -p "$HOME/Applications/Nix"
+              rm -rf "$HOME/Applications/Nix Apps"
+              mkdir -p "$HOME/Applications/Nix Apps"
               ${lib.optionalString stdenv.hostPlatform.isDarwin ''
               for app in ${pkgs.alacritty}/Applications/*.app ${pkgs.wezterm}/Applications/*.app ${pkgs.kitty}/Applications/*.app; do
                 if [ -d "$app" ]; then
                   app_name=$(basename "$app")
-                  if [ ! -e "$HOME/Applications/Nix/$app_name" ]; then
-                    ln -sf "$app" "$HOME/Applications/Nix/$app_name"
-                    echo "  ✓ $app_name"
-                  fi
+                  echo "  Creating alias for $app_name"
+                  ${pkgs.mkalias}/bin/mkalias "$app" "$HOME/Applications/Nix Apps/$app_name"
                 fi
               done
               ''}
               touch "$HOME/.apps-installed"
-              echo "✅ Applications installed in ~/Applications/Nix/"
-              echo "   Add this folder to Spotlight: System Settings → Siri & Spotlight → Spotlight Privacy"
+              echo "✅ Applications installed in ~/Applications/Nix Apps/"
+              echo "   Apps should now be searchable in Spotlight!"
             fi
             
             echo "🎉 Nix development environment activated!"
@@ -180,25 +204,20 @@
               exit 1
             fi
             echo "📱 Installing macOS applications..."
-            mkdir -p "$HOME/Applications/Nix"
+            rm -rf "$HOME/Applications/Nix Apps"
+            mkdir -p "$HOME/Applications/Nix Apps"
             ${lib.optionalString stdenv.hostPlatform.isDarwin ''
             for app in ${pkgs.alacritty}/Applications/*.app ${pkgs.wezterm}/Applications/*.app ${pkgs.kitty}/Applications/*.app; do
               if [ -d "$app" ]; then
                 app_name=$(basename "$app")
-                if [ -e "$HOME/Applications/Nix/$app_name" ]; then
-                  rm -rf "$HOME/Applications/Nix/$app_name"
-                fi
-                ln -sf "$app" "$HOME/Applications/Nix/$app_name"
-                echo "  ✓ $app_name"
+                echo "  Creating alias for $app_name"
+                ${pkgs.mkalias}/bin/mkalias "$app" "$HOME/Applications/Nix Apps/$app_name"
               fi
             done
             ''}
             touch "$HOME/.apps-installed"
-            echo "✅ Applications installed in ~/Applications/Nix/"
-            echo ""
-            echo "💡 To make apps searchable in Spotlight:"
-            echo "   System Settings → Siri & Spotlight → Spotlight Privacy"
-            echo "   Remove ~/Applications/Nix if it's in the exclusion list"
+            echo "✅ Applications installed in ~/Applications/Nix Apps/"
+            echo "   Apps should now be searchable in Spotlight!"
           '';
         };
       }
