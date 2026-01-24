@@ -1,79 +1,36 @@
-require("alpha").setup(require("alpha.themes.dashboard").config)
-
 local present, alpha = pcall(require, "alpha")
 if not present then
 	return
 end
 
 local dashboard = require("alpha.themes.dashboard")
-local if_nil = vim.F.if_nil
-local fn = vim.fn
 
-local thingy = io.popen('echo "$(LANG=en_us_88591; date +%a) $(date +%d) $(LANG=en_us_88591; date +%b)" | tr -d "\n"')
-if thingy == nil then
-	return
-end
-local date = thingy:read("*a")
-thingy:close()
-
-local datetime = os.date(" %H:%M")
+local datetime = os.date("%H:%M")
+local date = os.date("%A, %B %d, %Y")
 
 dashboard.section.header.val = {
-	"██████████████████████████████████████████████████████████",
-	"██████████████████████████████████████████████████████████",
-	"██████████████████████████████████████████████████████████",
-	"████████████  ██        ██  ██████████████████████████████",
-	"████████████                ██████████████████████████████",
-	"████████████                  ████████████████████████████",
-	"██████████    ██    ██          ██████████████████████████",
-	"██████████                        ████████████████████████",
-	"██████████      ████                  ████████████████████",
-	"██████████  ██  ██    ██                            ██████",
-	"██████████    ████████                        ████████████",
-	"██████████                                    ████████████",
-	"██████████                                    ████████████",
-	"██████████                                    ████████████",
-	"██████████                                    ████████████",
-	"██████████                                  ██████████████",
-	"████████████                                ██████████████",
-	"████████████    ████    ████████    ████    ██████████████",
-	"████████████    ████    ████████    ████    ██████████████",
-	"████████████  ██████  ██████████  ██████  ████████████████",
+	"",
+	"",
+	"███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗",
+	"████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║",
+	"██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║",
+	"██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║",
+	"██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║",
+	"╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝",
+	"",
 }
-dashboard.section.header.type = "text"
+
 dashboard.section.header.opts = {
 	position = "center",
-	hl = "EcovimHeader",
+	hl = "DraculaPurple",
 }
 
 local hi_top_section = {
 	type = "text",
-	val = "┌────────────   Today is "
-		.. date
-		.. " ────────────┐",
+	val = "󰃭 " .. date .. "  " .. datetime,
 	opts = {
 		position = "center",
-		hl = "EcovimHeaderInfo",
-	},
-}
-
-local hi_middle_section = {
-	type = "text",
-	val = "│                                                │",
-	opts = {
-		position = "center",
-		hl = "EcovimHeaderInfo",
-	},
-}
-
-local hi_bottom_section = {
-	type = "text",
-	val = "└───══───══───══───  "
-		.. datetime
-		.. "  ───══───══───══────┘",
-	opts = {
-		position = "center",
-		hl = "EcovimHeaderInfo",
+		hl = "DraculaCyan",
 	},
 }
 
@@ -84,19 +41,20 @@ local function button(sc, txt, keybind, keybind_opts)
 
 	local opts = {
 		position = "center",
-		shortcut = sc,
-		cursor = 5,
+		shortcut = "[" .. sc .. "]",
+		cursor = 3,
 		width = 50,
 		align_shortcut = "right",
-		hl_shortcut = "EcovimPrimary",
+		hl_shortcut = "DraculaOrange",
+		hl = "DraculaFg",
 	}
+
 	if keybind then
-		keybind_opts = if_nil(keybind_opts, { noremap = true, silent = true, nowait = true })
+		keybind_opts = keybind_opts or { noremap = true, silent = true, nowait = true }
 		opts.keymap = { "n", sc_, keybind, keybind_opts }
 	end
 
 	local function on_press()
-		-- local key = vim.api.nvim_replace_termcodes(keybind .. "<Ignore>", true, false, true)
 		local key = vim.api.nvim_replace_termcodes(sc_ .. "<Ignore>", true, false, true)
 		vim.api.nvim_feedkeys(key, "t", false)
 	end
@@ -110,80 +68,37 @@ local function button(sc, txt, keybind, keybind_opts)
 end
 
 dashboard.section.buttons.val = {
-	-- button(
-	-- 	"<C-P>",
-	-- 	icons.fileNoBg .. " " .. "Find File",
-	-- 	"<cmd>lua require('plugins.telescope').project_files()<CR>",
-	-- 	{}
-	-- ),
-	-- button("<S-P>", icons.t .. " " .. "Find Word", "<cmd>lua require('plugins.telescope.pickers.multi-rg')()<CR>", {}),
-	button("SPC s h", " " .. " " .. "Recents", "<cmd>Telescope oldfiles hidden=true<CR>", {}),
-	-- button(
-	-- 	"SPC / s d",
-	-- 	icons.timer .. " " .. "Load Current Dir Session",
-	-- 	"<cmd>SessionManager load_current_dir_session<CR>",
-	-- 	{}
-	-- ),
-	button("SPC / u", " " .. " " .. "Update Plugins", "<cmd>Lazy update<CR>", {}),
-	button("SPC / i", " " .. " " .. "Manage Plugins", "<cmd>Lazy<CR>", {}),
-	button("SPC / c", " " .. " " .. "Settings", "<cmd>e $MYVIMRC<CR>", {}),
-	button("-", "󰿅 " .. " " .. "Exit", "<cmd>exit<CR>", {}),
+	button("SPC p p", "  Find Project", "<cmd>Telescope find_files<CR>", {}),
+	button("SPC f f", "  Find File", "<cmd>Telescope find_files<CR>", {}),
+	button("SPC f r", "  Recent Files", "<cmd>Telescope oldfiles<CR>", {}),
+	button("SPC s p", "  Search Project", "<cmd>Telescope live_grep<CR>", {}),
+	button("SPC / u", "  Update Plugins", "<cmd>Lazy update<CR>", {}),
+	button("q", "󰿅  Quit", "<cmd>qa<CR>", {}),
 }
-
-local function file_exists(file)
-	local f = io.open(file, "rb")
-	if f then
-		f:close()
-	end
-	return f ~= nil
-end
-
-local function line_from(file)
-	if not file_exists(file) then
-		return {}
-	end
-	local lines = {}
-	for line in io.lines(file) do
-		lines[#lines + 1] = line
-	end
-	return lines
-end
 
 local function footer()
-	local plugins = require("lazy").stats().count
+	local total_plugins = require("lazy").stats().count
 	local v = vim.version()
-	return string.format(" v%d.%d.%d   %d", v.major, v.minor, v.patch, plugins)
+	local version = string.format("v%d.%d.%d", v.major, v.minor, v.patch)
+	return "⚡ Neovim " .. version .. "  │  󰂖 " .. total_plugins .. " plugins"
 end
 
-dashboard.section.footer.val = {
-	footer(),
-}
+dashboard.section.footer.val = footer()
 dashboard.section.footer.opts = {
 	position = "center",
-	hl = "EcovimFooter",
-}
-
-local section = {
-	header = dashboard.section.header,
-	hi_top_section = hi_top_section,
-	hi_middle_section = hi_middle_section,
-	hi_bottom_section = hi_bottom_section,
-	buttons = dashboard.section.buttons,
-	footer = dashboard.section.footer,
+	hl = "DraculaComment",
 }
 
 local opts = {
 	layout = {
-		{ type = "padding", val = 3 },
-		section.header,
-		{ type = "padding", val = 1 },
-		section.hi_top_section,
-		section.hi_middle_section,
-		section.hi_bottom_section,
 		{ type = "padding", val = 2 },
-		section.buttons,
-		{ type = "padding", val = 3 },
-		section.footer,
+		dashboard.section.header,
+		{ type = "padding", val = 1 },
+		hi_top_section,
+		{ type = "padding", val = 2 },
+		dashboard.section.buttons,
+		{ type = "padding", val = 1 },
+		dashboard.section.footer,
 	},
 	opts = {
 		margin = 5,
