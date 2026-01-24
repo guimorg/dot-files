@@ -98,3 +98,74 @@
   :init
   (when (executable-find "basedpyright")
     (setq lsp-pyright-langserver-command "basedpyright")))
+
+(with-eval-after-load 'lsp-mode
+  (when (or (executable-find "ty") (executable-find "uvx"))
+    (lsp-register-client
+     (make-lsp-client
+      :new-connection (lsp-stdio-connection
+                       (lambda ()
+                         (if (executable-find "ty")
+                             '("ty" "server")
+                           '("uvx" "ty" "server"))))
+      :major-modes '(python-mode python-ts-mode)
+      :server-id 'ty
+      :priority 1
+      :add-on? nil))
+    
+    (setq lsp-enabled-clients '(ty pyright))
+    (add-to-list 'lsp-language-id-configuration '(python-mode . "python"))
+    (add-to-list 'lsp-language-id-configuration '(python-ts-mode . "python"))))
+
+(use-package! uv-mode
+  :when (executable-find "uv")
+  :hook (python-mode . uv-mode)
+  :config
+  (setq uv-mode-auto-activate t))
+
+(defun +python/find-pyproject-root ()
+  (or
+   (locate-dominating-file default-directory "pyproject.toml")
+   (and (fboundp 'projectile-project-root) (projectile-project-root))
+   default-directory))
+
+(defun +python/uv-sync ()
+  (interactive)
+  (let ((default-directory (+python/find-pyproject-root)))
+    (compile "uv sync")))
+
+(defun +python/uv-add (package)
+  (interactive "sPackage name: ")
+  (let ((default-directory (+python/find-pyproject-root)))
+    (compile (format "uv add %s" package))))
+
+(defun +python/uv-remove (package)
+  (interactive "sPackage name: ")
+  (let ((default-directory (+python/find-pyproject-root)))
+    (compile (format "uv remove %s" package))))
+
+(defun +python/uv-run (command)
+  (interactive "sCommand: ")
+  (let ((default-directory (+python/find-pyproject-root)))
+    (compile (format "uv run %s" command))))
+
+(defun +python/uv-lock ()
+  (interactive)
+  (let ((default-directory (+python/find-pyproject-root)))
+    (compile "uv lock")))
+
+(defun +python/uv-pip-compile ()
+  (interactive)
+  (let ((default-directory (+python/find-pyproject-root)))
+    (compile "uv pip compile pyproject.toml -o requirements.txt")))
+
+(map! :after python
+      :localleader
+      :map python-mode-map
+      :prefix ("u" . "uv")
+      "s" #'+python/uv-sync
+      "a" #'+python/uv-add
+      "r" #'+python/uv-remove
+      "x" #'+python/uv-run
+      "l" #'+python/uv-lock
+      "c" #'+python/uv-pip-compile)

@@ -58,3 +58,8 @@
 (package! peep-dired)
 (package! all-the-icons)
 (package! all-the-icons-dired)
+(package! dired-subtree)
+(package! dired-narrow)
+(package! dired-hide-dotfiles)
+(package! dired-rainbow)
+(package! dired-open)

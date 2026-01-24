@@ -79,6 +79,8 @@
 ;; Projectile Config
 (setq projectile-project-search-path '("~/projects/work" "~/projects/work/wander" "~/projects/oss"))
 
+(setq projectile-switch-project-action #'magit-status)
+
 ;; gp
 (setq epg-gpg-program "gpg2")
 
@@ -185,3 +187,83 @@
 
 (setq delete-by-moving-to-trash t
       trash-directory "~/.Trash")
+
+(defun +copy-code-snippet-with-line-numbers ()
+  (interactive)
+  (if (use-region-p)
+      (let* ((start (region-beginning))
+             (end (region-end))
+             (filename (buffer-file-name))
+             (relative-filename (if filename
+                                    (file-relative-name filename (projectile-project-root))
+                                  (buffer-name)))
+             (decoration (make-string (+ (length relative-filename) 1) ?-))
+             (start-line (line-number-at-pos start))
+             (end-line (line-number-at-pos end))
+             (content ""))
+        (save-excursion
+          (goto-char start)
+          (while (and (<= (point) end) (not (eobp)))
+            (let ((line-num (line-number-at-pos))
+                  (line-text (buffer-substring-no-properties
+                              (line-beginning-position)
+                              (line-end-position))))
+              (setq content (concat content (format "%6d  %s\n" line-num line-text))))
+            (forward-line 1)))
+        (let ((result (format "%s\n%s:\n%s\n%s" decoration relative-filename decoration content)))
+          (kill-new result)
+          (message "Code snippet copied to clipboard with line numbers!")))
+    (message "No region selected!")))
+
+(map! :v "SPC y" #'+copy-code-snippet-with-line-numbers)
+
+(defun +dired/create-empty-file (file)
+  (interactive
+   (list (read-file-name "Create file: " (dired-current-directory))))
+  (write-region "" nil (expand-file-name file) t)
+  (revert-buffer))
+
+(after! dired
+  (when (featurep! :emacs dired)
+    (when (require 'dired-subtree nil t)
+      (setq dired-subtree-use-backgrounds nil))
+    
+    (when (require 'dired-hide-dotfiles nil t)
+      (add-hook 'dired-mode-hook #'dired-hide-dotfiles-mode))
+    
+    (when (require 'dired-rainbow nil t)
+      (dired-rainbow-define-chmod directory "#6cb2eb" "d.*")
+      (dired-rainbow-define html "#eb5286" ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
+      (dired-rainbow-define xml "#f2d024" ("xml" "xsd" "xsl" "xslt" "wsdl" "bib" "json" "msg" "pgn" "rss" "yaml" "yml" "rdata"))
+      (dired-rainbow-define document "#9561e2" ("docm" "doc" "docx" "odb" "odt" "pdb" "pdf" "ps" "rtf" "djvu" "epub" "odp" "ppt" "pptx"))
+      (dired-rainbow-define markdown "#ffed4e" ("org" "etx" "info" "markdown" "md" "mkd" "nfo" "pod" "rst" "tex" "textfile" "txt"))
+      (dired-rainbow-define database "#6574cd" ("xlsx" "xls" "csv" "accdb" "db" "mdb" "sqlite" "nc"))
+      (dired-rainbow-define media "#de751f" ("mp3" "mp4" "mkv" "MP3" "MP4" "avi" "mpeg" "mpg" "flv" "ogg" "mov" "mid" "midi" "wav" "aiff" "flac"))
+      (dired-rainbow-define image "#f66d9b" ("tiff" "tif" "cdr" "gif" "ico" "jpeg" "jpg" "png" "psd" "eps" "svg"))
+      (dired-rainbow-define log "#c17d11" ("log"))
+      (dired-rainbow-define shell "#f6993f" ("awk" "bash" "bat" "sed" "sh" "zsh" "vim"))
+      (dired-rainbow-define interpreted "#38c172" ("py" "ipynb" "rb" "pl" "t" "msql" "mysql" "pgsql" "sql" "r" "clj" "cljs" "scala" "js"))
+      (dired-rainbow-define compiled "#4dc0b5" ("asm" "cl" "lisp" "el" "c" "h" "c++" "h++" "hpp" "hxx" "m" "cc" "cs" "cp" "cpp" "go" "f" "for" "ftn" "f90" "f95" "f03" "f08" "s" "rs" "hi" "hs" "pyc" ".java"))
+      (dired-rainbow-define executable "#8cc4ff" ("exe" "msi"))
+      (dired-rainbow-define compressed "#51d88a" ("7z" "zip" "bz2" "tgz" "txz" "gz" "xz" "z" "Z" "jar" "war" "ear" "rar" "sar" "xpi" "apk" "xz" "tar"))
+      (dired-rainbow-define packaged "#faad63" ("deb" "rpm" "apk" "jad" "jar" "cab" "pak" "pk3" "vdf" "vpk" "bsp"))
+      (dired-rainbow-define encrypted "#ffed4e" ("gpg" "pgp" "asc" "bfe" "enc" "signature" "sig" "p12" "pem"))
+      (dired-rainbow-define fonts "#6cb2eb" ("afm" "fon" "fnt" "pfb" "pfm" "ttf" "otf"))
+      (dired-rainbow-define partition "#e3342f" ("dmg" "iso" "bin" "nrg" "qcow" "toast" "vcd" "vmdk" "bak"))
+      (dired-rainbow-define vc "#0074d9" ("git" "gitignore" "gitattributes" "gitmodules"))
+      (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*"))
+    
+    (when (require 'dired-open nil t)
+      (setq dired-open-extensions '(("png" . "open")
+                                     ("jpg" . "open")
+                                     ("jpeg" . "open")
+                                     ("pdf" . "open")
+                                     ("mp4" . "open")
+                                     ("mkv" . "open"))))
+    
+    (evil-define-key 'normal dired-mode-map
+      (kbd "c") #'+dired/create-empty-file
+      (kbd "i") #'dired-subtree-toggle
+      (kbd "/") #'dired-narrow-fuzzy
+      (kbd ".") #'dired-hide-dotfiles-mode
+      (kbd "W") #'dired-open-file)))
