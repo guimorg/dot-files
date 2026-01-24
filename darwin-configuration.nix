@@ -20,8 +20,12 @@
     eza
     direnv
     git
+    git-extras
+    k9s
     stow
     tmux
+    doppler
+    gnupg
     vim
     neovim
     zsh
@@ -43,6 +47,11 @@
     gcc
     pkg-config
     libiconv
+    proton-pass-cli
+    postgresql
+    claude-code
+    gh
+    act
   ];
 
   fonts.packages = with pkgs; [
@@ -69,12 +78,12 @@
     dock.orientation = "bottom";
     dock.show-recents = false;
     dock.tilesize = 48;
-    
+
     finder.AppleShowAllExtensions = true;
     finder.FXPreferredViewStyle = "Nlsv";
     finder.ShowPathbar = true;
     finder.ShowStatusBar = true;
-    
+
     NSGlobalDomain.AppleInterfaceStyle = "Dark";
     NSGlobalDomain.KeyRepeat = 2;
     NSGlobalDomain.InitialKeyRepeat = 15;

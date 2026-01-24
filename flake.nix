@@ -101,7 +101,7 @@
             export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
             export FZF_CTRL_T_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
             export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
-            
+
             if [ ! -f "$HOME/.dotfiles-installed" ]; then
               echo "🔗 Installing dotfiles with stow..."
               ${pkgs.stow}/bin/stow -d "$PWD" -t "$HOME" \
@@ -110,7 +110,7 @@
               touch "$HOME/.dotfiles-installed"
               echo "✅ Dotfiles installed!"
             fi
-            
+
             if [ ! -f "$HOME/.fonts-installed" ]; then
               echo "🔤 Installing Nerd Fonts..."
               FONTS="${pkgs.nerd-fonts.fira-code} ${pkgs.nerd-fonts.hack} ${pkgs.nerd-fonts.jetbrains-mono} ${pkgs.nerd-fonts.roboto-mono} ${pkgs.nerd-fonts.noto} ${pkgs.nerd-fonts.overpass} ${pkgs.nerd-fonts.bitstream-vera-sans-mono} ${pkgs.nerd-fonts.droid-sans-mono}"
@@ -129,7 +129,7 @@
               touch "$HOME/.fonts-installed"
               echo "✅ Fonts installed!"
             fi
-            
+
             if [ "$(uname)" = "Darwin" ] && [ ! -f "$HOME/.apps-installed" ]; then
               echo "📱 Installing macOS applications..."
               rm -rf "$HOME/Applications/Nix Apps"
@@ -147,7 +147,7 @@
               echo "✅ Applications installed in ~/Applications/Nix Apps/"
               echo "   Apps should now be searchable in Spotlight!"
             fi
-            
+
             echo "🎉 Nix development environment activated!"
             echo "📦 Tools: python, node, go, rust, and more..."
           '';
@@ -161,7 +161,7 @@
             touch "$HOME/.dotfiles-installed"
             echo "✅ Dotfiles installed!"
           '';
-          
+
           reinstall = pkgs.writeShellScriptBin "reinstall-dotfiles" ''
             echo "🔄 Reinstalling dotfiles..."
             rm -f "$HOME/.dotfiles-installed"
@@ -170,7 +170,7 @@
             touch "$HOME/.dotfiles-installed"
             echo "✅ Dotfiles reinstalled!"
           '';
-          
+
           uninstall = pkgs.writeShellScriptBin "uninstall-dotfiles" ''
             echo "🗑️  Uninstalling dotfiles..."
             ${pkgs.stow}/bin/stow -D -d "$PWD" -t "$HOME" \
@@ -178,7 +178,7 @@
             rm -f "$HOME/.dotfiles-installed"
             echo "✅ Dotfiles uninstalled!"
           '';
-          
+
           install-fonts = pkgs.writeShellScriptBin "install-fonts" ''
             echo "🔤 Installing Nerd Fonts..."
             FONTS="${pkgs.nerd-fonts.fira-code} ${pkgs.nerd-fonts.hack} ${pkgs.nerd-fonts.jetbrains-mono} ${pkgs.nerd-fonts.roboto-mono} ${pkgs.nerd-fonts.noto} ${pkgs.nerd-fonts.overpass} ${pkgs.nerd-fonts.bitstream-vera-sans-mono} ${pkgs.nerd-fonts.droid-sans-mono}"
@@ -197,7 +197,7 @@
             touch "$HOME/.fonts-installed"
             echo "✅ Fonts installed!"
           '';
-          
+
           install-apps = pkgs.writeShellScriptBin "install-apps" ''
             if [ "$(uname)" != "Darwin" ]; then
               echo "⚠️  This command is only for macOS"
