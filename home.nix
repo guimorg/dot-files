@@ -36,4 +36,19 @@
   programs.git = {
     enable = true;
   };
+
+  programs.zoxide = {
+    enable = true;
+    enableZshIntegration = true;
+  };
+
+  home.file.".local/bin/wezterm-zoxide-workspace" = {
+    source = ./wezterm/.local/bin/wezterm-zoxide-workspace;
+    executable = true;
+  };
+
+  home.sessionPath = [
+    "$HOME/.local/bin"
+    "/Applications/WezTerm.app/Contents/MacOS"
+  ];
 }

@@ -29,6 +29,8 @@ lazy-lock.json
 
 # Fonts (managed by Nix)
 .local/
+!wezterm/.local/
+!wezterm/.local/bin/
 
 # Nix
 result

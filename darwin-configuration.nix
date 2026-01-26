@@ -56,6 +56,7 @@
     docker-client
     docker-credential-helpers
     colima
+    zoxide
   ];
 
   fonts.packages = with pkgs; [

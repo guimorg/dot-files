@@ -47,7 +47,6 @@ zinit wait"1" lucid for \
   asdf-vm/asdf \
   MichaelAquilina/zsh-you-should-use \
   OMZP::git/git.plugin.zsh \
-  OMZP::aws \
   OMZP::command-not-found \
   OMZP::sudo
 
@@ -109,7 +108,6 @@ if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
 	eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.toml)"
 fi
 
-export PATH=/home/guimorg/.local/bin:${PATH}
 eval "$(luarocks path --bin)"
 
 export PYENV_ROOT="$HOME/.pyenv"
