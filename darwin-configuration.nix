@@ -52,6 +52,10 @@
     claude-code
     gh
     act
+    docker-compose
+    docker-client
+    docker-credential-helpers
+    colima
   ];
 
   fonts.packages = with pkgs; [
