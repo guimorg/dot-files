@@ -3,7 +3,7 @@ PLUGIN_DIR="$HOME/.config/sketchybar/plugins"
 FONT="Hack Nerd Font:Regular:12.0"
 ICON_FONT="Hack Nerd Font:Regular:13.0"
 
-sketchybar --bar height=24 color=0xff1e1e2e border_width=0 padding_left=8 padding_right=8
+sketchybar --bar height=24 color=0xff1e1e2e border_width=0 padding_left=8 padding_right=8 topmost=window
 sketchybar --default icon.font="$ICON_FONT" label.font="$FONT" label.color=0xffcdd6f4 icon.color=0xffcdd6f4 background.height=22 background.corner_radius=6 background.color=0xff313244 background.padding_left=6 background.padding_right=6
 
 sketchybar --add event aerospace_workspace_change
@@ -37,23 +37,23 @@ sketchybar --add item app_refresh left \
   --set app_refresh drawing=off script="sh $PLUGIN_DIR/apps.sh" update_freq=5
 
 sketchybar --add item cpu right \
-  --set cpu icon="" script="sh $PLUGIN_DIR/cpu.sh" update_freq=5
+  --set cpu icon="" script="sh $PLUGIN_DIR/cpu.sh" update_freq=5 click_script="open -a 'Activity Monitor'"
 
 sketchybar --add item ram right \
-  --set ram icon="󰍛" script="sh $PLUGIN_DIR/ram.sh" update_freq=10
+  --set ram icon="󰍛" script="sh $PLUGIN_DIR/ram.sh" update_freq=10 click_script="open -a 'Activity Monitor'"
 
 sketchybar --add item net right \
-  --set net icon="󰈀" script="sh $PLUGIN_DIR/net.sh" update_freq=2
+  --set net icon="󰈀" script="sh $PLUGIN_DIR/net.sh" update_freq=2 click_script="open -a 'Activity Monitor'"
 
 sketchybar --add item wifi right \
-  --set wifi icon="" script="sh $PLUGIN_DIR/wifi.sh" update_freq=10
+  --set wifi icon="" script="sh $PLUGIN_DIR/wifi.sh" update_freq=10 click_script="open 'x-apple.systempreferences:com.apple.preference.network?Wi-Fi'"
 
 sketchybar --add item volume right \
-  --set volume icon="" script="sh $PLUGIN_DIR/volume.sh" \
+  --set volume icon="" script="sh $PLUGIN_DIR/volume.sh" click_script="open 'x-apple.systempreferences:com.apple.preference.sound'" \
   --subscribe volume volume_change
 
 sketchybar --add item battery right \
-  --set battery icon="" script="sh $PLUGIN_DIR/battery.sh" update_freq=120 \
+  --set battery icon="" script="sh $PLUGIN_DIR/battery.sh" update_freq=120 click_script="open 'x-apple.systempreferences:com.apple.preference.battery'" \
   --subscribe battery power_source_change
 
 sketchybar --add item clock right \
