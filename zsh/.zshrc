@@ -142,6 +142,7 @@ esac
 # pnpm end
 eval "$(uv generate-shell-completion zsh)"
 eval "$(direnv hook zsh)"
+eval "$(zoxide init zsh)"
 
 # bun completions
 [ -s "/Users/thexuh/.bun/_bun" ] && source "/Users/thexuh/.bun/_bun"
