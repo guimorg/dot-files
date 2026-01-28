@@ -139,8 +139,17 @@
 (setq lsp-idle-delay 1)
 (setq lsp-ui-doc-delay 1)
 (setq lsp-enable-snippet nil)
-(with-eval-after-load 'lsp-mode
-  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]worktrees]]'" t))
+(load! "lisp/terragrunt-mode.el")
+
+(use-package! lsp-mode
+  :config
+  (require 'lsp-terraform)
+  (setq lsp-disabled-clients nil)
+  (setq lsp-enabled-clients nil)
+  (add-to-list 'lsp-file-watch-ignored-directories "[/\\\\]worktrees]]'" t)
+  (add-to-list 'lsp-language-id-configuration '(terraform-mode . "terraform")))
+
+(add-hook 'terraform-mode-hook #'lsp-deferred)
 
 ;; all the icons
 (use-package! all-the-icons
@@ -224,7 +233,7 @@
   (revert-buffer))
 
 (after! dired
-  (when (featurep! :emacs dired)
+  (when (modulep! :emacs dired)
     (when (require 'dired-subtree nil t)
       (setq dired-subtree-use-backgrounds nil))
     

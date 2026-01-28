@@ -6,7 +6,7 @@ end
 
 return {
 	cmd = { "terraform-ls", "serve" },
-	filetypes = { "terraform", "terraform-vars" },
+	filetypes = { "terraform", "terraform-vars", "hcl" },
 	root_markers = { ".terraform", ".git" },
 	capabilities = capabilities,
 }

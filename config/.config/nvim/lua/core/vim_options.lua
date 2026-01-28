@@ -45,3 +45,9 @@ vim.opt.shortmess = vim.opt.shortmess + { c = true }
 vim.o.termguicolors = true
 
 vim.env.PATH = vim.env.PATH .. ":" .. "${HOME}/.pyenv/shims"
+
+vim.filetype.add({
+	filename = {
+		["terragrunt.hcl"] = "terraform",
+	},
+})
