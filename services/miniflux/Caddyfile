@@ -1,0 +1,4 @@
+https://miniflux.local, https://MacBook-Pro.local {
+    tls internal
+    reverse_proxy miniflux:8080
+}
