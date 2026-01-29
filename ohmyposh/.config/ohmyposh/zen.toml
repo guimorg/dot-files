@@ -3,12 +3,12 @@ version = 3
 final_space = true
 
 [secondary_prompt]
-  template = '❯❯ '
+  template = '>> '
   foreground = 'magenta'
   background = 'transparent'
 
 [transient_prompt]
-  template = '❯ '
+  template = '{{ if .Root }}#{{ else }}${{ end }} '
   background = 'transparent'
   foreground_templates = ['{{if gt .Code 0}}red{{end}}', '{{if eq .Code 0}}magenta{{end}}']
 
@@ -17,18 +17,30 @@ final_space = true
   alignment = 'left'
 
   [[blocks.segments]]
-    template = '{{ .Path }}'
-    foreground = 'blue'
+    template = '[{{ .UserName }}]'
+    foreground = 'white'
     background = 'transparent'
-    type = 'path'
+    type = 'session'
     style = 'plain'
 
     [blocks.segments.properties]
       cache_duration = 'none'
-      style = 'full'
+      display_user = true
+      display_host = false
+      display_always = false
 
   [[blocks.segments]]
-    template = ' {{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{ end }} <cyan>{{ if gt .Behind 0 }}⇣{{ end }}{{ if gt .Ahead 0 }}⇡{{ end }}</>'
+    template = '--'
+    foreground = 'darkGray'
+    background = 'transparent'
+    type = 'text'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+
+  [[blocks.segments]]
+    template = '[{{ .HEAD }}{{ if .Staging.Changed }}*{{ end }}{{ if .Working.Changed }}+{{ end }}{{ if gt .Ahead 0 }} ^{{ .Ahead }}{{ end }}{{ if gt .Behind 0 }} v{{ .Behind }}{{ end }}]'
     foreground = 'grey'
     background = 'transparent'
     type = 'git'
@@ -40,20 +52,108 @@ final_space = true
       commit_icon = '@'
       fetch_status = true
 
-[[blocks]]
-  type = 'rprompt'
-  overflow = 'hidden'
-
   [[blocks.segments]]
-    template = '{{ .FormattedMs }}'
-    foreground = 'yellow'
+    template = '--'
+    foreground = 'darkGray'
     background = 'transparent'
-    type = 'executiontime'
+    type = 'text'
     style = 'plain'
 
     [blocks.segments.properties]
       cache_duration = 'none'
-      threshold = 5000
+
+  [[blocks.segments]]
+    template = '[{{ .Full }}]'
+    foreground = 'yellow'
+    background = 'transparent'
+    type = 'python'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+      display_version = true
+      display_virtual_env = true
+
+  [[blocks.segments]]
+    template = '--'
+    foreground = 'darkGray'
+    background = 'transparent'
+    type = 'text'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+
+  [[blocks.segments]]
+    template = '[v{{ .Full }}]'
+    foreground = 'green'
+    background = 'transparent'
+    type = 'node'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+
+  [[blocks.segments]]
+    template = '--'
+    foreground = 'darkGray'
+    background = 'transparent'
+    type = 'text'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+
+  [[blocks.segments]]
+    template = '[gcp:{{ .Project }}{{ if .Account }}@{{ .Account }}{{ end }}]'
+    foreground = 'cyan'
+    background = 'transparent'
+    type = 'gcp'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+
+  [[blocks.segments]]
+    template = '--'
+    foreground = 'darkGray'
+    background = 'transparent'
+    type = 'text'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+
+  [[blocks.segments]]
+    template = '[k8s:{{ .Context }}{{ if .Namespace }}/{{ .Namespace }}{{ end }}]'
+    foreground = 'blue'
+    background = 'transparent'
+    type = 'kubectl'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+
+  [[blocks.segments]]
+    template = '--'
+    foreground = 'darkGray'
+    background = 'transparent'
+    type = 'text'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+
+  [[blocks.segments]]
+    template = '[tf:{{ .WorkspaceName }}{{ if .Version }} {{ .Version }}{{ end }}]'
+    foreground = 'purple'
+    background = 'transparent'
+    type = 'terraform'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+      fetch_version = true
 
 [[blocks]]
   type = 'prompt'
@@ -61,7 +161,60 @@ final_space = true
   newline = true
 
   [[blocks.segments]]
-    template = '❯'
+    template = '[{{ .Path }}]'
+    foreground = 'blue'
+    background = 'transparent'
+    type = 'path'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+      style = 'full'
+      folder_separator_icon = '/'
+      home_icon = '~'
+
+[[blocks]]
+  type = 'rprompt'
+  overflow = 'hidden'
+
+  [[blocks.segments]]
+    template = '[{{ .FormattedMs }}]'
+    foreground = 'yellow'
+    background = 'transparent'
+    type = 'executiontime'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+      threshold = 2000
+
+  [[blocks.segments]]
+    template = '--'
+    foreground = 'darkGray'
+    background = 'transparent'
+    type = 'text'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+
+  [[blocks.segments]]
+    template = '{{ if gt .Count 0 }}[{{ .Count }}j]{{ end }}'
+    foreground = 'darkGray'
+    background = 'transparent'
+    type = 'jobs'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+  newline = true
+
+  [[blocks.segments]]
+    template = '{{ if .Root }}#{{ else }}${{ end }} '
     background = 'transparent'
     type = 'text'
     style = 'plain'

@@ -103,27 +103,70 @@ _fzf_compgen_dir() {
 
 [ -f ~/fzf-git.sh/fzf-git.sh ] && source ~/fzf-git.sh/fzf-git.sh
 
+_omp_select_config() {
+	if [ -n "$OMP_CONFIG" ]; then
+		echo "$OMP_CONFIG"
+		return
+	fi
+	
+	local has_cloud_context=false
+	
+	if command -v gcloud &> /dev/null 2>&1; then
+		local gcp_project=$(gcloud config get-value project 2>/dev/null)
+		if [ -n "$gcp_project" ] && [ "$gcp_project" != "(unset)" ]; then
+			has_cloud_context=true
+		fi
+	fi
+	
+	if [ "$has_cloud_context" = false ] && command -v kubectl &> /dev/null 2>&1; then
+		local k8s_context=$(kubectl config current-context 2>/dev/null)
+		if [ -n "$k8s_context" ]; then
+			has_cloud_context=true
+		fi
+	fi
+	
+	if [ "$has_cloud_context" = true ] || [[ "$PWD" == *"/projects"* ]]; then
+		echo "$HOME/.config/ohmyposh/zen.toml"
+	else
+		echo "$HOME/.config/ohmyposh/zen-minimal.toml"
+	fi
+}
 
 if [ "$TERM_PROGRAM" != "Apple_Terminal" ]; then
-	eval "$(oh-my-posh init zsh --config $HOME/.config/ohmyposh/zen.toml)"
+	omp_config=$(_omp_select_config)
+	eval "$(oh-my-posh init zsh --config "$omp_config")"
+	
+	omp_switch() {
+		local new_config=$(_omp_select_config)
+		if [ "$new_config" != "$omp_config" ]; then
+			omp_config="$new_config"
+			eval "$(oh-my-posh init zsh --config "$omp_config")"
+			echo "Switched to: $(basename "$omp_config")"
+		fi
+	}
+	
+	omp_minimal() {
+		export OMP_CONFIG="$HOME/.config/ohmyposh/zen-minimal.toml"
+		eval "$(oh-my-posh init zsh --config "$OMP_CONFIG")"
+		echo "Switched to minimal config"
+	}
+	
+	omp_full() {
+		export OMP_CONFIG="$HOME/.config/ohmyposh/zen.toml"
+		eval "$(oh-my-posh init zsh --config "$OMP_CONFIG")"
+		echo "Switched to full config"
+	}
+	
+	omp_auto() {
+		unset OMP_CONFIG
+		omp_config=$(_omp_select_config)
+		eval "$(oh-my-posh init zsh --config "$omp_config")"
+		echo "Switched to auto mode: $(basename "$omp_config")"
+	}
 fi
 
 eval "$(luarocks path --bin)"
 
-export PYENV_ROOT="$HOME/.pyenv"
-[[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-
-pyenv() {
-  unset -f pyenv
-  eval "$(command pyenv init -)"
-  pyenv "$@"
-}
-
-python() {
-  unset -f pyenv python
-  eval "$(command pyenv init -)"
-  python "$@"
-}
 export MODULAR_HOME="/Users/thexuh/.modular"
 export PATH="/Users/thexuh/.modular/pkg/packages.modular.com_max/bin:$PATH"
 
