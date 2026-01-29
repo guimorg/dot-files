@@ -42,8 +42,22 @@
     enableZshIntegration = true;
   };
 
-  home.file.".local/bin/wezterm-zoxide-workspace" = {
-    source = ./wezterm/.local/bin/wezterm-zoxide-workspace;
+  home.file.".config/wezterm/sessionizer.lua" = {
+    source = ./wezterm/sessionizer.lua;
+  };
+
+  home.file.".local/bin/workspace-picker.sh" = {
+    source = ./wezterm/workspace-picker.sh;
+    executable = true;
+  };
+
+  home.file.".local/bin/workspace-picker-wrapper.sh" = {
+    source = ./wezterm/workspace-picker-wrapper.sh;
+    executable = true;
+  };
+
+  home.file.".local/bin/workspace-manager-display.sh" = {
+    source = ./wezterm/workspace-manager-display.sh;
     executable = true;
   };
 
