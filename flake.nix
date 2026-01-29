@@ -135,7 +135,7 @@
               rm -rf "$HOME/Applications/Nix Apps"
               mkdir -p "$HOME/Applications/Nix Apps"
               ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-              for app in ${pkgs.alacritty}/Applications/*.app ${pkgs.wezterm}/Applications/*.app ${pkgs.kitty}/Applications/*.app; do
+              for app in ${pkgs.alacritty}/Applications/*.app ${pkgs.wezterm}/Applications/*.app ${pkgs.kitty}/Applications/*.app ${pkgs.ice-bar}/Applications/*.app; do
                 if [ -d "$app" ]; then
                   app_name=$(basename "$app")
                   echo "  Creating alias for $app_name"
@@ -207,7 +207,7 @@
             rm -rf "$HOME/Applications/Nix Apps"
             mkdir -p "$HOME/Applications/Nix Apps"
             ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-            for app in ${pkgs.alacritty}/Applications/*.app ${pkgs.wezterm}/Applications/*.app ${pkgs.kitty}/Applications/*.app; do
+            for app in ${pkgs.alacritty}/Applications/*.app ${pkgs.wezterm}/Applications/*.app ${pkgs.kitty}/Applications/*.app ${pkgs.ice-bar}/Applications/*.app; do
               if [ -d "$app" ]; then
                 app_name=$(basename "$app")
                 echo "  Creating alias for $app_name"

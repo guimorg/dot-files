@@ -41,6 +41,7 @@
     alacritty
     wezterm
     kitty
+    ice-bar
     clang
     cmake
     gnumake
@@ -58,6 +59,9 @@
     colima
     zoxide
     miniflux
+    terraform-ls
+    stats
+    bat
   ];
 
   fonts.packages = with pkgs; [
@@ -94,6 +98,7 @@
     NSGlobalDomain.KeyRepeat = 2;
     NSGlobalDomain.InitialKeyRepeat = 15;
     NSGlobalDomain."com.apple.swipescrolldirection" = false;
+    NSGlobalDomain._HIHideMenuBar = false;
   };
 
   system.keyboard.enableKeyMapping = true;
@@ -120,6 +125,32 @@
       WorkingDirectory = "/Users/${username}/projects/oss/dot-files/services/miniflux";
     };
   };
+
+  # launchd.user.agents.ice-bar = {
+  #   serviceConfig = {
+  #     Label = "com.thexuh.ice-bar";
+  #     ProgramArguments = [
+  #       "/usr/bin/open"
+  #       "-a"
+  #       "Ice"
+  #     ];
+  #     RunAtLoad = true;
+  #     KeepAlive = false;
+  #   };
+  # };
+
+  # launchd.user.agents.hidden-bar = {
+  #   serviceConfig = {
+  #     Label = "com.thexuh.hidden-bar";
+  #     ProgramArguments = [
+  #       "/usr/bin/open"
+  #       "-a"
+  #       "Hidden Bar"
+  #     ];
+  #     RunAtLoad = true;
+  #     KeepAlive = false;
+  #   };
+  # };
 
   services.aerospace = {
     enable = true;
@@ -257,23 +288,9 @@
           };
         };
       };
+
+      "after-startup-command" = [ "exec-and-forget open -a Ice" ];
     };
-  };
-
-  services.aerospace.settings = {
-    "exec-on-workspace-change" = [
-      "/bin/bash"
-      "-c"
-      "sketchybar --trigger aerospace_workspace_change FOCUSED_WORKSPACE=$AEROSPACE_FOCUSED_WORKSPACE"
-    ];
-
-    "after-startup-command" = [ "exec-and-forget sketchybar" ];
-  };
-
-  services.sketchybar = {
-    enable = true;
-    extraPackages = [ pkgs.jq pkgs.bash ];
-    config = builtins.readFile ./sketchybar/.config/sketchybar/sketchybarrc;
   };
 
   system.stateVersion = 5;
