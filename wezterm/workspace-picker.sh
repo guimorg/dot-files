@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -o pipefail
 trap '' PIPE
+set +m
 
 ZOXIDE_PATH="${ZOXIDE_PATH:-/run/current-system/sw/bin/zoxide}"
 FD_PATH="${FD_PATH:-/opt/homebrew/bin/fd}"

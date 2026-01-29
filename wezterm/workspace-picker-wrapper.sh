@@ -13,5 +13,7 @@ if [ -n "${SELECTED:-}" ] && [ "$SELECTED" != "" ]; then
   printf "\033]1337;SetUserVar=%s=%s\007" "WORKSPACE_SELECTED" "$(echo -n "$SELECTED" | base64)"
   sleep 0.5
 else
-  echo "ERROR: No selection or empty" >> "$LOGFILE"
+  echo "No selection - user cancelled" >> "$LOGFILE"
 fi
+
+exit 0

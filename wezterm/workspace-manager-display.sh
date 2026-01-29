@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+set +m
 
 DATAFILE="$1"
 
@@ -61,6 +62,8 @@ if [ -n "${SELECTED:-}" ]; then
   fi
   sleep 0.5
 fi
+
+exit 0
 
 rm -f "$DATAFILE"
 
