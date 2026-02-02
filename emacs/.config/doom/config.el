@@ -236,10 +236,10 @@
   (when (modulep! :emacs dired)
     (when (require 'dired-subtree nil t)
       (setq dired-subtree-use-backgrounds nil))
-    
+
     (when (require 'dired-hide-dotfiles nil t)
       (add-hook 'dired-mode-hook #'dired-hide-dotfiles-mode))
-    
+
     (when (require 'dired-rainbow nil t)
       (dired-rainbow-define-chmod directory "#6cb2eb" "d.*")
       (dired-rainbow-define html "#eb5286" ("css" "less" "sass" "scss" "htm" "html" "jhtm" "mht" "eml" "mustache" "xhtml"))
@@ -261,7 +261,7 @@
       (dired-rainbow-define partition "#e3342f" ("dmg" "iso" "bin" "nrg" "qcow" "toast" "vcd" "vmdk" "bak"))
       (dired-rainbow-define vc "#0074d9" ("git" "gitignore" "gitattributes" "gitmodules"))
       (dired-rainbow-define-chmod executable-unix "#38c172" "-.*x.*"))
-    
+
     (when (require 'dired-open nil t)
       (setq dired-open-extensions '(("png" . "open")
                                      ("jpg" . "open")
@@ -269,10 +269,15 @@
                                      ("pdf" . "open")
                                      ("mp4" . "open")
                                      ("mkv" . "open"))))
-    
+
     (evil-define-key 'normal dired-mode-map
       (kbd "c") #'+dired/create-empty-file
       (kbd "i") #'dired-subtree-toggle
       (kbd "/") #'dired-narrow-fuzzy
       (kbd ".") #'dired-hide-dotfiles-mode
       (kbd "W") #'dired-open-file)))
+
+(use-package! claude-code-ide
+  :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
+  :config
+  (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools

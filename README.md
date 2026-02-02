@@ -57,4 +57,6 @@ Ready for more? See [NIXDARWIN.md](NIXDARWIN.md) for:
 - **nix-homebrew** - Declarative Homebrew integration
 - **System settings** - Configure macOS preferences as code
 
+Menu bar management (Ice): [MACOS_ICE.md](MACOS_ICE.md)
+
 Current setup works great standalone! Only migrate if you want system-wide configuration.

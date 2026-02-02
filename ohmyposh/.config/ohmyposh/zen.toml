@@ -15,6 +15,7 @@ final_space = true
 [[blocks]]
   type = 'prompt'
   alignment = 'left'
+  overflow = 'truncate'
 
   [[blocks.segments]]
     template = '[{{ .UserName }}]'
@@ -135,17 +136,7 @@ final_space = true
       cache_duration = 'none'
 
   [[blocks.segments]]
-    template = '--'
-    foreground = 'darkGray'
-    background = 'transparent'
-    type = 'text'
-    style = 'plain'
-
-    [blocks.segments.properties]
-      cache_duration = 'none'
-
-  [[blocks.segments]]
-    template = '[tf:{{ .WorkspaceName }}{{ if .Version }} {{ .Version }}{{ end }}]'
+    template = '--[tf:{{ .WorkspaceName }}{{ if .Version }} {{ .Version }}{{ end }}]'
     foreground = 'purple'
     background = 'transparent'
     type = 'terraform'
@@ -154,6 +145,19 @@ final_space = true
     [blocks.segments.properties]
       cache_duration = 'none'
       fetch_version = true
+      display_default = true
+
+  [[blocks.segments]]
+    template = '--[{{ .Output }}]'
+    foreground = 'purple'
+    background = 'transparent'
+    type = 'command'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+      shell = 'bash'
+      command = 'if [ -f terragrunt.hcl ]; then tool="hcl"; if [ -f .terraform.lock.hcl ]; then lockfile=$(head -1 .terraform.lock.hcl 2>/dev/null); if echo "$lockfile" | grep -q "tofu"; then tool="hcl/tofu"; elif echo "$lockfile" | grep -q "terraform"; then tool="hcl/tf"; fi; fi; echo "$tool"; elif [ -n "$(find . -maxdepth 3 -name "terragrunt.hcl" -type f -print -quit 2>/dev/null)" ]; then echo "hcl"; fi'
 
 [[blocks]]
   type = 'prompt'
@@ -175,7 +179,7 @@ final_space = true
 
 [[blocks]]
   type = 'rprompt'
-  overflow = 'hidden'
+  overflow = 'truncate'
 
   [[blocks.segments]]
     template = '[{{ .FormattedMs }}]'
@@ -186,20 +190,10 @@ final_space = true
 
     [blocks.segments.properties]
       cache_duration = 'none'
-      threshold = 2000
+      threshold = 50
 
   [[blocks.segments]]
-    template = '--'
-    foreground = 'darkGray'
-    background = 'transparent'
-    type = 'text'
-    style = 'plain'
-
-    [blocks.segments.properties]
-      cache_duration = 'none'
-
-  [[blocks.segments]]
-    template = '{{ if gt .Count 0 }}[{{ .Count }}j]{{ end }}'
+    template = '{{ if gt .Count 0 }}--[{{ .Count }}j]{{ end }}'
     foreground = 'darkGray'
     background = 'transparent'
     type = 'jobs'
@@ -214,7 +208,7 @@ final_space = true
   newline = true
 
   [[blocks.segments]]
-    template = '{{ if .Root }}#{{ else }}${{ end }} '
+    template = '{{ if .Root }}#{{ else }}${{ end }}'
     background = 'transparent'
     type = 'text'
     style = 'plain'

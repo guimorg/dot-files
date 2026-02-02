@@ -61,6 +61,16 @@
     executable = true;
   };
 
+  home.file.".local/bin/envrc-init" = {
+    source = ./direnv/.config/direnv/bin/envrc-init;
+    executable = true;
+  };
+
+  home.file.".local/bin/envrc-validate" = {
+    source = ./direnv/.config/direnv/bin/envrc-validate;
+    executable = true;
+  };
+
   home.sessionPath = [
     "$HOME/.local/bin"
     "/Applications/WezTerm.app/Contents/MacOS"

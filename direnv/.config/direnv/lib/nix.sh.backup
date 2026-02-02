@@ -1,0 +1,56 @@
+layout_flake() {
+    local flake_dir="${1:-.}"
+    local flake_path="$flake_dir/flake.nix"
+    
+    if [[ ! -f "$flake_path" ]]; then
+        log_error "No flake.nix found at $flake_path"
+        return 1
+    fi
+
+    watch_file "$flake_path"
+    watch_file_if_exists "$flake_dir/flake.lock"
+    
+    use flake "$flake_dir"
+    
+    export ENVRC_ANNOT="(+nix-flake)"
+}
+
+layout_nix_shell() {
+    local shell_file="${1:-shell.nix}"
+    
+    if [[ ! -f "$shell_file" ]]; then
+        log_error "No $shell_file found"
+        return 1
+    fi
+
+    watch_file "$shell_file"
+    
+    use nix
+    
+    export ENVRC_ANNOT="(+nix-shell)"
+}
+
+detect_flake() {
+    if [[ -f "flake.nix" ]]; then
+        return 0
+    fi
+    return 1
+}
+
+detect_nix_shell() {
+    if [[ -f "shell.nix" ]]; then
+        return 0
+    fi
+    return 1
+}
+
+layout_nix_auto() {
+    if detect_flake; then
+        layout_flake
+    elif detect_nix_shell; then
+        layout_nix_shell
+    else
+        log_error "No flake.nix or shell.nix found"
+        return 1
+    fi
+}

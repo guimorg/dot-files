@@ -1,0 +1,223 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+ENVRC_FILE="${1:-.envrc}"
+
+show_help() {
+    cat <<EOF
+envrc-validate - Validate .envrc syntax and configuration
+
+Usage:
+    envrc-validate [FILE]
+
+Arguments:
+    FILE    Path to .envrc file (default: .envrc)
+
+Options:
+    -h, --help    Show this help message
+
+Examples:
+    envrc-validate              # Validate .envrc in current directory
+    envrc-validate .envrc       # Validate specific file
+    envrc-validate ../.envrc    # Validate parent directory's .envrc
+
+EOF
+}
+
+validate_file_exists() {
+    if [[ ! -f "$ENVRC_FILE" ]]; then
+        echo "Error: File not found: $ENVRC_FILE"
+        exit 1
+    fi
+}
+
+validate_syntax() {
+    local errors=0
+    
+    echo "Checking syntax..."
+    
+    if bash -n "$ENVRC_FILE" 2>/dev/null; then
+        echo "  ✓ Bash syntax is valid"
+    else
+        echo "  ✗ Bash syntax error detected"
+        bash -n "$ENVRC_FILE" 2>&1 | sed 's/^/    /'
+        errors=$((errors + 1))
+    fi
+    
+    return $errors
+}
+
+validate_common_functions() {
+    local errors=0
+    local content=$(cat "$ENVRC_FILE")
+    
+    echo "Checking for common patterns..."
+    
+    local known_layouts=(
+        "layout_uv"
+        "layout_poetry"
+        "layout_node"
+        "layout_go"
+        "layout_rust"
+        "layout_python"
+        "layout python"
+        "use flake"
+        "use nix"
+    )
+    
+    local has_layout=false
+    for layout in "${known_layouts[@]}"; do
+        if echo "$content" | grep -q "$layout"; then
+            has_layout=true
+            break
+        fi
+    done
+    
+    if [[ "$has_layout" == "true" ]]; then
+        echo "  ✓ Contains recognized layout/use directive"
+    else
+        echo "  ⚠ No recognized layout or use directive found"
+        echo "    This might be intentional, but typically .envrc files should have:"
+        echo "    - layout <name> (e.g., layout uv, layout node)"
+        echo "    - use <command> (e.g., use flake, use nix)"
+    fi
+    
+    return $errors
+}
+
+validate_watch_files() {
+    local errors=0
+    local content=$(cat "$ENVRC_FILE")
+    
+    echo "Checking watch_file directives..."
+    
+    local watch_count=$(echo "$content" | grep -c "watch_file" || true)
+    
+    if [[ $watch_count -gt 0 ]]; then
+        echo "  ✓ Found $watch_count watch_file directive(s)"
+        
+        while IFS= read -r line; do
+            if [[ "$line" =~ watch_file[[:space:]]+(.+) ]]; then
+                local file="${BASH_REMATCH[1]}"
+                file=$(echo "$file" | tr -d '"' | tr -d "'")
+                
+                if [[ -f "$file" ]]; then
+                    echo "    ✓ $file exists"
+                else
+                    echo "    ⚠ $file not found (will be watched when created)"
+                fi
+            fi
+        done < <(grep "watch_file" "$ENVRC_FILE")
+    else
+        echo "  ℹ No watch_file directives found"
+        echo "    Consider adding watch_file for important files like:"
+        echo "    - pyproject.toml, requirements.txt (Python)"
+        echo "    - package.json, package-lock.json (Node.js)"
+        echo "    - go.mod, go.sum (Go)"
+        echo "    - Cargo.toml, Cargo.lock (Rust)"
+        echo "    - flake.nix, flake.lock (Nix)"
+    fi
+    
+    return $errors
+}
+
+validate_dangerous_patterns() {
+    local errors=0
+    local content=$(cat "$ENVRC_FILE")
+    
+    echo "Checking for dangerous patterns..."
+    
+    if echo "$content" | grep -q "rm -rf"; then
+        echo "  ⚠ WARNING: Found 'rm -rf' command"
+        echo "    This can be dangerous in .envrc files"
+        errors=$((errors + 1))
+    fi
+    
+    if echo "$content" | grep -q "sudo"; then
+        echo "  ⚠ WARNING: Found 'sudo' command"
+        echo "    .envrc should not require sudo"
+        errors=$((errors + 1))
+    fi
+    
+    if echo "$content" | grep -qE "curl.*\|.*bash"; then
+        echo "  ⚠ WARNING: Found 'curl | bash' pattern"
+        echo "    This can be dangerous, consider alternatives"
+        errors=$((errors + 1))
+    fi
+    
+    if [[ $errors -eq 0 ]]; then
+        echo "  ✓ No dangerous patterns detected"
+    fi
+    
+    return $errors
+}
+
+test_load() {
+    echo "Testing direnv load (dry-run)..."
+    
+    if command -v direnv >/dev/null 2>&1; then
+        local output
+        if output=$(direnv exec . bash -c 'echo "Environment loaded successfully"' 2>&1); then
+            echo "  ✓ Environment loads without errors"
+        else
+            echo "  ✗ Error loading environment:"
+            echo "$output" | sed 's/^/    /'
+            return 1
+        fi
+    else
+        echo "  ⚠ direnv not found, skipping load test"
+        echo "    Install direnv to test environment loading"
+    fi
+    
+    return 0
+}
+
+main() {
+    if [[ $# -gt 0 ]] && [[ "$1" == "-h" || "$1" == "--help" ]]; then
+        show_help
+        exit 0
+    fi
+    
+    if [[ $# -gt 0 ]]; then
+        ENVRC_FILE="$1"
+    fi
+    
+    echo "Validating: $ENVRC_FILE"
+    echo
+    
+    validate_file_exists
+    
+    local total_errors=0
+    
+    validate_syntax || total_errors=$((total_errors + $?))
+    echo
+    
+    validate_common_functions || total_errors=$((total_errors + $?))
+    echo
+    
+    validate_watch_files || total_errors=$((total_errors + $?))
+    echo
+    
+    validate_dangerous_patterns || total_errors=$((total_errors + $?))
+    echo
+    
+    test_load || total_errors=$((total_errors + $?))
+    echo
+    
+    if [[ $total_errors -eq 0 ]]; then
+        echo "✅ Validation passed!"
+        echo
+        echo "Next steps:"
+        echo "  1. Run: direnv allow"
+        echo "  2. Test by entering the directory"
+        exit 0
+    else
+        echo "⚠️  Validation completed with $total_errors error(s)/warning(s)"
+        echo
+        echo "Review the issues above and fix them before running 'direnv allow'"
+        exit 1
+    fi
+}
+
+main "$@"

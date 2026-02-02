@@ -1,0 +1,111 @@
+env_var() {
+    local var_name="$1"
+    local var_value="$2"
+    local required="${3:-false}"
+
+    if [[ -z "$var_name" ]]; then
+        log_error "env_var: variable name is required"
+        return 1
+    fi
+
+    if [[ -z "$var_value" ]]; then
+        if [[ "$required" == "true" ]]; then
+            log_error "env_var: value for $var_name is required but not provided"
+            return 1
+        else
+            log_status "env_var: skipping $var_name (no value provided)"
+            return 0
+        fi
+    fi
+
+    export "$var_name"="$var_value"
+    log_status "Set $var_name"
+}
+
+path_add() {
+    local new_path="$1"
+    
+    if [[ -z "$new_path" ]]; then
+        log_error "path_add: path is required"
+        return 1
+    fi
+
+    if [[ ! -d "$new_path" ]]; then
+        log_status "path_add: $new_path does not exist, skipping"
+        return 0
+    fi
+
+    if [[ ":$PATH:" == *":$new_path:"* ]]; then
+        return 0
+    fi
+
+    PATH_add "$new_path"
+}
+
+load_env_file() {
+    local env_file="${1:-.env}"
+    
+    if [[ ! -f "$env_file" ]]; then
+        log_status "load_env_file: $env_file not found, skipping"
+        return 0
+    fi
+
+    log_status "Loading environment from $env_file"
+    
+    if ! dotenv_if_exists "$env_file"; then
+        set -a
+        source "$env_file"
+        set +a
+    fi
+}
+
+project_name() {
+    basename "$PWD"
+}
+
+detect_project_type() {
+    if [[ -f "pyproject.toml" ]]; then
+        if grep -q "tool.poetry" pyproject.toml 2>/dev/null; then
+            echo "poetry"
+        elif grep -q "tool.uv" pyproject.toml 2>/dev/null || [[ -f "uv.lock" ]]; then
+            echo "uv"
+        else
+            echo "python"
+        fi
+    elif [[ -f "requirements.txt" ]] || [[ -f "setup.py" ]]; then
+        echo "python"
+    elif [[ -f "package.json" ]]; then
+        echo "node"
+    elif [[ -f "go.mod" ]]; then
+        echo "go"
+    elif [[ -f "Cargo.toml" ]]; then
+        echo "rust"
+    elif [[ -f "flake.nix" ]]; then
+        echo "nix-flake"
+    elif [[ -f "shell.nix" ]]; then
+        echo "nix-shell"
+    else
+        echo "unknown"
+    fi
+}
+
+ensure_command() {
+    local cmd="$1"
+    local install_hint="${2:-}"
+    
+    if ! has "$cmd"; then
+        log_error "$cmd is not installed"
+        if [[ -n "$install_hint" ]]; then
+            log_error "Install with: $install_hint"
+        fi
+        return 1
+    fi
+    return 0
+}
+
+watch_file_if_exists() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        watch_file "$file"
+    fi
+}

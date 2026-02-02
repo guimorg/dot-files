@@ -62,6 +62,9 @@
     terraform-ls
     stats
     bat
+    tflint
+    tilt
+    kind
   ];
 
   fonts.packages = with pkgs; [

@@ -1,0 +1,9 @@
+DIRENV_LIB_DIR="${DIRENV_LIB_DIR:-$HOME/.config/direnv/lib}"
+
+if [[ -d "$DIRENV_LIB_DIR" ]]; then
+    for lib_file in "$DIRENV_LIB_DIR"/*.sh; do
+        if [[ -f "$lib_file" ]]; then
+            source "$lib_file"
+        fi
+    done
+fi

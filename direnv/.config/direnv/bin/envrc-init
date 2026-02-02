@@ -1,0 +1,208 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+TEMPLATES_DIR="${DIRENV_TEMPLATES_DIR:-$HOME/.config/direnv/templates}"
+ENVRC_FILE=".envrc"
+
+show_help() {
+    cat <<EOF
+envrc-init - Generate .envrc files from templates
+
+Usage:
+    envrc-init [OPTIONS]
+
+Options:
+    -h, --help              Show this help message
+    -l, --list              List available templates
+    -t, --template NAME     Use specific template
+    -c, --custom CONTENT    Create with custom content
+    -f, --force             Overwrite existing .envrc
+    -a, --auto              Auto-detect project type and create .envrc
+
+Examples:
+    envrc-init                          # Interactive mode (auto-detect)
+    envrc-init --list                   # List templates
+    envrc-init --template python-uv     # Use python-uv template
+    envrc-init --custom "layout uv"     # Custom content
+    envrc-init --auto                   # Auto-detect and create
+
+Available templates:
+    python-uv       Python with uv
+    python-poetry   Python with Poetry
+    python          Python with venv
+    node            Node.js
+    go              Go modules
+    rust            Rust with cargo
+    nix-flake       Nix flakes
+    nix-shell       Nix shell
+    multi-lang      Multi-language (Nix + Node)
+
+EOF
+}
+
+list_templates() {
+    echo "Available templates:"
+    echo
+    if [[ -d "$TEMPLATES_DIR" ]]; then
+        for template in "$TEMPLATES_DIR"/*.envrc; do
+            if [[ -f "$template" ]]; then
+                name=$(basename "$template" .envrc)
+                echo "  - $name"
+            fi
+        done
+    else
+        echo "  No templates found at $TEMPLATES_DIR"
+    fi
+}
+
+detect_project_type() {
+    if [[ -f "pyproject.toml" ]]; then
+        if grep -q "tool.poetry" pyproject.toml 2>/dev/null; then
+            echo "python-poetry"
+        elif grep -q "tool.uv" pyproject.toml 2>/dev/null || [[ -f "uv.lock" ]]; then
+            echo "python-uv"
+        else
+            echo "python"
+        fi
+    elif [[ -f "requirements.txt" ]] || [[ -f "setup.py" ]]; then
+        echo "python"
+    elif [[ -f "package.json" ]]; then
+        echo "node"
+    elif [[ -f "go.mod" ]]; then
+        echo "go"
+    elif [[ -f "Cargo.toml" ]]; then
+        echo "rust"
+    elif [[ -f "flake.nix" ]]; then
+        echo "nix-flake"
+    elif [[ -f "shell.nix" ]]; then
+        echo "nix-shell"
+    else
+        echo "unknown"
+    fi
+}
+
+create_from_template() {
+    local template_name="$1"
+    local force="${2:-false}"
+    local template_file="$TEMPLATES_DIR/${template_name}.envrc"
+
+    if [[ ! -f "$template_file" ]]; then
+        echo "Error: Template '$template_name' not found at $template_file"
+        echo
+        echo "Run 'envrc-init --list' to see available templates"
+        exit 1
+    fi
+
+    if [[ -f "$ENVRC_FILE" ]] && [[ "$force" != "true" ]]; then
+        echo "Error: $ENVRC_FILE already exists"
+        echo "Use --force to overwrite"
+        exit 1
+    fi
+
+    cp "$template_file" "$ENVRC_FILE"
+    chmod 644 "$ENVRC_FILE"
+    echo "Created $ENVRC_FILE from template: $template_name"
+    echo
+    echo "Next steps:"
+    echo "  1. Review $ENVRC_FILE"
+    echo "  2. Run: direnv allow"
+}
+
+create_custom() {
+    local content="$1"
+    local force="${2:-false}"
+
+    if [[ -f "$ENVRC_FILE" ]] && [[ "$force" != "true" ]]; then
+        echo "Error: $ENVRC_FILE already exists"
+        echo "Use --force to overwrite"
+        exit 1
+    fi
+
+    echo "$content" > "$ENVRC_FILE"
+    chmod 644 "$ENVRC_FILE"
+    echo "Created $ENVRC_FILE with custom content"
+    echo
+    echo "Next steps:"
+    echo "  1. Review $ENVRC_FILE"
+    echo "  2. Run: direnv allow"
+}
+
+auto_detect_and_create() {
+    local force="${1:-false}"
+    
+    echo "Detecting project type..."
+    local project_type=$(detect_project_type)
+    
+    if [[ "$project_type" == "unknown" ]]; then
+        echo "Error: Could not detect project type"
+        echo
+        echo "Available files:"
+        ls -la
+        echo
+        echo "Use --template to specify a template manually"
+        exit 1
+    fi
+
+    echo "Detected: $project_type"
+    echo
+    create_from_template "$project_type" "$force"
+}
+
+main() {
+    local mode="auto"
+    local template_name=""
+    local custom_content=""
+    local force="false"
+
+    while [[ $# -gt 0 ]]; do
+        case $1 in
+            -h|--help)
+                show_help
+                exit 0
+                ;;
+            -l|--list)
+                list_templates
+                exit 0
+                ;;
+            -t|--template)
+                mode="template"
+                template_name="$2"
+                shift 2
+                ;;
+            -c|--custom)
+                mode="custom"
+                custom_content="$2"
+                shift 2
+                ;;
+            -f|--force)
+                force="true"
+                shift
+                ;;
+            -a|--auto)
+                mode="auto"
+                shift
+                ;;
+            *)
+                echo "Error: Unknown option: $1"
+                echo
+                show_help
+                exit 1
+                ;;
+        esac
+    done
+
+    case $mode in
+        template)
+            create_from_template "$template_name" "$force"
+            ;;
+        custom)
+            create_custom "$custom_content" "$force"
+            ;;
+        auto)
+            auto_detect_and_create "$force"
+            ;;
+    esac
+}
+
+main "$@"

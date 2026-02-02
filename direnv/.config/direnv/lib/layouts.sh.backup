@@ -1,0 +1,150 @@
+layout_uv() {
+    PYPROJECT_TOML="${PYPROJECT_TOML:-pyproject.toml}"
+    if [[ ! -f "$PYPROJECT_TOML" ]]; then
+        log_status "No pyproject.toml found. Not setting anything"
+        return
+    fi
+
+    VIRTUAL_ENV="$PWD/.venv"
+
+    if [[ -z $VIRTUAL_ENV || ! -d $VIRTUAL_ENV ]]; then
+        log_status "No virtual environment exists. Setting up a uv accordingly"
+
+        real_python_bin=`python -c 'import sys;print(sys.executable)'`
+        log_status "Target python version is `"$real_python_bin" --version`"
+
+        uv venv --python="$real_python_bin"
+        if [[ $? != 0 ]]; then
+            log_status "Not setting anything"
+            return
+        fi
+    fi
+
+    if [[ "$VIRTUAL_ENV" =~ ^"$PWD" ]]; then
+        rel_path=${VIRTUAL_ENV#"$PWD"}
+        venv_name="`basename ${PWD}`$rel_path"
+    else
+        venv_name="`basename ${VIRTUAL_ENV}`"
+    fi
+
+    PATH_add "$VIRTUAL_ENV/bin"
+    export VENV_ACTIVE=1
+    export VIRTUAL_ENV
+
+    export ENVRC_ANNOT="(+uv $venv_name)"
+}
+
+layout_poetry() {
+    PYPROJECT_TOML="${PYPROJECT_TOML:-pyproject.toml}"
+    if [[ ! -f "$PYPROJECT_TOML" ]]; then
+        log_status "No pyproject.toml found. Not setting anything"
+        return
+    fi
+
+    if [[ ! -f "poetry.lock" ]]; then
+        log_status "No poetry.lock found. Run 'poetry install' first"
+        return
+    fi
+
+    VIRTUAL_ENV=$(poetry env info --path 2>/dev/null)
+    if [[ -z "$VIRTUAL_ENV" || ! -d "$VIRTUAL_ENV" ]]; then
+        log_status "No virtual environment exists. Creating one with poetry"
+        poetry install
+        VIRTUAL_ENV=$(poetry env info --path 2>/dev/null)
+    fi
+
+    if [[ -z "$VIRTUAL_ENV" || ! -d "$VIRTUAL_ENV" ]]; then
+        log_status "Failed to create virtual environment"
+        return
+    fi
+
+    PATH_add "$VIRTUAL_ENV/bin"
+    export POETRY_ACTIVE=1
+    export VIRTUAL_ENV
+
+    venv_name="`basename ${PWD}`"
+    export ENVRC_ANNOT="(+poetry $venv_name)"
+}
+
+layout_node() {
+    if [[ ! -f "package.json" ]]; then
+        log_status "No package.json found. Not setting anything"
+        return
+    fi
+
+    local node_modules="$PWD/node_modules"
+    if [[ -d "$node_modules/.bin" ]]; then
+        PATH_add "$node_modules/.bin"
+    fi
+
+    local pkg_manager="npm"
+    if [[ -f "pnpm-lock.yaml" ]]; then
+        pkg_manager="pnpm"
+    elif [[ -f "yarn.lock" ]]; then
+        pkg_manager="yarn"
+    elif [[ -f "bun.lockb" ]]; then
+        pkg_manager="bun"
+    fi
+
+    export NODE_ENV="${NODE_ENV:-development}"
+    export ENVRC_ANNOT="(+node $pkg_manager)"
+}
+
+layout_go() {
+    if [[ ! -f "go.mod" ]]; then
+        log_status "No go.mod found. Not setting anything"
+        return
+    fi
+
+    local go_bin="$PWD/bin"
+    if [[ -d "$go_bin" ]]; then
+        PATH_add "$go_bin"
+    fi
+
+    export GOPATH="${GOPATH:-$HOME/go}"
+    export GOBIN="${GOBIN:-$GOPATH/bin}"
+    
+    module_name=$(go list -m 2>/dev/null || basename "$PWD")
+    export ENVRC_ANNOT="(+go $module_name)"
+}
+
+layout_rust() {
+    if [[ ! -f "Cargo.toml" ]]; then
+        log_status "No Cargo.toml found. Not setting anything"
+        return
+    fi
+
+    local target_dir="${CARGO_TARGET_DIR:-$PWD/target}"
+    if [[ -d "$target_dir/debug" ]]; then
+        PATH_add "$target_dir/debug"
+    fi
+    if [[ -d "$target_dir/release" ]]; then
+        PATH_add "$target_dir/release"
+    fi
+
+    package_name=$(grep -m1 '^name = ' Cargo.toml | cut -d'"' -f2 || basename "$PWD")
+    export ENVRC_ANNOT="(+rust $package_name)"
+}
+
+layout_python() {
+    local python_version="${1:-python3}"
+    local venv_dir="${2:-.venv}"
+
+    VIRTUAL_ENV="$PWD/$venv_dir"
+
+    if [[ ! -d "$VIRTUAL_ENV" ]]; then
+        log_status "Creating virtual environment with $python_version"
+        $python_version -m venv "$VIRTUAL_ENV"
+        if [[ $? != 0 ]]; then
+            log_status "Failed to create virtual environment"
+            return
+        fi
+    fi
+
+    PATH_add "$VIRTUAL_ENV/bin"
+    export VENV_ACTIVE=1
+    export VIRTUAL_ENV
+
+    venv_name="`basename ${PWD}`"
+    export ENVRC_ANNOT="(+python $venv_name)"
+}
