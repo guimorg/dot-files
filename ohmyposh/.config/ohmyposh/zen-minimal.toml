@@ -1,0 +1,101 @@
+console_title_template = '{{ .Shell }} in {{ .Folder }}'
+version = 3
+final_space = true
+
+[secondary_prompt]
+  template = '>> '
+  foreground = 'magenta'
+  background = 'transparent'
+
+[transient_prompt]
+  template = '{{ if .Root }}#{{ else }}${{ end }} '
+  background = 'transparent'
+  foreground_templates = ['{{if gt .Code 0}}red{{end}}', '{{if eq .Code 0}}magenta{{end}}']
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+
+  [[blocks.segments]]
+    template = '[{{ .UserName }}]'
+    foreground = 'white'
+    background = 'transparent'
+    type = 'session'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+      display_user = true
+      display_host = false
+      display_always = false
+
+  [[blocks.segments]]
+    template = '--'
+    foreground = 'darkGray'
+    background = 'transparent'
+    type = 'text'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+
+  [[blocks.segments]]
+    template = '[{{ .HEAD }}{{ if .Staging.Changed }}*{{ end }}{{ if .Working.Changed }}+{{ end }}{{ if gt .Ahead 0 }} ^{{ .Ahead }}{{ end }}{{ if gt .Behind 0 }} v{{ .Behind }}{{ end }}]'
+    foreground = 'grey'
+    background = 'transparent'
+    type = 'git'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      branch_icon = ''
+      cache_duration = 'none'
+      commit_icon = '@'
+      fetch_status = true
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+  newline = true
+
+  [[blocks.segments]]
+    template = '[{{ .Path }}]'
+    foreground = 'blue'
+    background = 'transparent'
+    type = 'path'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+      style = 'full'
+      folder_separator_icon = '/'
+      home_icon = '~'
+
+[[blocks]]
+  type = 'rprompt'
+  overflow = 'hidden'
+
+  [[blocks.segments]]
+    template = '[{{ .FormattedMs }}]'
+    foreground = 'yellow'
+    background = 'transparent'
+    type = 'executiontime'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
+      threshold = 50
+
+[[blocks]]
+  type = 'prompt'
+  alignment = 'left'
+  newline = true
+
+  [[blocks.segments]]
+    template = '{{ if .Root }}#{{ else }}${{ end }}'
+    background = 'transparent'
+    type = 'text'
+    style = 'plain'
+    foreground_templates = ['{{if gt .Code 0}}red{{end}}', '{{if eq .Code 0}}magenta{{end}}']
+
+    [blocks.segments.properties]
+      cache_duration = 'none'
