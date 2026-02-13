@@ -281,3 +281,22 @@
   :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
   :config
   (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
+;; Use just-mode for files named "justfile" (no extension)
+(add-to-list 'auto-mode-alist '("\\`[Jj]ustfile\\'" . just-mode))
+
+;; Optional: also for *.just (if you use that naming)
+(add-to-list 'auto-mode-alist '("\\.just\\'" . just-mode))
+
+;; Handy keybinds (evil leader) to interact with recipes
+(map! :leader
+      (:prefix ("j" . "just")
+       :desc "Justl (list/run recipes)" "j" #'justl
+       :desc "Justl exec recipe"        "e" #'justl-exec-recipe
+       :desc "Justl exec default"       "d" #'justl-exec-default))
+
+;; Ensure just-mode is used for Justfile/justfile
+(use-package! just-mode
+  :mode (("\\`[Jj]ustfile\\'" . just-mode)
+         ("\\`justfile\\'" . just-mode)
+         ("\\`Justfile\\'" . just-mode)
+         ("\\.just\\'" . just-mode)))

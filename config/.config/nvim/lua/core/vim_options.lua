@@ -51,3 +51,10 @@ vim.filetype.add({
 		["terragrunt.hcl"] = "terraform",
 	},
 })
+
+vim.filetype.add({
+  filename = {
+    ["justfile"] = "just",
+    ["Justfile"] = "just",
+  },
+})

@@ -232,6 +232,7 @@ require("lazy").setup({
 	{ "tpope/vim-repeat" },
 	{ "wakatime/vim-wakatime" },
 	{ "ThePrimeagen/git-worktree.nvim" },
+	{ "NoahTheDuke/vim-just", ft = "just" },
 	-- {
 	-- 	"m4xshen/hardtime.nvim",
 	-- 	dependencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
