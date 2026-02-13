@@ -11,6 +11,20 @@ if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
         print -P "%F{160} The clone has failed.%f%b"
 fi
 
+if command -v just >/dev/null 2>&1; then
+  _just_compdir="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/site-functions"
+  _just_compfile="$_just_compdir/_just"
+
+  mkdir -p "$_just_compdir"
+
+  # (Re)generate if missing, or if just binary is newer than the completion file
+  if [[ ! -f "$_just_compfile" || "$(command -v just)" -nt "$_just_compfile" ]]; then
+    just --completions zsh >| "$_just_compfile"
+  fi
+
+  fpath=("$_just_compdir" $fpath)
+fi
+
 autoload -Uz compinit
 
 if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qN.mh+24) ]]; then
