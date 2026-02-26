@@ -74,25 +74,32 @@
 
   (setq-hook! 'python-mode-hook tab-width python-indent-offset))
 
-(add-hook! python-mode
-  (advice-add 'python-pytest-file :before
-              (lambda (&rest args)
-                (setq python-pytest-executable (+python-executable-find "pytest")))))
-
 (use-package! python-pytest
-  :commands python-pytest-dispatch
-  :init
-  (map! :after python
-        :localleader
-        :map python-mode-map
+  :after python
+  :config
+  (require 'python-pytest) ; force-load (fixes your autoload edge case)
+
+  (map! :localleader
+        :map (python-mode-map python-ts-mode-map)
         :prefix ("t" . "test")
-        "a" #'python-pytest
+        "p" #'python-pytest-dispatch
+        "r" #'python-pytest-repeat
         "f" #'python-pytest-file-dwim
         "F" #'python-pytest-file
-        "t" #'python-pytest-function-dwim
-        "T" #'python-pytest-function
-        "r" #'python-pytest-repeat
-       "p" #'python-pytest-dispatch))
+        "t" #'python-pytest-run-def-or-class-at-point))
+
+(after! python-pytest
+  (defun +my/python-pytest-set-executable-h ()
+    (let* ((root (or (locate-dominating-file default-directory ".venv")
+                     (locate-dominating-file default-directory "pyproject.toml")
+                     default-directory))
+           (py (and root (expand-file-name ".venv/bin/python" root))))
+      (setq-local python-pytest-executable
+                  (if (and py (file-executable-p py))
+                      (format "%s -m pytest" (shell-quote-argument py))
+                    "pytest"))))
+  (add-hook 'python-mode-hook #'+my/python-pytest-set-executable-h)
+  (add-hook 'python-ts-mode-hook #'+my/python-pytest-set-executable-h))
 
 (use-package! lsp-pyright
   :init
