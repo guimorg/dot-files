@@ -67,3 +67,5 @@
   :recipe (:host github :repo "manzaltu/claude-code-ide.el"))
 (package! just-mode)
 (package! justl)
+(package! linear-emacs
+  :recipe (:host github :repo "anegg0/linear-emacs" :files ("*.el")))

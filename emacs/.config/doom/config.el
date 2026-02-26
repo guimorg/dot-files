@@ -308,3 +308,139 @@
         (locate-dominating-file dir "rust-project.json")
         (doom-project-root)))
   (setq rustic-project-root-function #'gui/rustic-project-root))
+
+(defun my/linear-load-api-key-from-auth-source ()
+  "Load Linear API key from auth-source into `linear-emacs-api-key`."
+  (require 'auth-source)
+  (let* ((auth-info (auth-source-search :host "api.linear.app" :user "apikey" :max 1))
+         (secret (when auth-info
+                   (funcall (plist-get (car auth-info) :secret)))))
+    (when (and secret (stringp secret) (> (length secret) 0))
+      (setq linear-emacs-api-key secret))))
+
+(defun my/linear--linear-org-p ()
+  "Non-nil if current buffer is the Linear org file."
+  (and buffer-file-name
+       (string-match-p (rx "/linear.org" eos) buffer-file-name)))
+
+(use-package! linear-emacs
+  :after org
+  :init
+  ;; Set file path before package loads
+  (setq linear-emacs-org-file-path (expand-file-name "gtd/linear.org" org-directory))
+  :config
+  ;; API key
+  (my/linear-load-api-key-from-auth-source)
+
+  ;; State mapping
+  (setq linear-emacs-issues-state-mapping
+        '(("Todo" . "TODO")
+          ("In Progress" . "DOING")
+          ("In Review" . "REVIEW")
+          ("Blocked" . "HOLD")
+          ("Completed" . "DONE")
+          ("Cancelled" . "CANCELLED")))
+
+  ;; Enable sync only when the Linear file is opened
+  (defun my/enable-linear-org-sync ()
+    (when (my/linear--linear-org-p)
+      (linear-emacs-enable-org-sync)))
+  (add-hook 'find-file-hook #'my/enable-linear-org-sync))
+
+(after! linear-emacs
+  (defun my/linear-open-dashboard ()
+    "Sync Linear issues and open linear.org."
+    (interactive)
+    (linear-emacs-list-issues) ;; fetch + write active issues
+    (find-file linear-emacs-org-file-path)
+    (when (fboundp 'org-overview) (org-overview)))
+
+  (map! :leader
+        (:prefix ("l" . "linear")
+         :desc "Open Linear dashboard" "l" #'my/linear-open-dashboard
+         :desc "Create new issue" "n" #'linear-emacs-new-issue
+         :desc "Enable org sync" "e" #'linear-emacs-enable-org-sync
+         :desc "Sync org -> Linear" "s" #'linear-emacs-sync-org-to-linear
+         :desc "Open issue in browser" "o" #'my/linear-open-issue-in-browser)))
+
+(after! org
+  ;; Make Linear part of agenda
+  (add-to-list 'org-agenda-files linear-emacs-org-file-path)
+
+  ;; Work dashboard
+  (setq org-agenda-custom-commands
+        '(("w" "Work Dashboard"
+           ((todo "DOING")
+            (todo "REVIEW")
+            (todo "TODO" ((org-agenda-overriding-header "My Active Tickets"))))))))
+
+;; Auto-sync on save (safer: only if this is linear.org AND sync mode is enabled)
+(defun my/linear-auto-sync ()
+  (when (and (my/linear--linear-org-p)
+             ;; don't error if the mode var doesn't exist
+             (or (bound-and-true-p linear-emacs-org-sync-mode)
+                 ;; fallback: if the package doesn't use a minor-mode, still sync
+                 t))
+    (linear-emacs-sync-org-to-linear)))
+
+(add-hook 'after-save-hook #'my/linear-auto-sync)
+
+(after! (org linear-emacs)
+  (setq org-agenda-files
+        (delete-dups
+         (list (expand-file-name "~/notes/main.org")
+               (expand-file-name linear-emacs-org-file-path)))))
+
+(defun my/linear-open-issue-in-browser ()
+  "Open the current Linear issue in the browser.
+Tries LINK property first, then scans drawer, then falls back to ID-LINEAR."
+  (interactive)
+  (save-excursion
+    (org-back-to-heading t)
+    (let* ((link (org-entry-get (point) "LINK"))
+           (id-linear (org-entry-get (point) "ID-LINEAR"))
+           (drawer (ignore-errors
+                     ;; grab subtree header+drawer area (a small chunk is enough)
+                     (buffer-substring-no-properties
+                      (line-beginning-position)
+                      (min (point-max) (+ (point) 800))))))
+      (unless (and link (string-match-p "^https?://" link))
+        (setq link
+              (when (and drawer (string-match (rx line-start (* space) ":LINK:" (+ space)
+                                                  (group "http" (*? nonl)) line-end)
+                                              drawer))
+                (match-string 1 drawer))))
+      (unless (and link (string-match-p "^https?://" link))
+        (setq link (when id-linear
+                     (format "https://linear.app/issue/%s" id-linear))))
+      (unless link
+        (user-error "Couldn't find LINK or ID-LINEAR on this heading"))
+      (browse-url link)
+      (message "Opened: %s" link))))
+
+(setq code-review-auth-login-marker 'forge)
+(add-hook 'code-review-mode-hook
+          (lambda ()
+            ;; include *Code-Review* buffer into current workspace
+            (persp-add-buffer (current-buffer))))
+
+(add-hook 'code-review-mode-hook #'emojify-mode)
+;; (setq code-review-download-dir "/tmp/code-review/")
+(map! :leader
+      (:prefix ("g" . "git")
+       :desc "Start code review" "r" #'+magit/start-code-review))
+
+(remove-hook 'prog-mode-hook #'flyspell-mode)
+(remove-hook 'conf-mode-hook #'flyspell-mode)
+(setq ispell-program-name "hunspell")
+(setq ispell-dictionary "en_US")
+(after! spell-fu
+  ;; Disable everywhere first
+  (remove-hook 'text-mode-hook #'spell-fu-mode)
+  (remove-hook 'prog-mode-hook #'spell-fu-mode)
+  (remove-hook 'conf-mode-hook #'spell-fu-mode)
+
+  ;; Enable ONLY in prose modes
+  (add-hook 'markdown-mode-hook #'spell-fu-mode)
+  (add-hook 'org-mode-hook #'spell-fu-mode)
+  (add-hook 'text-mode-hook #'spell-fu-mode))
