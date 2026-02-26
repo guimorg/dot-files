@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    fenix.url = "github:nix-community/fenix";
     nix-darwin = {
       url = "github:nix-darwin/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -14,7 +15,7 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { self, nixpkgs, nix-darwin, home-manager, flake-utils }:
+  outputs = { self, nixpkgs, fenix, nix-darwin, home-manager, flake-utils }:
     let
       username = "thexuh";
       system = "aarch64-darwin";
@@ -22,7 +23,7 @@
     {
       darwinConfigurations."darwin-system" = nix-darwin.lib.darwinSystem {
         inherit system;
-        specialArgs = { inherit username; };
+        specialArgs = { inherit username fenix; };
         modules = [
           ./darwin-configuration.nix
           home-manager.darwinModules.home-manager

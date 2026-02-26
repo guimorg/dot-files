@@ -39,6 +39,9 @@
       "nodejs": {
         "pkg-path": "nodejs"
       },
+      "oh-my-posh": {
+        "pkg-path": "oh-my-posh"
+      },
       "python3": {
         "pkg-path": "python3"
       },
@@ -64,7 +67,9 @@
         "pkg-path": "zsh"
       }
     },
-    "hook": {},
+    "hook": {
+      "on-activate": "  if [ ! -f \"$HOME/.dotfiles-installed\" ]; then\n    echo \"🔗 Installing dotfiles with stow...\"\n    stow -d \"$FLOX_ENV_PROJECT\" -t \"$HOME\" \\\n      direnv dbt emacs bash config git tmux vim zsh ohmyposh kanata wezterm \\\n      2>/dev/null || true\n    touch \"$HOME/.dotfiles-installed\"\n    echo \"✅ Dotfiles installed!\"\n  fi\n  \n  if [ ! -f \"$HOME/.fonts-installed\" ]; then\n    echo \"🔤 Installing Nerd Fonts from Flox...\"\n    echo \"Note: Install additional fonts via: flox install <font-package>\"\n    touch \"$HOME/.fonts-installed\"\n  fi\n  \n  if [ \"$(uname)\" = \"Darwin\" ] && [ ! -f \"$HOME/.apps-installed\" ]; then\n    echo \"📱 macOS applications available!\"\n    echo \"   Use 'nix develop' for automatic app installation\"\n    echo \"   Apps: Alacritty, WezTerm, Kitty\"\n  fi\n  \n  echo \"🎉 Flox environment activated!\"\n  echo \"📦 Tools: python, node, go, rust, and more...\"\n"
+    },
     "profile": {},
     "options": {}
   },
@@ -84,6 +89,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:32:30.004853Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -113,6 +119,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:12:33.781380Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -142,6 +149,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:49:36.227521Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -171,6 +179,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:35:54.487961Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -200,6 +209,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:32:30.172664Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -229,6 +239,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:12:33.911107Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -258,6 +269,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:49:36.314979Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -287,6 +299,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:35:54.639660Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -316,6 +329,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:32:30.580600Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -345,6 +359,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:12:34.478075Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -374,6 +389,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:49:36.724770Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -403,6 +419,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:35:55.278590Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -432,6 +449,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:32:30.825378Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -463,6 +481,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:12:34.849872Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -494,6 +513,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:49:36.971700Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -525,6 +545,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:35:55.687420Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -556,6 +577,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:32:30.862776Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -585,6 +607,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:12:34.908396Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -614,6 +637,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:49:37.005164Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -643,6 +667,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:35:55.764033Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -672,6 +697,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:32:31.012608Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -703,6 +729,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:12:35.167287Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -734,6 +761,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:49:37.159396Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -765,6 +793,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:35:56.045618Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -796,6 +825,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:32:31.093776Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -825,6 +855,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:12:35.292232Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -854,6 +885,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:49:37.240481Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -883,6 +915,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:35:56.184274Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -912,11 +945,13 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:32:31.124526Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
       "version": "2.52.0",
       "outputs_to_install": [
+        "out",
         "out"
       ],
       "outputs": {
@@ -942,6 +977,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:12:35.337907Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -973,6 +1009,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:49:37.272705Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1003,6 +1040,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:35:56.233697Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1034,6 +1072,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:32:31.245124Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1063,6 +1102,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:12:35.929610Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1092,6 +1132,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:49:37.421593Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1121,6 +1162,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:35:56.890139Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1150,6 +1192,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:32:45.720299Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1184,6 +1227,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:12:54.263817Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1219,6 +1263,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:49:52.246924Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1253,6 +1298,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:36:16.223396Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1288,6 +1334,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:32:51.622795Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1319,6 +1366,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:13:07.923344Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1350,6 +1398,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:49:58.208004Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1381,6 +1430,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:36:31.631523Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1412,6 +1462,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:32:53.037797Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1443,6 +1494,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:13:09.898009Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1474,6 +1526,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:49:59.621703Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1505,6 +1558,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:36:33.696886Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1516,6 +1570,126 @@
         "dev": "/nix/store/y4a1pyqcjhp281krkg0zf3d5bga1pbfy-nodejs-24.12.0-dev",
         "libv8": "/nix/store/0hq6zscpapk7h148zv5c2wqwnvy5pdr4-nodejs-24.12.0-libv8",
         "out": "/nix/store/cikdc61gfwvdma6y0p9b5d5d448aqcv6-nodejs-24.12.0"
+      },
+      "system": "x86_64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "oh-my-posh",
+      "broken": false,
+      "derivation": "/nix/store/k2sraa43i13mmrccb632xl517p82zjk7-oh-my-posh-29.0.2.drv",
+      "description": "Prompt theme engine for any shell",
+      "install_id": "oh-my-posh",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=88d3861acdd3d2f0e361767018218e51810df8a1",
+      "name": "oh-my-posh-29.0.2",
+      "pname": "oh-my-posh",
+      "rev": "88d3861acdd3d2f0e361767018218e51810df8a1",
+      "rev_count": 931542,
+      "rev_date": "2026-01-21T18:02:10Z",
+      "scrape_date": "2026-01-23T04:32:57.438622Z",
+      "stabilities": [
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "29.0.2",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/89cjdnff573ai4pqw5ijpgg9c1cbaf8s-oh-my-posh-29.0.2"
+      },
+      "system": "aarch64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "oh-my-posh",
+      "broken": false,
+      "derivation": "/nix/store/ndsvkk3sd10igymvy1dng3mzr77m16am-oh-my-posh-29.0.2.drv",
+      "description": "Prompt theme engine for any shell",
+      "install_id": "oh-my-posh",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=88d3861acdd3d2f0e361767018218e51810df8a1",
+      "name": "oh-my-posh-29.0.2",
+      "pname": "oh-my-posh",
+      "rev": "88d3861acdd3d2f0e361767018218e51810df8a1",
+      "rev_count": 931542,
+      "rev_date": "2026-01-21T18:02:10Z",
+      "scrape_date": "2026-01-23T05:13:15.846934Z",
+      "stabilities": [
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "29.0.2",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/hhpxrjj51v02slrmr74gxivb97ishp44-oh-my-posh-29.0.2"
+      },
+      "system": "aarch64-linux",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "oh-my-posh",
+      "broken": false,
+      "derivation": "/nix/store/9sha4bqrv3vq5fscgcrlq2haciplvacy-oh-my-posh-29.0.2.drv",
+      "description": "Prompt theme engine for any shell",
+      "install_id": "oh-my-posh",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=88d3861acdd3d2f0e361767018218e51810df8a1",
+      "name": "oh-my-posh-29.0.2",
+      "pname": "oh-my-posh",
+      "rev": "88d3861acdd3d2f0e361767018218e51810df8a1",
+      "rev_count": 931542,
+      "rev_date": "2026-01-21T18:02:10Z",
+      "scrape_date": "2026-01-23T05:50:04.302779Z",
+      "stabilities": [
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "29.0.2",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/7v8ziwps2bqk0qmmjzk79y7x53y72x06-oh-my-posh-29.0.2"
+      },
+      "system": "x86_64-darwin",
+      "group": "toplevel",
+      "priority": 5
+    },
+    {
+      "attr_path": "oh-my-posh",
+      "broken": false,
+      "derivation": "/nix/store/xx36q57mkzjhh78bh3dwbdvysqhyk74j-oh-my-posh-29.0.2.drv",
+      "description": "Prompt theme engine for any shell",
+      "install_id": "oh-my-posh",
+      "license": "MIT",
+      "locked_url": "https://github.com/flox/nixpkgs?rev=88d3861acdd3d2f0e361767018218e51810df8a1",
+      "name": "oh-my-posh-29.0.2",
+      "pname": "oh-my-posh",
+      "rev": "88d3861acdd3d2f0e361767018218e51810df8a1",
+      "rev_count": 931542,
+      "rev_date": "2026-01-21T18:02:10Z",
+      "scrape_date": "2026-01-23T06:36:39.815757Z",
+      "stabilities": [
+        "staging",
+        "unstable"
+      ],
+      "unfree": false,
+      "version": "29.0.2",
+      "outputs_to_install": [
+        "out"
+      ],
+      "outputs": {
+        "out": "/nix/store/vqvpj0aqz1y2wzdmmzclxwwz5vz0xr5v-oh-my-posh-29.0.2"
       },
       "system": "x86_64-linux",
       "group": "toplevel",
@@ -1536,11 +1710,13 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:33:08.258356Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
       "version": "3.13.11",
       "outputs_to_install": [
+        "out",
         "out"
       ],
       "outputs": {
@@ -1565,6 +1741,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:13:30.706863Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1596,6 +1773,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:50:15.451860Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1625,6 +1803,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:36:55.489866Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1656,6 +1835,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:33:51.281039Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1685,6 +1865,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:14:24.300132Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1714,6 +1895,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:50:58.514780Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1743,6 +1925,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:37:51.154634Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1772,6 +1955,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:34:13.041730Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1801,6 +1985,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:14:50.608913Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1830,6 +2015,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:51:20.076815Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1859,6 +2045,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:38:18.969207Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1888,6 +2075,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:34:33.024288Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1919,6 +2107,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:15:19.165208Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1950,6 +2139,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:51:40.242853Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -1981,6 +2171,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:38:48.226615Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2012,6 +2203,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:34:48.418649Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2041,6 +2233,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:15:38.022750Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2070,6 +2263,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:51:55.859310Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2099,6 +2293,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:39:07.787375Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2128,6 +2323,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:34:48.971170Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2159,6 +2355,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:15:38.932818Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2190,6 +2387,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:51:56.421304Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2221,6 +2419,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:39:08.771003Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2252,6 +2451,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:35:03.856064Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2282,6 +2482,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:15:58.456887Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2312,6 +2513,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:52:11.357043Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2342,6 +2544,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:39:29.314624Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2372,6 +2575,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T04:35:04.601554Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2405,6 +2609,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:15:59.706171Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2438,6 +2643,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T05:52:12.091522Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,
@@ -2471,6 +2677,7 @@
       "rev_date": "2026-01-21T18:02:10Z",
       "scrape_date": "2026-01-23T06:39:30.632462Z",
       "stabilities": [
+        "staging",
         "unstable"
       ],
       "unfree": false,

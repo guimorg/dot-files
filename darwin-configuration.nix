@@ -1,17 +1,32 @@
-{ config, pkgs, username, ... }:
+{ config, pkgs, username, fenix, ... }:
 
-{
+let
+  toolchain = fenix.packages.${pkgs.system}.stable.withComponents [
+    "rustc"
+    "cargo"
+    "rust-src"
+    "clippy"
+    "rustfmt"
+  ];
+in {
   users.users.${username} = {
     name = username;
     home = "/Users/${username}";
   };
 
+  environment.variables = {
+    LIBRARY_PATH = "${pkgs.libiconv}/lib";
+    CPATH = "${pkgs.libiconv}/include";
+  };
+
   environment.systemPackages = with pkgs; [
+    toolchain
+    rust-analyzer
+    cargo-nextest
     python312
     nodejs_22
     go
-    rustup
-    cargo
+    rust-analyzer
     fd
     fzf
     neofetch
@@ -66,6 +81,10 @@
     tilt
     kind
     just
+    aspell
+    aspellDicts.en
+    hunspell
+    hunspellDicts.en_US
   ];
 
   fonts.packages = with pkgs; [
@@ -303,4 +322,9 @@
   system.stateVersion = 5;
 
   nixpkgs.hostPlatform = "aarch64-darwin";
+  environment.shellInit = ''
+    export LIBICONV="${pkgs.libiconv}"
+    export LIBRARY_PATH="$LIBICONV/lib"
+    export CPATH="$LIBICONV/include"
+  '';
 }
