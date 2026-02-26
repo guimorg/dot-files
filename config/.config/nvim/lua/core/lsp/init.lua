@@ -11,6 +11,7 @@ local servers = {
 	"yamlls",
 	"terraformls",
 	"tflint",
+    "rust_analyzer"
 }
 
 local server_cmds = {
@@ -24,6 +25,7 @@ local server_cmds = {
 	yamlls = "yaml-language-server",
 	terraformls = "terraform-ls",
 	tflint = "tflint",
+    rust_analyzer = "rust-analyzer"
 }
 
 vim.api.nvim_create_autocmd("LspAttach", {

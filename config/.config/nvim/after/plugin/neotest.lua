@@ -6,7 +6,8 @@ neotest.setup({
 			dap = { justMyCode = false, console = "integratedTerminal" },
 			args = {"--no-cov"}
 		}),
-		require("neotest-go")
+		require("neotest-go"),
+		require("neotest-rust")({ args = { "--no-capture" } }),
 	},
 })
 

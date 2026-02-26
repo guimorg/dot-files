@@ -142,6 +142,7 @@ require("lazy").setup({
 			"antoinemadec/FixCursorHold.nvim",
 		},
 	},
+	{ "rouge8/neotest-rust" },
 	{ "nvim-neotest/neotest-go" },
 	{ "nvim-neotest/neotest-python" },
 	{

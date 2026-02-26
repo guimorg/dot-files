@@ -11,6 +11,8 @@ local tools_to_install = {
 	"yaml-language-server",
 	"terraform-ls",
 	"tflint",
+    "rust-analyzer",
+    "trivy",
 	"stylua",
 }
 
