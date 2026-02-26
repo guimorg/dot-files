@@ -15,6 +15,7 @@ export PATH=/opt/homebrew/bin:$PATH
 export PATH=$PWD/node_modules/.bin:$PATH
 export PATH=$HOME/tinygo/bin:$PATH
 export PATH=/nix/var/nix/profiles/default/bin:$PATH
+export PATH="$HOME/.nix-profile/bin:/nix/var/nix/profiles/default/bin:$PATH"
 export ZSH=${HOME}/.oh-my-zsh
 export ZSH_THEME="spaceship"
 export ZSH_PYENV_VIRTUALENV=true

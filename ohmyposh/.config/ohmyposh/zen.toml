@@ -106,7 +106,7 @@ final_space = true
       cache_duration = 'none'
 
   [[blocks.segments]]
-    template = '[gcp:{{ .Project }}{{ if .Account }}@{{ .Account }}{{ end }}]'
+    template = '[gcp:{{ if .Project }}{{ .Project }}-{{ end }}{{ .ActiveConfig }}-{{ if .Account }}@{{ .Account }}{{ end }}]'
     foreground = 'cyan'
     background = 'transparent'
     type = 'gcp'

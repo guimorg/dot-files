@@ -125,12 +125,12 @@ _omp_select_config() {
 	
 	local has_cloud_context=false
 	
-	if command -v gcloud &> /dev/null 2>&1; then
-		local gcp_project=$(gcloud config get-value project 2>/dev/null)
-		if [ -n "$gcp_project" ] && [ "$gcp_project" != "(unset)" ]; then
-			has_cloud_context=true
-		fi
-	fi
+	# if command -v gcloud &> /dev/null 2>&1; then
+	# 	local gcp_project=$(gcloud config get-value project 2>/dev/null)
+	# 	if [ -n "$gcp_project" ] && [ "$gcp_project" != "(unset)" ]; then
+	# 		has_cloud_context=true
+	# 	fi
+	# fi
 	
 	if [ "$has_cloud_context" = false ] && command -v kubectl &> /dev/null 2>&1; then
 		local k8s_context=$(kubectl config current-context 2>/dev/null)
@@ -241,6 +241,10 @@ export SDKMAN_DIR="$HOME/.sdkman"
 [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
 export PATH="/opt/homebrew/opt/apache-flink@1/bin:$PATH"
 export PATH="/nix/var/nix/profiles/default/bin:$PATH"
+path=(/run/current-system/sw/bin $path)
+path=(~/.nix-profile/bin /nix/var/nix/profiles/default/bin $path)
+export PATH
+
 pass-cli ssh-agent load >/dev/null 2>&1
 
 [ -f ~/.zsh_nix ] && source ~/.zsh_nix
