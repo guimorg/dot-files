@@ -300,3 +300,11 @@
          ("\\`justfile\\'" . just-mode)
          ("\\`Justfile\\'" . just-mode)
          ("\\.just\\'" . just-mode)))
+
+(after! rustic
+  (defun gui/rustic-project-root (dir)
+    "Prefer nearest Cargo.toml (or rust-project.json) for Rust buffers."
+    (or (locate-dominating-file dir "Cargo.toml")
+        (locate-dominating-file dir "rust-project.json")
+        (doom-project-root)))
+  (setq rustic-project-root-function #'gui/rustic-project-root))
