@@ -13,9 +13,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     flake-utils.url = "github:numtide/flake-utils";
+    herdr.url = "github:ogulcancelik/herdr/v0.7.1";
   };
 
-  outputs = { self, nixpkgs, fenix, nix-darwin, home-manager, flake-utils }:
+  outputs = { self, nixpkgs, fenix, nix-darwin, home-manager, flake-utils, herdr }:
     let
       username = "thexuh";
       system = "aarch64-darwin";
@@ -23,7 +24,10 @@
     {
       darwinConfigurations."darwin-system" = nix-darwin.lib.darwinSystem {
         inherit system;
-        specialArgs = { inherit username fenix; };
+        specialArgs = {
+          inherit username fenix;
+          herdrPkg = herdr.packages.${system}.default;
+        };
         modules = [
           ./darwin-configuration.nix
           home-manager.darwinModules.home-manager
@@ -43,6 +47,7 @@
           config.allowUnfree = true;
         };
         inherit (pkgs) lib stdenv;
+        herdrPkg = herdr.packages.${system}.default;
       in
       {
         devShells.default = pkgs.mkShell {
@@ -54,7 +59,7 @@
             cargo
             fd
             fzf
-            neofetch
+            fastfetch
             ripgrep
             bat
             eza
@@ -72,7 +77,7 @@
             oh-my-posh
             luarocks
             bun
-            nodePackages.pnpm
+            pnpm
             nerd-fonts.fira-code
             nerd-fonts.hack
             nerd-fonts.jetbrains-mono
@@ -84,13 +89,14 @@
           ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
             mkalias
             alacritty
-            wezterm
+            ghostty-bin
             kitty
+            herdrPkg
           ];
 
           shellHook = ''
             export EDITOR=vim
-            export TERMINAL=alacritty
+            export TERMINAL=ghostty
             export PAGER=less
             export GOPATH=$HOME/go
             export GOBIN=$HOME/go/bin
@@ -106,7 +112,7 @@
             if [ ! -f "$HOME/.dotfiles-installed" ]; then
               echo "🔗 Installing dotfiles with stow..."
               ${pkgs.stow}/bin/stow -d "$PWD" -t "$HOME" \
-                direnv dbt emacs bash config git tmux vim zsh ohmyposh kanata wezterm \
+                direnv dbt emacs bash config git tmux vim zsh ohmyposh kanata ghostty herdr claude \
                 2>/dev/null || true
               touch "$HOME/.dotfiles-installed"
               echo "✅ Dotfiles installed!"
@@ -136,7 +142,7 @@
               rm -rf "$HOME/Applications/Nix Apps"
               mkdir -p "$HOME/Applications/Nix Apps"
               ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-              for app in ${pkgs.alacritty}/Applications/*.app ${pkgs.wezterm}/Applications/*.app ${pkgs.kitty}/Applications/*.app ${pkgs.ice-bar}/Applications/*.app; do
+              for app in ${pkgs.alacritty}/Applications/*.app ${pkgs.ghostty-bin}/Applications/*.app ${pkgs.kitty}/Applications/*.app ${pkgs.ice-bar}/Applications/*.app; do
                 if [ -d "$app" ]; then
                   app_name=$(basename "$app")
                   echo "  Creating alias for $app_name"
@@ -158,7 +164,7 @@
           install = pkgs.writeShellScriptBin "install-dotfiles" ''
             echo "🔗 Installing dotfiles..."
             ${pkgs.stow}/bin/stow -d "$PWD" -t "$HOME" \
-              direnv dbt emacs bash config git tmux vim zsh ohmyposh kanata wezterm
+              direnv dbt emacs bash config git tmux vim zsh ohmyposh kanata ghostty herdr claude
             touch "$HOME/.dotfiles-installed"
             echo "✅ Dotfiles installed!"
           '';
@@ -167,7 +173,7 @@
             echo "🔄 Reinstalling dotfiles..."
             rm -f "$HOME/.dotfiles-installed"
             ${pkgs.stow}/bin/stow -R -d "$PWD" -t "$HOME" \
-              direnv dbt emacs bash config git tmux vim zsh ohmyposh kanata wezterm
+              direnv dbt emacs bash config git tmux vim zsh ohmyposh kanata ghostty herdr claude
             touch "$HOME/.dotfiles-installed"
             echo "✅ Dotfiles reinstalled!"
           '';
@@ -175,7 +181,7 @@
           uninstall = pkgs.writeShellScriptBin "uninstall-dotfiles" ''
             echo "🗑️  Uninstalling dotfiles..."
             ${pkgs.stow}/bin/stow -D -d "$PWD" -t "$HOME" \
-              direnv dbt emacs bash config git tmux vim zsh ohmyposh kanata wezterm
+              direnv dbt emacs bash config git tmux vim zsh ohmyposh kanata ghostty herdr claude
             rm -f "$HOME/.dotfiles-installed"
             echo "✅ Dotfiles uninstalled!"
           '';
@@ -208,7 +214,7 @@
             rm -rf "$HOME/Applications/Nix Apps"
             mkdir -p "$HOME/Applications/Nix Apps"
             ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-            for app in ${pkgs.alacritty}/Applications/*.app ${pkgs.wezterm}/Applications/*.app ${pkgs.kitty}/Applications/*.app ${pkgs.ice-bar}/Applications/*.app; do
+            for app in ${pkgs.alacritty}/Applications/*.app ${pkgs.kitty}/Applications/*.app ${pkgs.ice-bar}/Applications/*.app; do
               if [ -d "$app" ]; then
                 app_name=$(basename "$app")
                 echo "  Creating alias for $app_name"

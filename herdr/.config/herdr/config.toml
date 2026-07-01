@@ -1,0 +1,41 @@
+[terminal]
+default_shell = "zsh"
+shell_mode = "auto"
+new_cwd = "follow"
+
+[theme]
+name = "catppuccin"
+
+[session]
+resume_agents_on_restore = true
+
+[experimental]
+pane_history = true
+
+[keys]
+prefix = "ctrl+b"
+new_tab = "prefix+c"
+next_tab = "prefix+n"
+previous_tab = "prefix+p"
+focus_pane_left = "prefix+h"
+focus_pane_right = "prefix+l"
+focus_pane_up = "prefix+k"
+focus_pane_down = "prefix+j"
+split_vertical = "prefix+v"
+split_horizontal = "prefix+minus"
+close_pane = "prefix+x"
+zoom = "prefix+z"
+toggle_sidebar = "prefix+b"
+copy_mode = "prefix+["
+
+[[keys.command]]
+key = "prefix+alt+g"
+type = "pane"
+command = "lazygit"
+description = "lazygit"
+
+[[keys.command]]
+key = "prefix+alt+c"
+type = "pane"
+command = "claude"
+description = "claude code"

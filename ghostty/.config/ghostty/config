@@ -1,0 +1,9 @@
+font-family = JetBrainsMono Nerd Font
+font-size = 15
+theme = catppuccin-mocha
+background-opacity = 0.85
+background-blur = true
+cursor-style = bar
+cursor-style-blink = true
+command = /bin/zsh
+working-directory = home

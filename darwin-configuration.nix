@@ -1,4 +1,4 @@
-{ config, pkgs, username, fenix, ... }:
+{ config, pkgs, username, fenix, herdrPkg, ... }:
 
 let
   toolchain = fenix.packages.${pkgs.system}.stable.withComponents [
@@ -29,7 +29,7 @@ in {
     rust-analyzer
     fd
     fzf
-    neofetch
+    fastfetch
     ripgrep
     bat
     eza
@@ -37,6 +37,7 @@ in {
     git
     git-extras
     k9s
+    kubectl
     stow
     tmux
     doppler
@@ -51,13 +52,15 @@ in {
     oh-my-posh
     luarocks
     bun
-    nodePackages.pnpm
+    pnpm
     mkalias
     alacritty
-    wezterm
+    ghostty-bin
     kitty
+    herdrPkg
     ice-bar
     clang
+    llvm  # provides dsymutil for Nix clang (needed by aws-lc-sys and other C deps)
     cmake
     gnumake
     gcc
@@ -65,7 +68,6 @@ in {
     libiconv
     proton-pass-cli
     postgresql
-    claude-code
     gh
     act
     docker-compose
@@ -85,6 +87,17 @@ in {
     aspellDicts.en
     hunspell
     hunspellDicts.en_US
+    hledger
+    ledger
+    actionlint
+    gh-dash
+    zld
+    (google-cloud-sdk.withExtraComponents [ google-cloud-sdk.components.gke-gcloud-auth-plugin ])
+    redis
+    cocoapods
+    ruby
+    mermaid-cli
+    tectonic
   ];
 
   fonts.packages = with pkgs; [
@@ -184,9 +197,11 @@ in {
     settings = {
       config-version = 2;
 
-      # ── Layout normalization (keeps trees sane)
-      "enable-normalization-flatten-containers" = true;
-      "enable-normalization-opposite-orientation-for-nested-containers" = true;
+      # ── Layout normalization
+      # Keep both off: flatten-containers collapses single-child containers
+      # (which destroys splits), and opposite-orientation blocks same-axis nesting.
+      "enable-normalization-flatten-containers" = false;
+      "enable-normalization-opposite-orientation-for-nested-containers" = false;
 
       # ── Gaps
       gaps = {
@@ -229,6 +244,10 @@ in {
             # Layouts
             "alt-slash" = "layout tiles horizontal vertical";
             "alt-comma" = "layout accordion horizontal vertical";
+
+            # Explicit splits (set orientation before joining a second window)
+            "alt-shift-v" = "split vertical";
+            "alt-shift-x" = "split horizontal";
 
             # Resize (quick)
             "alt-minus" = "resize smart -50";

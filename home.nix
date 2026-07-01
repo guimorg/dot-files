@@ -5,7 +5,7 @@
 
   home.sessionVariables = {
     EDITOR = "vim";
-    TERMINAL = "alacritty";
+    TERMINAL = "ghostty";
     PAGER = "less";
     GOPATH = "$HOME/go";
     GOBIN = "$HOME/go/bin";
@@ -42,25 +42,6 @@
     enableZshIntegration = true;
   };
 
-  home.file.".config/wezterm/sessionizer.lua" = {
-    source = ./wezterm/sessionizer.lua;
-  };
-
-  home.file.".local/bin/workspace-picker.sh" = {
-    source = ./wezterm/workspace-picker.sh;
-    executable = true;
-  };
-
-  home.file.".local/bin/workspace-picker-wrapper.sh" = {
-    source = ./wezterm/workspace-picker-wrapper.sh;
-    executable = true;
-  };
-
-  home.file.".local/bin/workspace-manager-display.sh" = {
-    source = ./wezterm/workspace-manager-display.sh;
-    executable = true;
-  };
-
   home.file.".local/bin/envrc-init" = {
     source = ./direnv/.config/direnv/bin/envrc-init;
     executable = true;
@@ -71,8 +52,12 @@
     executable = true;
   };
 
+  home.file.".local/bin/slack-delete-message" = {
+    source = ./scripts/slack_delete_message.py;
+    executable = true;
+  };
+
   home.sessionPath = [
     "$HOME/.local/bin"
-    "/Applications/WezTerm.app/Contents/MacOS"
   ];
 }
