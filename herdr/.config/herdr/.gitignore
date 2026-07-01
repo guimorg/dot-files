@@ -1,0 +1,12 @@
+# Runtime state
+session.json
+session-history.json
+*.log
+plugins.json
+
+# Plugin source clones (managed by herdr, not stow)
+plugins/github/
+
+# Allow herdr-plus user config
+!plugins/config/
+!plugins/config/**
