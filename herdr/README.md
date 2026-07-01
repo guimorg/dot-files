@@ -40,9 +40,27 @@ herdr attach <session-name>
 4. Open the sidebar (`ctrl+b b`) to see agent states
 5. Use `ctrl+b alt+c` to spawn Claude Code in a new pane
 
+## Structure
+
+```
+Session  →  Workspaces  →  Tabs  →  Panes
+```
+
+Think of **workspaces** as projects (e.g. "api", "frontend"), **tabs** as contexts within a project, **panes** as splits.
+
 ## Prefix key: `ctrl+b`
 
 Press `ctrl+b`, release, then press the second key.
+
+### Workspaces
+
+| Key | Action |
+|-----|--------|
+| `ctrl+b w` | Workspace picker — navigate/switch |
+| `ctrl+b shift+n` | New workspace (prompts for name) |
+| `ctrl+b shift+w` | Rename current workspace |
+| `ctrl+b shift+d` | Close current workspace |
+| `ctrl+b g` | Go to... (jump by name) |
 
 ### Tabs
 
@@ -52,16 +70,19 @@ Press `ctrl+b`, release, then press the second key.
 | `ctrl+b n` | Next tab |
 | `ctrl+b p` | Previous tab |
 | `ctrl+b 1`…`9` | Jump to tab by number |
+| `ctrl+b shift+t` | Rename current tab |
+| `ctrl+b shift+x` | Close current tab |
 
 ### Panes
 
 | Key | Action |
 |-----|--------|
-| `ctrl+b v` | Split pane vertically |
-| `ctrl+b -` | Split pane horizontally |
+| `ctrl+b v` | Split pane right |
+| `ctrl+b -` | Split pane down |
 | `ctrl+b h/j/k/l` | Focus pane left/down/up/right |
 | `ctrl+b x` | Close pane |
 | `ctrl+b z` | Zoom pane (toggle fullscreen) |
+| `ctrl+b r` | Resize mode |
 
 ### Session & misc
 
@@ -71,6 +92,42 @@ Press `ctrl+b`, release, then press the second key.
 | `ctrl+b [` | Enter copy mode (scroll / select) |
 | `ctrl+b alt+g` | Open lazygit in a new pane |
 | `ctrl+b alt+c` | Open Claude Code in a new pane |
+| `ctrl+b ?` | Help |
+| `ctrl+b q` | Detach (Herdr stays running) |
+
+## CLI reference
+
+```bash
+herdr                          # launch / reattach
+herdr --session myproject      # open named session
+
+# workspaces
+herdr workspace list
+herdr workspace create --label "api" --focus
+herdr workspace rename <id> "new-name"
+herdr workspace close <id>
+
+# tabs
+herdr tab create --label "tests" --focus
+herdr tab list
+
+# panes
+herdr pane split --direction right   # split current pane right
+herdr pane split --direction down
+herdr pane zoom --toggle             # zoom current pane
+herdr pane read <id> --lines 50      # read pane output (great for scripting)
+```
+
+## Typical workflow
+
+```
+herdr                         # enter
+ctrl+b shift+n  →  "api"      # new workspace for your project
+ctrl+b c        →  "editor"   # tab for nvim
+ctrl+b v                      # split right for shell
+ctrl+b alt+c                  # open claude in a pane
+ctrl+b w                      # switch between workspaces
+```
 
 ## Agent sidebar
 

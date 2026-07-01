@@ -51,6 +51,7 @@ in {
     gh
     oh-my-posh
     luarocks
+    tree-sitter
     bun
     pnpm
     mkalias
@@ -254,7 +255,7 @@ in {
             "alt-equal" = "resize smart +50";
 
             # Modes
-            "alt-r" = "mode resize";
+            "alt-shift-r" = "mode resize";
             "alt-shift-semicolon" = "mode service";
 
             # Workspaces (core)
@@ -304,11 +305,19 @@ in {
           binding = {
             "esc" = "mode main";
             "enter" = "mode main";
+            "q" = "mode main";
 
+            # Coarse resize (±50)
             "h" = "resize smart -50";
             "j" = "resize smart -50";
             "k" = "resize smart +50";
             "l" = "resize smart +50";
+
+            # Fine resize (±10)
+            "shift-h" = "resize smart -10";
+            "shift-j" = "resize smart -10";
+            "shift-k" = "resize smart +10";
+            "shift-l" = "resize smart +10";
 
             "minus" = "resize smart -50";
             "equal" = "resize smart +50";
@@ -320,10 +329,12 @@ in {
         # =========================
         service = {
           binding = {
-            "esc" = [ "reload-config" "mode main" ];
+            "esc" = "mode main";
+            "q" = "mode main";
 
-            "r" = [ "flatten-workspace-tree" "mode main" ];
-            "f" = [ "layout floating tiling" "mode main" ];
+            "r" = [ "reload-config" "mode main" ];
+            "f" = [ "flatten-workspace-tree" "mode main" ];
+            "t" = [ "layout floating tiling" "mode main" ];
             "backspace" = [ "close-all-windows-but-current" "mode main" ];
 
             "h" = [ "join-with left" "mode main" ];
