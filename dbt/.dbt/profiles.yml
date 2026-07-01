@@ -3,20 +3,20 @@ wander:
   outputs:
     sandbox:
       type: bigquery
-      method: service-account
-      keyfile: "/tmp/sa-private-key.json"
+      method: "{{ env_var('DBT_BQ_METHOD', 'oauth') }}"
+      keyfile: "{{ env_var('DBT_BQ_KEYFILE', '')}}"
       project: wander-9fc9c
       dataset: sandbox
       location: us-central1
       priority: interactive
       threads: 10
-      maximum_bytes_billed: 400_000_000_000  # 400 GB
+      maximum_bytes_billed: 800_000_000_000  # 800 GB
       job_execution_timeout_seconds: 3600
       job_retries: 1
     dev:
       type: bigquery
-      method: service-account
-      keyfile: "/Users/thexuh/.gcp/wander.json"
+      method: "{{ env_var('DBT_BQ_METHOD', 'oauth') }}"
+      keyfile: "{{ env_var('DBT_BQ_KEYFILE', '')}}"
       project: wander-9fc9c
       dataset: dbt_guilherme
       location: us-central1
@@ -27,13 +27,12 @@ wander:
       job_retries: 1
     prod:
       type: bigquery
-      method: service-account
-      keyfile: "/Users/thexuh/.gcp/wander.json"
+      method: oauth
       project: wander-9fc9c
       dataset: analytics
       location: us-central1
       priority: interactive
       threads: 4
-      maximum_bytes_billed: 600_000_000_000  # 400 GB
+      maximum_bytes_billed: 900_000_000_000  # 400 GB
       job_execution_timeout_seconds: 1200
       job_retries: 1
