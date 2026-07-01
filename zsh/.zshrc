@@ -1,5 +1,5 @@
 if [[ -o interactive ]] && [[ -z "$ZSHRC_SOURCED" ]]; then
-    neofetch --config ~/.config/neofetch/config.conf
+    fastfetch
 fi
 
 ### Added by Zinit's installer
@@ -190,6 +190,9 @@ if [ -f '/Users/thexuh/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/thexuh/g
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/thexuh/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/thexuh/google-cloud-sdk/completion.zsh.inc'; fi
 
+# npm global (user-local, avoids Nix store permission issues)
+export PATH="$HOME/.npm-global/bin:$PATH"
+
 # pnpm
 export PNPM_HOME="/Users/thexuh/Library/pnpm"
 case ":$PATH:" in
@@ -250,3 +253,5 @@ pass-cli ssh-agent load >/dev/null 2>&1
 [ -f ~/.zsh_nix ] && source ~/.zsh_nix
 
 export ZSHRC_SOURCED=1
+
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
