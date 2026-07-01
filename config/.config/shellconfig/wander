@@ -1,0 +1,3 @@
+kstg() { kubectl --context "$(wan-env-context staging)" "$@"; }
+kprd() { kubectl --context "$(wan-env-context production)" "$@"; }
+k9stg() { k9s --context "$(wan-env-context staging)" "$@"; }
