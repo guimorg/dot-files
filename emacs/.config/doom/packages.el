@@ -63,9 +63,15 @@
 (package! dired-hide-dotfiles)
 (package! dired-rainbow)
 (package! dired-open)
-(package! claude-code-ide
-  :recipe (:host github :repo "manzaltu/claude-code-ide.el"))
+;; (package! claude-code-ide
+;;   :recipe (:host github :repo "manzaltu/claude-code-ide.el"))
+(package! claude-code
+  :recipe (:host github :repo "stevemolitor/claude-code.el"))
+(package! monet
+  :recipe (:host github :repo "stevemolitor/monet"))
 (package! just-mode)
 (package! justl)
 (package! linear-emacs
   :recipe (:host github :repo "anegg0/linear-emacs" :files ("*.el")))
+(package! eat)
+(package! mermaid-mode)

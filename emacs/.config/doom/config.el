@@ -21,7 +21,7 @@
 ;; See 'C-h v doom-font' for documentation and more examples of what they
 ;; accept. For example:
 ;;
-(setq doom-font (font-spec :family "FiraCode Nerd Font" :size 14 :weight 'semi-light)
+(setq doom-font (font-spec :family "JetBrainsMono Nerd Font" :size 14 :weight 'semi-light)
      ;; doom-variable-pitch-font (font-spec :family "Alegreya" :size 13)
      )
 ;;
@@ -42,6 +42,7 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/private/Org")
+(setq org-roam-directory (expand-file-name "roam" org-directory))
 
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
@@ -77,7 +78,7 @@
 ;; they are implemented.
 
 ;; Projectile Config
-(setq projectile-project-search-path '("~/projects/work" "~/projects/work/wander" "~/projects/oss"))
+(setq projectile-project-search-path '("~/projects/work" "~/projects/work/wander" "~/projects/oss" "~/projects/worktrees"))
 
 (setq projectile-switch-project-action #'magit-status)
 
@@ -277,10 +278,26 @@
       (kbd ".") #'dired-hide-dotfiles-mode
       (kbd "W") #'dired-open-file)))
 
-(use-package! claude-code-ide
-  :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
+;; (use-package! claude-code-ide
+;;   :bind ("C-c C-'" . claude-code-ide-menu) ; Set your favorite keybinding
+;;   :config
+;;   (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
+
+;; Monet - Claude IDE protocol support (requires Emacs 30+)
+(use-package! monet
   :config
-  (claude-code-ide-emacs-tools-setup)) ; Optionally enable Emacs MCP tools
+  (monet-mode))
+
+;; Claude Code integration (requires Emacs 30+)
+(use-package! claude-code
+  :config
+  (claude-code-mode)
+  ;; Choose terminal backend: 'eat (default) or 'vterm
+  ;; (setq claude-code-terminal-backend 'eat)
+  ;; Integrate with monet for IDE protocol support
+  (add-hook 'claude-code-process-environment-functions
+            #'monet-start-server-function)
+  :bind-keymap ("C-c c" . claude-code-command-map))
 ;; Use just-mode for files named "justfile" (no extension)
 (add-to-list 'auto-mode-alist '("\\`[Jj]ustfile\\'" . just-mode))
 
@@ -314,7 +331,9 @@
   (require 'auth-source)
   (let* ((auth-info (auth-source-search :host "api.linear.app" :user "apikey" :max 1))
          (secret (when auth-info
-                   (funcall (plist-get (car auth-info) :secret)))))
+                   (let ((secret-fn (plist-get (car auth-info) :secret)))
+                     (when (functionp secret-fn)
+                       (funcall secret-fn))))))
     (when (and secret (stringp secret) (> (length secret) 0))
       (setq linear-emacs-api-key secret))))
 
@@ -444,3 +463,75 @@ Tries LINK property first, then scans drawer, then falls back to ID-LINEAR."
   (add-hook 'markdown-mode-hook #'spell-fu-mode)
   (add-hook 'org-mode-hook #'spell-fu-mode)
   (add-hook 'text-mode-hook #'spell-fu-mode))
+
+(after! ledger-mode
+  (setq ledger-master-file "~/private/finance/ledger.journal"))
+
+;; Eat terminal configuration
+(use-package! eat
+  :config
+  ;; For `eat-eshell-mode'.
+  (add-hook 'eshell-load-hook #'eat-eshell-mode)
+  ;; For `eat-eshell-visual-command-mode'.
+  (add-hook 'eshell-load-hook #'eat-eshell-visual-command-mode)
+
+  ;; Set up keybindings
+  (map! :leader
+        (:prefix ("o" . "open")
+         :desc "Eat terminal" "e" #'eat
+         :desc "Eat terminal (other window)" "E" #'eat-other-window))
+
+  ;; Sensible defaults
+  (setq eat-term-name "xterm-256color"
+        eat-kill-buffer-on-exit t
+        eat-enable-shell-prompt-annotation t))
+
+(after! eshell
+  ;; Make eshell work nicely with eat
+  (setq eshell-visual-commands
+        '("vi" "vim" "nvim" "screen" "tmux" "top" "htop" "less" "more" "lynx"
+          "ncftp" "pine" "tin" "trn" "elm" "ssh" "nano" "watch")))
+
+(after! ox-latex
+  (setq org-latex-pdf-process '("tectonic --outdir %o %f"))
+  (setq org-latex-compiler "xelatex")
+  ;; Use a nicer default class with better font/encoding support
+  (add-to-list 'org-latex-classes
+               '("article-modern"
+                 "\\documentclass[11pt,a4paper]{article}
+[DEFAULT-PACKAGES]
+[PACKAGES]
+\\usepackage{fontspec}
+\\usepackage{microtype}
+[EXTRA]"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}"))))
+
+(after! org
+  (setq mermaid-mmdc-location "/run/current-system/sw/bin/mmdc"
+        mermaid-flags (concat "-p " (expand-file-name "~/.config/mermaid/puppeteer-config.json")))
+  (setq org-babel-default-header-args:mermaid
+        '((:results . "file") (:exports . "results")))
+  (setq org-ditaa-jar-path "~/.vscode/extensions/shd101wyy.markdown-preview-enhanced-0.4.3/node_modules/@shd101wyy/mume/dependencies/ditaa/ditaa.jar")
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   (append org-babel-load-languages '((mermaid . t) (ditaa . t)))))
+
+(defadvice! my/org-babel-mermaid-auto-file (orig-fn &optional arg info params)
+  :around #'org-babel-execute-src-block
+  "Auto-generate a unique :file for mermaid blocks that lack one."
+  (let* ((info (or info (org-babel-get-src-block-info)))
+         (lang (nth 0 info))
+         (block-params (nth 2 info)))
+    (when (and (equal lang "mermaid")
+               (not (cdr (assq :file block-params))))
+      (setf (nth 2 info)
+            (cons `(:file . ,(concat (make-temp-name "/tmp/org-mermaid-") ".png"))
+                  block-params)))
+    (funcall orig-fn arg info params)))
+
+(add-to-list 'auto-mode-alist '("\\.mmd\\'" . mermaid-mode))
+
