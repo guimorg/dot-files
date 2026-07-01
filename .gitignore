@@ -59,3 +59,13 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Claude Code - Only track safe configuration files
+# Whitelist approach: Ignore everything in .claude by default
+**/.claude/
+**/.claude/**
+
+# Explicitly allow only safe config files
+!claude/.claude/settings.json
+!claude/.claude/plugins/
+!claude/.claude/plugins/blocklist.json

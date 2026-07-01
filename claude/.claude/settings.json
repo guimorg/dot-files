@@ -1,0 +1,60 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__kindex__*",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:sqlite.org)",
+      "Bash(git diff:*)",
+      "Bash(git status:*)",
+      "Bash(echo:*)",
+      "Bash(test:*)",
+      "Bash(find:*)"
+    ],
+    "defaultMode": "auto"
+  },
+  "model": "sonnet[1m]",
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "osascript -e 'display notification \"Claude needs your attention\" with title \"Claude Code\" sound name \"Glass\"'"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '{\"hookSpecificOutput\": {\"hookEventName\": \"SessionStart\", \"additionalContext\": \"Be terse, succinct, exacting, specific, nuanced, and unflinching. Delegate to specialist agent instances. Eagerly launch subagents when needed. Think in parallel, preserve your context. Question me if you suspect an X-Y problem, don't let me get away with sloppy prompting or diluted intentionality. Don't make up things that sound industry-resonant, respond to the immanent code and structures at hand. Don't talk like a LinkedIn post, avoid typical vapid attractor basins. Don't make up timelines, work estimates, or other make-work performative PM cruft. Don't do things you aren't asked, do make the case back to your interlocutor if you want to move scope.\"}}'"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/hooks/git-safety.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "pyright-lsp@claude-plugins-official": true,
+    "self-improving-agent@claude-code-skills": true,
+    "code-review@claude-plugins-official": true,
+    "rust-analyzer-lsp@claude-plugins-official": true
+  },
+  "effortLevel": "medium",
+  "skipAutoPermissionPrompt": true
+}
