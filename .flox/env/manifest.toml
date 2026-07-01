@@ -21,7 +21,7 @@ go.pkg-path = "go"
 cargo.pkg-path = "cargo"
 fd.pkg-path = "fd"
 fzf.pkg-path = "fzf"
-neofetch.pkg-path = "neofetch"
+fastfetch.pkg-path = "fastfetch"
 ripgrep.pkg-path = "ripgrep"
 bat.pkg-path = "bat"
 eza.pkg-path = "eza"
@@ -32,10 +32,17 @@ tmux.pkg-path = "tmux"
 vim.pkg-path = "vim"
 zsh.pkg-path = "zsh"
 uv.pkg-path = "uv"
+uv.version = "0.11.2"
+uv.pkg-group = "uv"
 jq.pkg-path = "jq"
 yq.pkg-path = "yq"
 gh.pkg-path = "gh"
 oh-my-posh.pkg-path = "oh-my-posh"
+zld.pkg-path = "zld"
+zld.systems = ["aarch64-darwin"]
+cocoapods.pkg-path = "cocoapods"
+cocoapods.systems = ["aarch64-darwin"]
+ruby.pkg-path = "ruby"
 # gum.pkg-path = "gum"
 # gum.version = "^0.14.5"
 
@@ -131,11 +138,6 @@ on-activate = '''
 ## Other Environment Options -----------------------------------------
 [options]
 # Systems that environment is compatible with
-# systems = [
-#   "aarch64-darwin",
-#   "aarch64-linux",
-#   "x86_64-darwin",
-#   "x86_64-linux",
-# ]
+systems = ["aarch64-darwin"]
 # Uncomment to disable CUDA detection.
 # cuda-detection = false
