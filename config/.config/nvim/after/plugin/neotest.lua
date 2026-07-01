@@ -1,37 +1,36 @@
-local neotest = require("neotest")
+local ok, neotest = pcall(require, "neotest")
+if not ok then
+	return
+end
 
 neotest.setup({
 	adapters = {
 		require("neotest-python")({
-			dap = { justMyCode = false, console = "integratedTerminal" },
-			args = {"--no-cov"}
+			args = { "--no-cov" },
 		}),
 		require("neotest-go"),
 		require("neotest-rust")({ args = { "--no-capture" } }),
 	},
 })
 
-require("neodev").setup({
-	library = { plugins = { "neotest", "nvim-dap-ui" }, types = true },
-})
-
-vim.keymap.set("n", "<localleader>tcf", function()
+vim.keymap.set("n", "<leader>tcf", function()
 	neotest.run.run(vim.fn.expand("%"))
 end, { desc = "[T]est [C]urrent [F]ile" })
-vim.keymap.set("n", "<localleader>tn", function()
+
+vim.keymap.set("n", "<leader>tn", function()
 	neotest.run.run()
 	neotest.summary.open()
 end, { desc = "[T]est [N]earest" })
-vim.keymap.set("n", "<localleader>to", function()
+
+vim.keymap.set("n", "<leader>to", function()
 	neotest.output.open({ last_run = true, enter = true })
-end, { desc = "[T]est [O]utput window" })
-vim.keymap.set("n", "<localleader>ts", function()
+end, { desc = "[T]est [O]utput" })
+
+vim.keymap.set("n", "<leader>tS", function()
 	neotest.summary.toggle()
-end, { desc = "[T]est [S]ummary window" })
-vim.keymap.set("n", "<localleader>tl", function()
+end, { desc = "[T]est [S]ummary toggle" })
+
+vim.keymap.set("n", "<leader>tl", function()
 	neotest.run.run_last({ enter = true })
 	neotest.output.open({ last_run = true, enter = true })
-end, { desc = "[T]est [L]ast" })
-vim.keymap.set("n", "<localleader>tfd", function()
-	neotest.run.run({ strategy = "dap" })
-end, { desc = "[T]est [F]ile [D]ap" })
+end, { desc = "[T]est run [L]ast" })

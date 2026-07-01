@@ -1,5 +1,8 @@
 local M = {}
 
+-- Mason-installed tools live here; add to PATH so vim.fn.executable() finds them
+vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin:" .. vim.env.PATH
+
 local servers = {
 	"ty",
 	"ruff",
@@ -11,7 +14,7 @@ local servers = {
 	"yamlls",
 	"terraformls",
 	"tflint",
-    "rust_analyzer"
+	"rust_analyzer",
 }
 
 local server_cmds = {
@@ -25,17 +28,14 @@ local server_cmds = {
 	yamlls = "yaml-language-server",
 	terraformls = "terraform-ls",
 	tflint = "tflint",
-    rust_analyzer = "rust-analyzer"
+	rust_analyzer = "rust-analyzer",
 }
 
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
 	callback = function(event)
 		local nmap = function(keys, func, desc)
-			if desc then
-				desc = "LSP: " .. desc
-			end
-			vim.keymap.set("n", keys, func, { buffer = event.buf, desc = desc })
+			vim.keymap.set("n", keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
 		end
 
 		nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
@@ -61,7 +61,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.api.nvim_buf_create_user_command(event.buf, "Format", function(_)
 			vim.lsp.buf.format()
 		end, { desc = "Format current buffer with LSP" })
-		nmap("<leader>f", ":Format<CR>", "[F]ormat")
+		nmap("<leader>lf", ":Format<CR>", "[L]SP [F]ormat")
 
 		local client = vim.lsp.get_client_by_id(event.data.client_id)
 		if client and client.server_capabilities.documentHighlightProvider then
@@ -69,7 +69,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				buffer = event.buf,
 				callback = vim.lsp.buf.document_highlight,
 			})
-
 			vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
 				buffer = event.buf,
 				callback = vim.lsp.buf.clear_references,
@@ -101,7 +100,7 @@ vim.api.nvim_create_user_command("LspPython", function()
 	local clients = vim.lsp.get_clients({ bufnr = 0 })
 	local python_clients = {}
 	for _, client in ipairs(clients) do
-		if client.name == "ty" or client.name == "pyright" or client.name == "ruff" then
+		if client.name == "ty" or client.name == "ruff" then
 			table.insert(python_clients, client.name)
 		end
 	end

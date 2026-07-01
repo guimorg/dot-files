@@ -46,7 +46,7 @@ end
 vim.keymap.set("v", "<leader>y", ":lua Complete_yank()<CR>", { noremap = true, desc = "Copy code with line numbers" })
 
 vim.keymap.set("n", "<leader>wv", "<cmd>vsplit<CR>", { desc = "[W]indow split [V]ertical" })
-vim.keymap.set("n", "<leader>ws", "<cmd>split<CR>", { desc = "[W]indow [S]plit horizontal" })
+vim.keymap.set("n", "<leader>wh", "<cmd>split<CR>", { desc = "[W]indow [H]orizontal split" })
 vim.keymap.set("n", "<leader>wd", "<cmd>close<CR>", { desc = "[W]indow [D]elete/close" })
 vim.keymap.set("n", "<leader>wh", "<C-w>h", { desc = "[W]indow focus left ([H])" })
 vim.keymap.set("n", "<leader>wj", "<C-w>j", { desc = "[W]indow focus down ([J])" })
@@ -65,8 +65,7 @@ vim.keymap.set("n", "<leader>qQ", "<cmd>qa!<CR>", { desc = "[Q]uit [Q]uit all wi
 vim.keymap.set("n", "<leader>hr", "<cmd>source $MYVIMRC<CR>", { desc = "[H]elp [R]eload config" })
 vim.keymap.set("n", "<leader>hh", "<cmd>Telescope help_tags<CR>", { desc = "[H]elp [H]elp tags" })
 
-vim.keymap.set("n", "<leader>cc", "<cmd>Commentary<CR>", { desc = "[C]ode [C]omment" })
-vim.keymap.set("v", "<leader>cc", "<cmd>Commentary<CR>", { desc = "[C]ode [C]omment" })
+-- Comment.nvim: use gcc (normal) / gc (visual) directly
 
 vim.keymap.set("n", "<leader>tn", "<cmd>tabnew<CR>", { desc = "[T]ab [N]ew" })
 vim.keymap.set("n", "<leader>tc", "<cmd>tabclose<CR>", { desc = "[T]ab [C]lose" })

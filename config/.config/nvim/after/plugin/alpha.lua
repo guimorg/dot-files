@@ -22,7 +22,7 @@ dashboard.section.header.val = {
 
 dashboard.section.header.opts = {
 	position = "center",
-	hl = "DraculaPurple",
+	hl = "DashboardHeader",
 }
 
 local hi_top_section = {
@@ -30,7 +30,7 @@ local hi_top_section = {
 	val = "󰃭 " .. date .. "  " .. datetime,
 	opts = {
 		position = "center",
-		hl = "DraculaCyan",
+		hl = "DashboardDate",
 	},
 }
 
@@ -45,8 +45,8 @@ local function button(sc, txt, keybind, keybind_opts)
 		cursor = 3,
 		width = 50,
 		align_shortcut = "right",
-		hl_shortcut = "DraculaOrange",
-		hl = "DraculaFg",
+		hl_shortcut = "DashboardShortcut",
+		hl = "DashboardFg",
 	}
 
 	if keybind then
@@ -86,10 +86,10 @@ end
 dashboard.section.footer.val = footer()
 dashboard.section.footer.opts = {
 	position = "center",
-	hl = "DraculaComment",
+	hl = "DashboardFooter",
 }
 
-local opts = {
+alpha.setup({
 	layout = {
 		{ type = "padding", val = 2 },
 		dashboard.section.header,
@@ -100,12 +100,8 @@ local opts = {
 		{ type = "padding", val = 1 },
 		dashboard.section.footer,
 	},
-	opts = {
-		margin = 5,
-	},
-}
-
-alpha.setup(opts)
+	opts = { margin = 5 },
+})
 
 vim.api.nvim_create_augroup("alpha_tabline", { clear = true })
 

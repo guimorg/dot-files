@@ -1,24 +1,17 @@
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
-
--- require("oil").setup()
-
-vim.keymap.set("n", "<leader>pv", ":NvimTreeToggle<CR>")
-
-require("nvim-tree").setup({
-	view = {
-		adaptive_size = true,
+require("oil").setup({
+	default_file_explorer = true,
+	view_options = {
+		show_hidden = true,
+		is_hidden_file = function(name, _)
+			return vim.startswith(name, ".")
+		end,
 	},
-	filters = {
-		dotfiles = false,
-		custom = { "^.git$" },
+	float = {
+		padding = 2,
+		border = "rounded",
 	},
 })
 
-local function open_tab_silent(node)
-	local api = require("nvim-tree.api")
-
-	api.node.open.tab(node)
-	vim.cmd.tabprev()
-end
-vim.keymap.set("n", "T", open_tab_silent, { desc = "Open Tab Silent" })
+vim.keymap.set("n", "<leader>op", "<cmd>Oil<CR>", { desc = "[O]pen [P]arent directory" })
+vim.keymap.set("n", "<leader>pv", "<cmd>Oil<CR>", { desc = "[P]roject [V]iew directory" })
+vim.keymap.set("n", "-", "<cmd>Oil<CR>", { desc = "Open parent directory" })

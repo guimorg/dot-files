@@ -1,7 +1,7 @@
 require("core.vim_options")
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
+if not (vim.uv or vim.loop).fs_stat(lazypath) then
 	vim.fn.system({
 		"git",
 		"clone",
@@ -16,4 +16,3 @@ require("core.lazy")
 
 require("core.keymaps")
 require("core.lsp")
-require("core.cmp")
